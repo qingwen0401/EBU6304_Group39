@@ -9,3 +9,4 @@ A web-based Teaching Assistant (TA) recruitment management system built with Jak
 * Zixi-Fang: 231222981 (Member)
 * Qingshang-Yin: 231222992(Leader)
 * Shuhan-Yang: 231222350(Member)
+* Yuman-Lyu: 231220862(Member)
