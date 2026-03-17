@@ -7,3 +7,4 @@ A web-based Teaching Assistant (TA) recruitment management system built with Jak
 ---
 * Shuyue-Xing: 18266311776 (Support TA)
 * Zixi-Fang: 231222981 (Member)
+* Qingshang-Yin: 231222992(Leader)
