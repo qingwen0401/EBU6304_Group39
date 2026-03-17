@@ -6,7 +6,7 @@ A web-based Teaching Assistant (TA) recruitment management system built with Jak
 ### 📋 Group Name-list
 ---
 * Shuyue-Xing: 18266311776 (Support TA)
-* Zixi-Fang: 231222981 (Member)
-* Qingshang-Yin: 231222992(Leader)
-* Shuhan-Yang: 231222350(Member)
-* Yuman-Lyu: 231220862(Member)
+* [qingwen0401] 尹晴尚 Qingshang-Yin QMID:231222992 BUPTID:2023213197 (Leader)
+* [Fzx501] 方紫熙 Zixi-Fang QMID:231222981 BUPTID：2023213198 (Member)
+* [Baooo118] 杨舒涵 Shuhan-Yang QMID:231222350 BUPTID:2023213204 (Member)
+* [joycegjy] 郭佳仪 Jiayi-Guo QMID:231222110 BUPTID:2023213199 (Member)
