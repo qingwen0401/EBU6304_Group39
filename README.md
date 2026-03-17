@@ -10,3 +10,4 @@ A web-based Teaching Assistant (TA) recruitment management system built with Jak
 * [Fzx501] 方紫熙 Zixi-Fang QMID:231222981 BUPTID：2023213198 (Member)
 * [Baooo118] 杨舒涵 Shuhan-Yang QMID:231222350 BUPTID:2023213204 (Member)
 * [joycegjy] 郭佳仪 Jiayi-Guo QMID:231222110 BUPTID:2023213199 (Member)
+* [manyuemei0423] 吕雨蔓 Yuman-Lyu QMID:231220862 BUPTID:2023213200 (Member)
