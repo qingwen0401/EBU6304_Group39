@@ -12,6 +12,3 @@ A web-based Teaching Assistant (TA) recruitment management system built with Jak
 * [joycegjy] 郭佳仪 Jiayi-Guo QMID:231222110 BUPTID:2023213199 (Member)
 * [willing] 张乐怡 Leyi-Zhang QMID:231220161 BUPTID:2023213203(Member)
 
-
-
-111
