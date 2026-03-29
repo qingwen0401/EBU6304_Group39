@@ -1,0 +1,23 @@
+[
+  {
+    "studentId": "2021001",
+    "department": "CS Department",
+    "major": "Software Engineering",
+    "year": null,
+    "gpa": 0.0,
+    "skills": [],
+    "cvPath": null,
+    "bio": null,
+    "applicationIds": [],
+    "currentWeeklyHours": 0,
+    "maxWeeklyHours": 20,
+    "userId": "TA20260329164406002",
+    "username": "alice.wang",
+    "passwordHash": "agyDbSpqnWyWKKr+auUm2Q\u003d\u003d:j1Kq5R9/2LxBJASO4D7MYLAmzm28q/dXLfYre+UGks4\u003d",
+    "email": "alice@student.bupt.edu.cn",
+    "role": "TA",
+    "createdAt": "2026-03-29T16:44:06.920678800",
+    "active": true,
+    "fullName": "Alice Wang"
+  }
+]

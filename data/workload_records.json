@@ -1,0 +1,44 @@
+[
+  {
+    "recordId": "WL20260329164407005",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260329164406003",
+    "jobTitle": "Lab TA for EBU6304",
+    "moduleCode": "EBU6304",
+    "moId": "MO20260329164406001",
+    "weeklyHours": 8,
+    "semester": "2026 Spring",
+    "createdAt": "2026-03-29T16:44:07.008630",
+    "applicationId": "APP20260329164406004",
+    "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260329164716003",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260329164716001",
+    "jobTitle": "Lab TA for EBU6304",
+    "moduleCode": "EBU6304",
+    "moId": "MO20260329164406001",
+    "weeklyHours": 8,
+    "semester": "2026 Spring",
+    "createdAt": "2026-03-29T16:47:16.641876300",
+    "applicationId": "APP20260329164716002",
+    "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260329165051003",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260329165051001",
+    "jobTitle": "Lab TA for EBU6304",
+    "moduleCode": "EBU6304",
+    "moId": "MO20260329164406001",
+    "weeklyHours": 8,
+    "semester": "2026 Spring",
+    "createdAt": "2026-03-29T16:50:51.293608200",
+    "applicationId": "APP20260329165051002",
+    "status": "ACTIVE"
+  }
+]

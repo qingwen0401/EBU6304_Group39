@@ -1,0 +1,83 @@
+[
+  {
+    "jobId": "JOB20260329164406003",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-29T16:44:06.926871",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260329164406004"
+    ]
+  },
+  {
+    "jobId": "JOB20260329164716001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-29T16:47:16.575793",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260329164716002"
+    ]
+  },
+  {
+    "jobId": "JOB20260329165051001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-29T16:50:51.246256800",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260329165051002"
+    ]
+  }
+]

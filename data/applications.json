@@ -1,0 +1,50 @@
+[
+  {
+    "applicationId": "APP20260329164406004",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260329164406003",
+    "jobTitle": "Lab TA for EBU6304",
+    "moId": "MO20260329164406001",
+    "coverLetter": "I am passionate about software engineering and have strong Java skills.",
+    "cvPath": null,
+    "status": "ACCEPTED",
+    "appliedAt": "2026-03-29T16:44:06.980888",
+    "reviewedAt": "2026-03-29T16:44:07.008055100",
+    "reviewNote": "Great candidate!",
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null
+  },
+  {
+    "applicationId": "APP20260329164716002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260329164716001",
+    "jobTitle": "Lab TA for EBU6304",
+    "moId": "MO20260329164406001",
+    "coverLetter": "I am passionate about software engineering and have strong Java skills.",
+    "cvPath": null,
+    "status": "ACCEPTED",
+    "appliedAt": "2026-03-29T16:47:16.611629700",
+    "reviewedAt": "2026-03-29T16:47:16.641876300",
+    "reviewNote": "Great candidate!",
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null
+  },
+  {
+    "applicationId": "APP20260329165051002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260329165051001",
+    "jobTitle": "Lab TA for EBU6304",
+    "moId": "MO20260329164406001",
+    "coverLetter": "I am passionate about software engineering and have strong Java skills.",
+    "cvPath": null,
+    "status": "ACCEPTED",
+    "appliedAt": "2026-03-29T16:50:51.277895200",
+    "reviewedAt": "2026-03-29T16:50:51.293608200",
+    "reviewNote": "Great candidate!",
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null
+  }
+]
