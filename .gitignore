@@ -19,6 +19,11 @@ hs_err_pid*
 out/
 gen/
 
+# 忽略 VS Code 的本地配置文件（含绝对路径，不应提交）
+.vscode/
+# 忽略 VS Code Live History 插件的本地历史记录
+.lh/
+
 # 忽略 Eclipse 的配置文件
 .settings/
 .bin/
@@ -28,5 +33,12 @@ gen/
 # 忽略系统自动生成的冗余文件
 .DS_Store
 Thumbs.db
+
+# 忽略 Maven 编译输出目录
+target/
+
+# 忽略编译时生成的临时文件列表
+sources.txt
+sources.txtjavac
 
 # 注意：不要忽略 .txt, .csv, .json 等数据文件，因为项目要求使用这些格式存储数据
