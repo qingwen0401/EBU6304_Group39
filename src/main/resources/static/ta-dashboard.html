@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TA Dashboard - Overview</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #fff; }
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 80px;
+            height: 100vh;
+            background: #2c3e50;
+            color: white;
+            padding: 20px 10px;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .sidebar h3 { font-size: 14px; margin-bottom: 20px; }
+        .sidebar a {
+            display: block;
+            color: #bdc3c7;
+            text-decoration: none;
+            padding: 8px 5px;
+            margin: 5px 0;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+        .sidebar a.active {
+            background: #34495e;
+            color: white;
+        }
+        .sidebar a:hover { color: white; }
+
+        /* 主内容区 */
+        .main {
+            margin-left: 80px;
+            padding: 20px;
+            max-width: 1000px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-bar {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 180px;
+        }
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: #bdc3c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        /* 提示条 */
+        .alert-bar {
+            background: #fef9c3;
+            color: #856404;
+            padding: 8px 15px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .alert-bar a { color: #856404; font-weight: bold; }
+        .alert-bar .close { cursor: pointer; }
+
+        /* 欢迎区 */
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .welcome h1 { font-size: 22px; color: #333; }
+        .welcome .btn-browse {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        /* 统计卡片 */
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .stat-card .number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-top: 5px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 70%;
+            background: #22c55e;
+            border-radius: 4px;
+        }
+        .progress-text { font-size: 11px; color: #64748b; margin-top: 3px; }
+
+        /* 内容区布局 */
+        .content-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        /* 最近申请表格 */
+        .section {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+        }
+        .section h3 { font-size: 14px; color: #333; margin-bottom: 15px; }
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .applications-table th,
+        .applications-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .applications-table th { color: #64748b; }
+        .status {
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: white;
+            font-size: 11px;
+        }
+        .status-pending { background: #eab308; }
+        .status-shortlisted { background: #2563eb; }
+
+        /* 新岗位推荐 */
+        .job-card {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 0;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .job-card:last-child { border-bottom: none; }
+        .job-card h4 { font-size: 13px; color: #1e293b; margin-bottom: 5px; }
+        .job-card p { color: #64748b; font-size: 11px; }
+        .job-card .apply-by { color: #dc2626; font-size: 11px; }
+
+        /* 右侧悬浮提示 */
+        .side-note {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 80px;
+            height: 80px;
+            background: #f1c40f;
+            color: white;
+            text-align: center;
+            padding: 5px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+<!-- 左侧导航 -->
+<div class="sidebar">
+    <h3>TA System</h3>
+    <a href="ta-dashboard.html" class="active">Dashboard</a>
+    <a href="job-market.html">Job Market</a>
+    <a href="ta-applications.html">My Applications</a>
+    <a href="ta-profile.html">Profile</a>
+</div>
+
+<!-- 主内容 -->
+<div class="main">
+    <div class="header">
+        <span>Home > Dashboard</span>
+        <div class="header-right">
+            <span>🔔</span>
+            <input type="text" class="search-bar" placeholder="Search...">
+            <div class="user-avatar">U</div>
+        </div>
+    </div>
+
+    <div class="alert-bar">
+        <span>Complete your profile to increase your chances of selection. <a href="ta-edit.html">Update Profile</a></span>
+        <span class="close" onclick="this.parentElement.style.display='none'">×</span>
+    </div>
+
+    <div class="welcome">
+        <h1>Welcome back, <span id="studentName">Student Name</span>!</h1>
+        <button class="btn-browse" onclick="location.href='job-market.html'">Browse All Jobs</button>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div>Active Applications</div>
+            <div class="number" id="activeAppsCount">3</div>
+        </div>
+        <div class="stat-card">
+            <div>Upcoming Deadlines</div>
+            <div class="number" id="deadlinesCount">2</div>
+        </div>
+        <div class="stat-card">
+            <div>Profile Strength</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">70% Complete</div>
+        </div>
+    </div>
+
+    <div class="content-row">
+        <div class="section">
+            <h3>Recent Applications</h3>
+            <table class="applications-table">
+                <thead>
+                <tr>
+                    <th>Module Name</th>
+                    <th>Position</th>
+                    <th>Date Applied</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="recentAppsBody">
+                <tr onclick="location.href='job-market.html'" style="cursor: pointer;">
+                    <td>CS101</td>
+                    <td>Lab Assistant</td>
+                    <td>2023-01-15</td>
+                    <td><span class="status status-pending">PENDING</span></td>
+                </tr>
+                <tr onclick="location.href='job-market.html'" style="cursor: pointer;">
+                    <td>MA203</td>
+                    <td>Grader</td>
+                    <td>2023-01-10</td>
+                    <td><span class="status status-shortlisted">SHORTLISTED</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>New Postings for You</h3>
+            <div class="job-card" onclick="location.href='job-market.html'">
+                <h4>CS101 Lab Assistant</h4>
+                <p>Credits: 3 | Hours: 10/week</p>
+                <p class="apply-by">Apply by: 2023-02-01</p>
+            </div>
+            <div class="job-card" onclick="location.href='job-market.html'">
+                <h4>PH201 Grader</h4>
+                <p>Credits: 2 | Hours: 5/week</p>
+                <p class="apply-by">Apply by: 2023-02-15</p>
+            </div>
+            <div class="job-card" onclick="location.href='job-market.html'">
+                <h4>HI305 Research Assistant</h4>
+                <p>Credits: 4 | Hours: 15/week</p>
+                <p class="apply-by">Apply by: 2023-03-01</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="side-note">TA System<br>Dashboard</div>
+
+<script src="js/ta.js"></script>
+<script>
+    // 页面加载时，自动读取学生姓名和申请数据
+    window.onload = function() {
+        const profile = getProfile();
+        if (profile.fullName) {
+            document.getElementById("studentName").textContent = profile.fullName;
+        }
+
+        const apps = getApplications();
+        const activeCount = apps.filter(a => a.status === "Pending").length;
+        document.getElementById("activeAppsCount").textContent = activeCount || 3;
+    };
+</script>
+</body>
+</html>

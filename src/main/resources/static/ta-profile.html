@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TA Profile - Personal Info & Weekly Availability</title>
+    <style>
+        /* 全局样式：*/
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border: 1px solid #e0e0e0; }
+        /* 导航栏样式 */
+        .nav-sidebar { width: 120px; float: left; background: #f0f0f0; padding: 15px; min-height: 600px; }
+        .nav-sidebar a { display: block; margin: 8px 0; text-decoration: none; color: #333; font-size: 12px; }
+        .nav-sidebar a.active { font-weight: bold; color: #0066cc; }
+        /* 主内容区 */
+        .content { margin-left: 140px; padding: 20px; }
+        .breadcrumb { font-size: 12px; color: #666; margin-bottom: 15px; }
+        .section { margin-bottom: 25px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 4px; }
+        .section h4 { margin-top: 0; color: #444; font-size: 14px; }
+        .field { margin: 10px 0; }
+        .field label { display: block; font-size: 12px; color: #666; margin-bottom: 3px; }
+        .field .value { padding: 6px; background: #f8f9fa; border: 1px solid #eee; border-radius: 3px; font-size: 13px; }
+        /* 按钮样式 */
+        .btn-group { text-align: right; }
+        .btn { padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        .btn-edit { background: #007bff; color: white; }
+        .btn-edit:hover { background: #0056b3; }
+        /* 右侧悬浮提示框 */
+        .side-note { position: absolute; right: 20px; top: 20px; width: 80px; height: 80px; background: #f1c40f; color: white; text-align: center; padding: 5px; font-size: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 左侧导航栏 -->
+    <div class="nav-sidebar">
+        <p style="font-size: 12px; font-weight: bold;">Navigation</p>
+        <a href="job-market.html">Job Market</a>
+        <a href="ta-profile.html" class="active">My Profile</a>
+        <a href="ta-applications.html">My Applications</a>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="content">
+        <div class="breadcrumb">Home > My Profile</div>
+        <h2>TA Profile - Personal Info & Weekly Availability</h2>
+
+        <div class="section">
+            <h4>Personal Details</h4>
+            <div id="profileContent">
+                <!-- JS 动态填充内容 -->
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-edit" onclick="location.href='ta-edit.html'">Edit Profile</button>
+        </div>
+    </div>
+
+    <!-- 右侧悬浮提示（仿照原型） -->
+    <div class="side-note">My Profile<br>Screen</div>
+</div>
+
+<script src="js/ta.js"></script>
+<script>
+    // 页面加载时渲染资料
+    window.onload = loadProfile;
+</script>
+</body>
+</html>
