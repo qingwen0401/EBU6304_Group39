@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Market</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #f9fafb; }
+
+    .sidebar {
+      width: 120px;
+      height: 100vh;
+      background: #f0f0f0;
+      padding: 20px 10px;
+      position: fixed;
+      left: 0; top: 0;
+    }
+    .sidebar p { font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      font-size: 12px; margin: 8px 0;
+    }
+    .sidebar a.active { font-weight: bold; color: #0066cc; }
+
+    .main {
+      margin-left: 120px;
+      padding: 20px;
+    }
+    .breadcrumb { font-size: 12px; color: #666; margin-bottom: 15px; }
+
+    .job-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+    .job-title { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
+    .job-tags { display: flex; gap: 8px; margin-bottom: 10px; }
+    .tag {
+      background: #f1f5f9;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+    .deadline { color: #dc2626; font-weight: bold; font-size: 13px; margin: 10px 0; }
+    .btn-apply {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+  <p>Navigation</p>
+  <a href="ta-dashboard.html">Dashboard</a>
+  <a href="job-market.html" class="active">Job Market</a>
+  <a href="ta-applications.html">My Applications</a>
+  <a href="ta-profile.html">My Profile</a>
+</div>
+
+<div class="main">
+  <div class="breadcrumb">Home > Job Market</div>
+
+  <div class="job-card">
+    <div class="job-title">CS101 - Programming Lab Assistant</div>
+    <div class="job-tags">
+      <span class="tag">Part-time</span>
+      <span class="tag">Autumn Term</span>
+    </div>
+    <div class="deadline">Deadline: 2026-10-15</div>
+    <button class="btn-apply" onclick="applyJob('CS101 - Programming Lab Assistant')">Apply Now</button>
+  </div>
+
+  <div class="job-card">
+    <div class="job-title">CS202 - Computer Architecture</div>
+    <div class="job-tags">
+      <span class="tag">Part-time</span>
+      <span class="tag">Autumn Term</span>
+    </div>
+    <div class="deadline">Deadline: 2026-10-20</div>
+    <button class="btn-apply" onclick="applyJob('CS202 - Computer Architecture')">Apply Now</button>
+  </div>
+
+  <div class="job-card">
+    <div class="job-title">PH201 - Physics Grader</div>
+    <div class="job-tags">
+      <span class="tag">Part-time</span>
+      <span class="tag">Spring Term</span>
+    </div>
+    <div class="deadline">Deadline: 2026-11-01</div>
+    <button class="btn-apply" onclick="applyJob('PH201 - Physics Grader')">Apply Now</button>
+  </div>
+</div>
+
+<script src="js/ta.js"></script>
+<script>
+  function applyJob(moduleName) {
+    const p = getProfile();
+    if (!p.fullName) {
+      alert("Please complete your profile first!");
+      location.href = "ta-edit.html";
+      return;
+    }
+
+
+    let apps = getApplications();
+
+    // 检查是否已经申请过这门课
+    const alreadyApplied = apps.some(app => app.module === moduleName);
+
+    if (alreadyApplied) {
+      alert("⚠️ You have already applied for this course!\nYou cannot apply again.");
+      return;
+    }
+
+    // 没申请过，才允许新增
+    apps.push({
+      module: moduleName,
+      date: new Date().toISOString().split("T")[0],
+      status: "Pending",
+      outcome: "Pending",
+      feedback: "Applied from Job Market"
+    });
+    saveApplications(apps);
+
+    alert("✅ Application submitted!\nCourse: " + moduleName);
+    location.href = "ta-applications.html";
+  }
+</script>
+
+</body>
+</html>
