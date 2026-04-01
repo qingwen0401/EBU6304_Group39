@@ -1,6 +1,7 @@
 package com.ebu6304.recruitment.services;
 
 import com.ebu6304.recruitment.models.Application;
+import com.ebu6304.recruitment.models.CvFileData;
 import com.ebu6304.recruitment.models.JobPosting;
 import com.ebu6304.recruitment.models.TA;
 import com.ebu6304.recruitment.models.WorkloadRecord;
@@ -10,8 +11,13 @@ import com.ebu6304.recruitment.repositories.UserRepository;
 import com.ebu6304.recruitment.repositories.WorkloadRepository;
 import com.ebu6304.recruitment.utils.IdGenerator;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * 申请服务（Application Service）
@@ -31,6 +37,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public class ApplicationService {
+    private static final String DEFAULT_CV_UPLOAD_DIR = "data/uploads/cv";
 
     /** 申请数据访问层 */
     private final ApplicationRepository applicationRepository;
@@ -43,6 +50,7 @@ public class ApplicationService {
 
     /** 工作量记录数据访问层 */
     private final WorkloadRepository workloadRepository;
+    private final String cvUploadDir;
 
     /**
      * 构造方法，注入依赖。
@@ -51,10 +59,19 @@ public class ApplicationService {
                                JobRepository jobRepository,
                                UserRepository userRepository,
                                WorkloadRepository workloadRepository) {
+        this(applicationRepository, jobRepository, userRepository, workloadRepository, DEFAULT_CV_UPLOAD_DIR);
+    }
+
+    public ApplicationService(ApplicationRepository applicationRepository,
+                              JobRepository jobRepository,
+                              UserRepository userRepository,
+                              WorkloadRepository workloadRepository,
+                              String cvUploadDir) {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.workloadRepository = workloadRepository;
+        this.cvUploadDir = cvUploadDir;
     }
 
     // ==================== TA申请操作 ====================
@@ -101,6 +118,7 @@ public class ApplicationService {
                 job.getTitle(), job.getMoId(), coverLetter
         );
         if (cvPath != null && !cvPath.isEmpty()) {
+            validateCvFileExtension(cvPath);
             application.setCvPath(cvPath);
         }
 
@@ -272,6 +290,71 @@ public class ApplicationService {
     }
 
     /**
+     * TA 上传 CV 文件并落盘，返回保存路径（相对路径）。
+     */
+    public String uploadCv(String taId, String originalFileName, byte[] content) {
+        if (userRepository.findTAById(taId).isEmpty()) {
+            throw new IllegalArgumentException("TA not found: " + taId);
+        }
+        if (content == null || content.length == 0) {
+            throw new IllegalArgumentException("CV file is empty");
+        }
+        validateCvFileExtension(originalFileName);
+
+        String extension = getFileExtension(originalFileName);
+        String safeFileName = taId + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID() + "." + extension;
+        Path dirPath = Paths.get(cvUploadDir);
+        Path target = dirPath.resolve(safeFileName).normalize();
+        try {
+            Files.createDirectories(dirPath);
+            Files.write(target, content);
+            return normalizeRelativePath(target);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to save CV file: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 绑定申请与CV路径，只允许申请人本人操作。
+     */
+    public Application attachCvToApplication(String taId, String applicationId, String cvPath) {
+        validateCvFileExtension(cvPath);
+        Application app = getApplicationOrThrow(applicationId);
+        if (!taId.equals(app.getTaId())) {
+            throw new IllegalArgumentException("You don't have permission to update this application");
+        }
+        app.setCvPath(cvPath);
+        applicationRepository.save(app);
+        return app;
+    }
+
+    /**
+     * 仅岗位发布者MO可读取申请关联CV。
+     */
+    public CvFileData getCvForApplicationAsMo(String moId, String applicationId) {
+        Application app = getApplicationOrThrow(applicationId);
+        if (!moId.equals(app.getMoId())) {
+            throw new IllegalArgumentException("You don't have permission to view this CV");
+        }
+        if (app.getCvPath() == null || app.getCvPath().isBlank()) {
+            throw new IllegalArgumentException("No CV uploaded for this application");
+        }
+
+        Path path = Paths.get(app.getCvPath()).normalize();
+        if (!Files.exists(path) || !Files.isRegularFile(path)) {
+            throw new IllegalArgumentException("CV file not found: " + app.getCvPath());
+        }
+        String fileName = path.getFileName().toString();
+        validateCvFileExtension(fileName);
+        try {
+            byte[] content = Files.readAllBytes(path);
+            return new CvFileData(fileName, inferContentType(fileName), content);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to read CV file: " + e.getMessage(), e);
+        }
+    }
+
+    /**
      * 获取指定职位的所有申请（管理员用，无权限限制）。
      *
      * @param jobId 职位ID
@@ -307,6 +390,36 @@ public class ApplicationService {
     private JobPosting getJobOrThrow(String jobId) {
         return jobRepository.findById(jobId)
                 .orElseThrow(() -> new IllegalArgumentException("Job not found: " + jobId));
+    }
+
+    private void validateCvFileExtension(String fileNameOrPath) {
+        String extension = getFileExtension(fileNameOrPath);
+        if (!"pdf".equals(extension) && !"doc".equals(extension)) {
+            throw new IllegalArgumentException("Invalid CV file type. Only .pdf or .doc is allowed");
+        }
+    }
+
+    private String getFileExtension(String fileNameOrPath) {
+        if (fileNameOrPath == null || fileNameOrPath.isBlank()) {
+            throw new IllegalArgumentException("CV file name is required");
+        }
+        String name = Paths.get(fileNameOrPath).getFileName().toString().toLowerCase();
+        int dot = name.lastIndexOf('.');
+        if (dot < 0 || dot == name.length() - 1) {
+            throw new IllegalArgumentException("Invalid CV file type. Only .pdf or .doc is allowed");
+        }
+        return name.substring(dot + 1);
+    }
+
+    private String normalizeRelativePath(Path target) {
+        return target.toString().replace('\\', '/');
+    }
+
+    private String inferContentType(String fileName) {
+        if (fileName.toLowerCase().endsWith(".pdf")) {
+            return "application/pdf";
+        }
+        return "application/msword";
     }
 
     /**
