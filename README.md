@@ -1,203 +1,203 @@
 # BUPT TA Recruitment System
 
 A **Teaching Assistant (TA) Recruitment Management System** for BUPT International School.  
-Built with **pure Java + Maven**, using JSON files for data storage (no database required).  
+Built with **Java Servlet + JSP + Maven**, using JSON files for data storage (no database required).  
 Supports three user roles: **Module Organiser (MO)**, **Teaching Assistant (TA)**, and **Administrator (Admin)**.
 
 ---
 
-## 📋 Group 39 Members
+## Group 39 Members
 
 | GitHub | Name | QMID | BUPTID | Role |
 |--------|------|------|--------|------|
-| [qingwen0401] | 尹晴尚 Qingshang Yin | 231222992 | 2023213197 | Leader |
-| [Fzx501] | 方紫熙 Zixi Fang | 231222981 | 2023213198 | Member |
-| [Baooo118] | 杨舒涵 Shuhan Yang | 231222350 | 2023213204 | Member |
-| [joycegjy] | 郭佳仪 Jiayi Guo | 231222110 | 2023213199 | Member |
-| [manyuemei0423] | 吕雨蔓 Yuman Lyu | 231220862 | 2023213200 | Member |
-| [willing] | 张乐怡 Leyi Zhang | 231220161 | 2023213203 | Member |
-| Shuyue-Xing | 邢书悦 | — | — | Support TA |
+| [qingwen0401] | 尹晴尚 | 231222992 | 2023213197 | Leader |
+| [Fzx501] | 方紫熙 | 231222981 | 2023213198 | Member |
+| [Baooo118] | 杨舒涵 | 231222350 | 2023213204 | Member |
+| [joycegjy] | J郭佳仪 | 231222110 | 2023213199 | Member |
+| [manyuemei0423] | 吕雨蔓 | 231220862 | 2023213200 | Member |
+| [willing] | 张乐怡 | 231220161 | 2023213203 | Member |
+| Shuyue-Xing | 邢舒悦 | - | - | Support TA |
 
 ---
 
-## 🚀 Quick Start（推荐使用 IntelliJ IDEA 打开）
+## Prerequisites
 
-### 前置要求
-
-| 工具 | 版本要求 | 下载地址 |
-|------|----------|----------|
-| JDK | 17 或 21（推荐） | https://adoptium.net/ |
-| Maven | 3.8+（IDEA 内置，无需单独安装） | — |
-| IntelliJ IDEA | Community 或 Ultimate | https://www.jetbrains.com/idea/ |
+| Tool | Version | Download |
+|------|---------|----------|
+| JDK | 17 or 21 (recommended) | https://adoptium.net/ |
+| Maven | 3.8+ (bundled in IDEA, no separate install needed) | - |
+| IntelliJ IDEA | Community or Ultimate | https://www.jetbrains.com/idea/ |
 
 ---
 
-### 第一步：克隆仓库
+## How to Run the Web Application
+
+This project is a **JSP + Servlet Web Application** packaged as a WAR file. It requires a Servlet container (Tomcat 10.x) to run. Three startup methods are provided below.
+
+---
+
+### Method 1: Maven `cargo:run` (Recommended - No Tomcat install needed)
+
+This is the simplest method. Maven automatically downloads and runs an embedded Tomcat 10 instance. No separate Tomcat installation required.
+
+**From the command line:**
 
 ```bash
+# Clone the repository
 git clone https://github.com/qingwen0401/EBU6304_Group39.git
 cd EBU6304_Group39
+
+# Build and start the embedded Tomcat server
+mvn cargo:run
 ```
 
----
+**From IntelliJ IDEA (any edition):**
 
-### 第二步：用 IDEA 打开项目（重要！）
+1. Open the project in IDEA (File -> Open -> select the project folder)
+2. Wait for Maven to finish importing (bottom progress bar)
+3. Open the **Maven** panel on the right sidebar (View -> Tool Windows -> Maven)
+4. Expand **Plugins -> cargo**
+5. Double-click **cargo:run**
+6. Wait for the console to show: `Press Ctrl-C to stop the container...`
 
-1. 打开 IntelliJ IDEA
-2. 点击菜单 **File → Open**
-3. 选择克隆下来的 `EBU6304_Group39` **文件夹**（不是某个具体文件）
-4. IDEA 会自动检测到 `pom.xml`，弹出提示 **"Maven build scripts found"**
-5. 点击 **"Load Maven Project"** / **"Trust Project"**
-6. 等待右下角进度条完成（Maven 自动下载依赖，首次约需 1~3 分钟）
+**Access the application:** http://localhost:8080/
 
-> ⚠️ **注意**：必须以"文件夹"方式打开，不要直接打开某个 `.java` 文件。
+> Note: The first run downloads Tomcat 10 dependencies (~20MB). Ensure you have internet access.
+> If downloads are slow, configure the Aliyun Maven mirror (see FAQ below).
 
----
-
-### 第三步：配置 JDK
-
-如果 IDEA 提示 "Project JDK is not defined"：
-
-1. 菜单 **File → Project Structure**（快捷键 `Ctrl+Alt+Shift+S`）
-2. 左侧选 **Project**
-3. **SDK** 下拉框选择你本机安装的 JDK（17 或 21）
-4. 如果列表为空，点击 **"Add SDK → JDK"**，手动选择 JDK 安装目录
-5. 点击 **OK** 保存
+**To stop the server:** Press `Ctrl+C` in the terminal, or click the red Stop button in IDEA.
 
 ---
 
-### 第四步：编译项目
+### Method 2: IntelliJ IDEA with Local Tomcat (IDEA Ultimate only)
 
-**方式 A：使用 IDEA 内置 Maven（推荐）**
+> Requires **IntelliJ IDEA Ultimate** edition (Community edition does not support Tomcat integration).
+> Requires **Tomcat 10.x** installed locally. Download: https://tomcat.apache.org/download-10.cgi
 
-1. 点击右侧边栏的 **Maven** 面板（或菜单 View → Tool Windows → Maven）
-2. 展开 **Lifecycle**
-3. 双击 **compile**
-4. 底部 Build 窗口显示 `BUILD SUCCESS` 即编译成功
+**Steps:**
 
-**方式 B：使用 IDEA 菜单**
+1. Download and extract Tomcat 10.x to a local directory (e.g. `C:\tomcat10` or `/opt/tomcat10`)
 
-菜单 **Build → Build Project**（快捷键 `Ctrl+F9`）
-
-**方式 C：命令行（在项目根目录执行）**
-
-```bash
-mvn compile
-```
-
----
-
-### 第五步：运行主程序
-
-**方式 A：IDEA 直接运行（推荐）**
-
-1. 在左侧 Project 面板中，展开：
+2. Build the WAR file first:
+   ```bash
+   mvn clean package
    ```
-   src/main/java/com/ebu6304/recruitment/
+   The WAR file will be at: `target/ta-recruitment-system-1.0.0.war`
+
+3. Configure a Run Configuration in IDEA:
+   - Menu: **Run -> Edit Configurations**
+   - Click **+** (top left) -> **Tomcat Server -> Local**
+   - Set **Name**: `Tomcat 10`
+   - Click **Configure** next to "Application server" -> select your Tomcat installation directory
+   - Switch to the **Deployment** tab
+   - Click **+** -> **Artifact** -> select `ta-recruitment-system-1.0.0:war`
+   - Set **Application context** to `/` (root)
+   - Click **OK**
+
+4. Click the green **Run** button (or press `Shift+F10`)
+
+5. IDEA will open the browser automatically at http://localhost:8080/
+
+---
+
+### Method 3: Deploy WAR to Tomcat Manually
+
+Use this method if you have Tomcat 10.x already installed and running.
+
+1. Build the WAR file:
+   ```bash
+   mvn clean package
    ```
-2. 找到 **`RecruitmentApp.java`**，右键点击
-3. 选择 **"Run 'RecruitmentApp.main()'"**
-4. 底部 Run 窗口会输出完整的演示流程
 
-**方式 B：Maven 命令行运行**
+2. Copy the WAR file to Tomcat's `webapps` directory:
+   ```bash
+   # Windows example
+   copy target\ta-recruitment-system-1.0.0.war C:\tomcat10\webapps\ROOT.war
 
-```bash
-mvn compile exec:java -Dexec.mainClass="com.ebu6304.recruitment.RecruitmentApp"
-```
+   # Linux/Mac example
+   cp target/ta-recruitment-system-1.0.0.war /opt/tomcat10/webapps/ROOT.war
+   ```
+   > Naming it `ROOT.war` deploys it at the root context `/`. You can also name it anything else (e.g. `ta.war`) and access it at `/ta`.
 
-**方式 C：先打包再运行**
+3. Start Tomcat:
+   ```bash
+   # Windows
+   C:\tomcat10\bin\startup.bat
 
-```bash
-mvn package
-java -jar target/recruitment-system-1.0.jar
-```
+   # Linux/Mac
+   /opt/tomcat10/bin/startup.sh
+   ```
 
----
+4. Access the application: http://localhost:8080/
 
-### 预期输出
+5. To stop Tomcat:
+   ```bash
+   # Windows
+   C:\tomcat10\bin\shutdown.bat
 
-运行成功后，控制台应显示：
-
-```
-========== TA Recruitment System Demo ==========
-
-[Step 1] Register Module Organiser...
-[SUCCESS] MO registered: dr.smith
-
-[Step 2] Register Teaching Assistant...
-[SUCCESS] TA registered: alice.wang
-
-[Step 3] MO posts a job...
-[SUCCESS] Job posted successfully
-
-[Step 4] TA browses available jobs...
-[SUCCESS] Found 1 open jobs
-
-[Step 5] TA applies for the job...
-[SUCCESS] Application submitted successfully
-
-[Step 6] MO reviews applications...
-[SUCCESS] Retrieved 1 applications
-
-[Step 7] MO accepts the application...
-[SUCCESS] Application accepted successfully
-
-[Step 8] TA checks application status...
-[SUCCESS] Found 1 applications (status: ACCEPTED)
-
-[Step 9] Admin checks workload...
-[SUCCESS] Workload report: 1 TA, 8h/week, NORMAL
-
-[Step 10] Admin checks system stats...
-[SUCCESS] System stats: 1 job, 1 accepted application
-
-========== Demo Complete ==========
-```
+   # Linux/Mac
+   /opt/tomcat10/bin/shutdown.sh
+   ```
 
 ---
 
-## 📁 项目结构
+## Data Storage
+
+All data is stored as JSON files. By default they are created in the `data/` directory relative to where Tomcat is started:
+
+- `data/ta_profiles.json` - TA user accounts and profiles
+- `data/mo_profiles.json` - Module Organiser accounts
+- `data/jobs.json` - Job postings
+- `data/applications.json` - TA applications
+- `data/workload_records.json` - Workload tracking
+
+> When running via `mvn cargo:run`, data files are created in the project root `data/` directory.
+> When running via a standalone Tomcat, data files are created in Tomcat's working directory.
+
+---
+
+## Project Structure
 
 ```
 EBU6304_Group39/
-├── pom.xml                          # Maven 项目配置（依赖、JDK版本等）
-├── README.md                        # 本文件
-├── data/                            # JSON 数据文件（运行时自动生成/更新）
-│   ├── applications.json
-│   ├── jobs.json
-│   ├── mo_profiles.json
-│   ├── ta_profiles.json
-│   └── workload_records.json
-├── src/main/java/com/ebu6304/recruitment/
-│   ├── RecruitmentApp.java          # 主入口，演示完整工作流
-│   ├── models/                      # 数据模型层
-│   │   ├── User.java
-│   │   ├── ModuleOrganiser.java
-│   │   ├── TA.java
-│   │   ├── JobPosting.java
-│   │   ├── Application.java
-│   │   └── WorkloadRecord.java
-│   ├── repositories/                # 数据访问层（读写 JSON 文件）
-│   │   ├── UserRepository.java
-│   │   ├── JobRepository.java
-│   │   ├── ApplicationRepository.java
-│   │   └── WorkloadRepository.java
-│   ├── services/                    # 业务逻辑层
-│   │   ├── AuthService.java
-│   │   ├── JobService.java
-│   │   ├── ApplicationService.java
-│   │   └── WorkloadService.java
-│   ├── controllers/                 # 控制层（封装请求/响应）
-│   │   ├── MOJobController.java
-│   │   ├── MOApplicationController.java
-│   │   ├── TAController.java
-│   │   ├── AdminController.java
-│   │   └── ControllerResult.java
-│   └── utils/                       # 工具类
-│       ├── JsonFileUtil.java
-│       ├── PasswordUtil.java
-│       └── IdGenerator.java
-└── doc/                             # 项目文档
+├── pom.xml                              # Maven config (dependencies, plugins)
+├── README.md
+├── data/                                # JSON data files (auto-created at runtime)
+├── src/main/
+│   ├── java/com/ebu6304/recruitment/
+│   │   ├── RecruitmentApp.java          # Standalone demo (non-web)
+│   │   ├── models/                      # Data models (User, TA, JobPosting, etc.)
+│   │   ├── repositories/               # Data access layer (reads/writes JSON)
+│   │   ├── services/                   # Business logic layer
+│   │   ├── controllers/                # Legacy controller layer
+│   │   ├── utils/                      # Utilities (JsonFileUtil, PasswordUtil, etc.)
+│   │   └── web/                        # Web layer (Servlets + Filter)
+│   │       ├── AppInitializer.java     # Initializes services on startup
+│   │       ├── AuthFilter.java         # Authentication filter
+│   │       └── servlet/
+│   │           ├── LoginServlet.java
+│   │           ├── RegisterServlet.java
+│   │           ├── LogoutServlet.java
+│   │           ├── TADashboardServlet.java
+│   │           ├── JobServlet.java
+│   │           ├── ApplicationServlet.java
+│   │           └── TAProfileServlet.java
+│   ├── resources/
+│   │   └── static/                     # Original static HTML prototypes
+│   └── webapp/
+│       ├── index.jsp                   # Entry point (redirects to login)
+│       └── WEB-INF/
+│           ├── web.xml                 # Servlet mappings
+│           └── jsp/
+│               ├── login.jsp
+│               ├── register.jsp
+│               └── ta/
+│                   ├── dashboard.jsp
+│                   ├── job-market.jsp
+│                   ├── applications.jsp
+│                   ├── profile.jsp
+│                   └── edit-profile.jsp
+└── doc/
     ├── ProductBacklog_group39.xlsx
     ├── Prototype_group39.pdf
     └── Report_group39.pdf
@@ -205,37 +205,68 @@ EBU6304_Group39/
 
 ---
 
-## ⚙️ 技术栈
+## URL Routes
 
-| 组件 | 技术 |
-|------|------|
-| 语言 | Java 21 |
-| 构建工具 | Maven 3.8+ |
-| 数据存储 | JSON 文件（Gson 库） |
-| 依赖管理 | `pom.xml` |
-| 无需 | 数据库 / Spring Boot / 外部服务器 |
+| URL | Method | Description |
+|-----|--------|-------------|
+| `/` | GET | Redirects to `/login` |
+| `/login` | GET | Login page |
+| `/login` | POST | Authenticate user |
+| `/register` | GET | Registration page |
+| `/register` | POST | Create TA account |
+| `/logout` | GET | Logout and clear session |
+| `/ta/dashboard` | GET | TA dashboard (stats + recent apps) |
+| `/ta/jobs` | GET | Browse open job postings |
+| `/ta/jobs` | POST | Submit a job application (JSON response) |
+| `/ta/applications` | GET | View my applications |
+| `/ta/applications` | POST | Withdraw an application (JSON response) |
+| `/ta/profile` | GET | View TA profile |
+| `/ta/profile?action=edit` | GET | Edit profile form |
+| `/ta/profile` | POST | Save profile changes |
 
 ---
 
-## ❓ 常见问题
+## Tech Stack
 
-**Q: IDEA 打开后报错 "Cannot resolve symbol"？**  
-A: 等待 Maven 依赖下载完成（右下角进度条），或手动点击 Maven 面板的刷新按钮（🔄）。
+| Component | Technology |
+|-----------|-----------|
+| Language | Java 21 |
+| Web Layer | Jakarta Servlet 6.0 + JSP 3.1 |
+| Template Engine | JSTL 3.0 |
+| Build Tool | Maven 3.8+ |
+| Embedded Server | Tomcat 10.x (via Cargo Maven plugin) |
+| Data Storage | JSON files (Gson library) |
+| No database | No Spring Boot | No external services required |
 
-**Q: 运行时报错 "Could not find or load main class"？**  
-A: 确认已执行 `mvn compile` 或 Build Project，确保 `target/classes` 目录存在。
+---
 
-**Q: data/ 目录下的 JSON 文件内容不对？**  
-A: 删除 `data/` 目录下所有 `.json` 文件，重新运行程序，会自动重新生成。
+## FAQ
 
-**Q: Maven 下载依赖很慢？**  
-A: 在 IDEA 的 Maven 设置中配置国内镜像源（阿里云）：  
-菜单 **File → Settings → Build → Maven → User settings file**，  
-指向一个包含以下内容的 `settings.xml`：
+**Q: `mvn cargo:run` fails with "port 8080 already in use"?**  
+A: Another process is using port 8080. Either stop that process, or change the port in `pom.xml`:
 ```xml
-<mirror>
-  <id>aliyun</id>
-  <mirrorOf>central</mirrorOf>
-  <name>Aliyun Maven</name>
-  <url>https://maven.aliyun.com/repository/public</url>
-</mirror>
+<cargo.servlet.port>8090</cargo.servlet.port>
+```
+Then access the app at http://localhost:8090/
+
+**Q: IDEA shows "Cannot resolve symbol" errors?**  
+A: Wait for Maven dependency download to complete (bottom progress bar), or click the refresh button in the Maven panel.
+
+**Q: Data files are in the wrong location?**  
+A: Delete all `.json` files in the `data/` directory and restart the server. They will be recreated automatically.
+
+**Q: Maven downloads are slow?**  
+A: Configure the Aliyun Maven mirror. In IDEA: File -> Settings -> Build -> Maven -> User settings file, point to a `settings.xml` containing:
+```xml
+<mirrors>
+  <mirror>
+    <id>aliyun</id>
+    <mirrorOf>central</mirrorOf>
+    <name>Aliyun Maven</name>
+    <url>https://maven.aliyun.com/repository/public</url>
+  </mirror>
+</mirrors>
+```
+
+**Q: Can I still run the standalone demo (non-web)?**  
+A: Yes. Right-click `RecruitmentApp.java` in IDEA and select "Run 'RecruitmentApp.main()'". This runs a console demo of the backend logic without starting a web server.
