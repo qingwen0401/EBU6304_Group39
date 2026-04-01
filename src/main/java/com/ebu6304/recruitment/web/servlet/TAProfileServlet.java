@@ -3,6 +3,7 @@ package com.ebu6304.recruitment.web.servlet;
 import com.ebu6304.recruitment.models.TA;
 import com.ebu6304.recruitment.models.User;
 import com.ebu6304.recruitment.repositories.UserRepository;
+import com.ebu6304.recruitment.services.ApplicationService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -11,12 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +40,6 @@ public class TAProfileServlet extends HttpServlet {
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         UserRepository userRepository =
                 (UserRepository) getServletContext().getAttribute("userRepository");
-
         Optional<TA> taOpt = userRepository.findTAById(currentUser.getUserId());
         TA ta = taOpt.orElse(null);
 
@@ -66,6 +61,8 @@ public class TAProfileServlet extends HttpServlet {
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         UserRepository userRepository =
                 (UserRepository) getServletContext().getAttribute("userRepository");
+        ApplicationService applicationService =
+                (ApplicationService) getServletContext().getAttribute("applicationService");
 
         Optional<TA> taOpt = userRepository.findTAById(currentUser.getUserId());
         if (!taOpt.isPresent()) {
@@ -121,19 +118,13 @@ public class TAProfileServlet extends HttpServlet {
             Part cvPart = request.getPart("cvFile");
             if (cvPart != null && cvPart.getSize() > 0) {
                 String submittedFileName = cvPart.getSubmittedFileName();
-                if (submittedFileName != null && submittedFileName.toLowerCase().endsWith(".pdf")) {
-                    // 保存到 data/cv/ 目录
-                    String dataDir = getServletContext().getRealPath("/") + "../../data/cv/";
-                    File cvDir = new File(dataDir);
-                    if (!cvDir.exists()) {
-                        cvDir.mkdirs();
-                    }
-                    String fileName = ta.getUserId() + "_cv.pdf";
-                    File dest = new File(cvDir, fileName);
-                    try (InputStream in = cvPart.getInputStream()) {
-                        Files.copy(in, dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    }
-                    ta.setCvPath("cv/" + fileName);
+                if (submittedFileName != null && !submittedFileName.isBlank()) {
+                    String savedPath = applicationService.uploadCv(
+                            ta.getUserId(),
+                            submittedFileName,
+                            cvPart.getInputStream().readAllBytes()
+                    );
+                    ta.setCvPath(savedPath);
                 }
             }
         } catch (Exception e) {

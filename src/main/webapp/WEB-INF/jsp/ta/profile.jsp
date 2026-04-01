@@ -109,7 +109,7 @@
                         <c:choose>
                             <c:when test="${not empty ta.cvPath}">
                                 <div class="value">
-                                    <a href="${pageContext.request.contextPath}/data/${ta.cvPath}" class="cv-link" target="_blank">
+                                    <a href="${pageContext.request.contextPath}/api/ta/cv/view?path=${ta.cvPath}" class="cv-link" target="_blank">
                                         &#128196; View / Download CV (PDF)
                                     </a>
                                 </div>

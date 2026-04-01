@@ -112,7 +112,14 @@
                     <label>Upload your latest CV (PDF only)</label>
                     <input type="file" id="cvFile" name="cvFile" accept=".pdf" style="padding: 3px;">
                     <c:if test="${ta != null && not empty ta.cvPath}">
-                        <small style="color:#666;font-size:11px;">Current CV uploaded. Upload a new file to replace it.</small>
+                        <div style="margin-top:8px;font-size:12px;color:#374151;">
+                            Current CV:
+                            <a href="${pageContext.request.contextPath}/api/ta/cv/view?path=${ta.cvPath}"
+                               target="_blank" style="color:#0066cc;text-decoration:none;">
+                                <c:out value="${ta.cvPath}" />
+                            </a>
+                        </div>
+                        <small style="color:#666;font-size:11px;">Upload a new file to replace it.</small>
                     </c:if>
                 </div>
                 <div class="form-group">
