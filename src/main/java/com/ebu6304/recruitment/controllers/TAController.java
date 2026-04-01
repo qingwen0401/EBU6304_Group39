@@ -125,6 +125,34 @@ public class TAController {
     }
 
     /**
+     * TA上传CV文件（允许.pdf/.doc），返回保存路径。
+     */
+    public ControllerResult<String> uploadCv(String taId, String fileName, byte[] fileContent) {
+        try {
+            String savedPath = applicationService.uploadCv(taId, fileName, fileContent);
+            return ControllerResult.success("CV uploaded successfully", savedPath);
+        } catch (IllegalArgumentException e) {
+            return ControllerResult.failure(e.getMessage());
+        } catch (Exception e) {
+            return ControllerResult.failure("Failed to upload CV: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 将已上传CV路径绑定到某条申请上。
+     */
+    public ControllerResult<Application> attachCvToApplication(String taId, String applicationId, String cvPath) {
+        try {
+            Application updated = applicationService.attachCvToApplication(taId, applicationId, cvPath);
+            return ControllerResult.success("CV attached to application", updated);
+        } catch (IllegalArgumentException e) {
+            return ControllerResult.failure(e.getMessage());
+        } catch (Exception e) {
+            return ControllerResult.failure("Failed to attach CV: " + e.getMessage());
+        }
+    }
+
+    /**
      * TA撤回申请。
      *
      * @param taId          TA用户ID

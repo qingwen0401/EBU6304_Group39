@@ -7,6 +7,9 @@
 const TA_PROFILE_KEY = "ta_profile";
 // 申请记录存储键
 const TA_APPLICATIONS_KEY = "ta_applications";
+const TA_USER_ID_KEY = "ta_user_id";
+const ALLOWED_CV_EXTENSIONS = [".pdf", ".doc"];
+const API_BASE = window.location.protocol === "file:" ? "http://localhost:8081" : "";
 
 /**
  * 读取个人资料
@@ -19,7 +22,8 @@ function getProfile() {
         email: "",
         degreeProgram: "BSc Computer Science",
         skills: "",
-        availability: {}
+        availability: {},
+        cvPath: ""
     };
 }
 
@@ -81,6 +85,10 @@ function loadProfile() {
             <div class="value">${profile.skills || "Not provided"}</div>
         </div>
         <div class="field">
+            <label>CV Path</label>
+            <div class="value">${profile.cvPath || "Not uploaded"}</div>
+        </div>
+        <div class="field">
             <label>Weekly Availability</label>
             <div class="value">${formatAvailability(profile.availability)}</div>
         </div>
@@ -123,6 +131,8 @@ function loadEditForm() {
         const day = cb.dataset.day;
         cb.checked = profile.availability?.[time]?.[day] || false;
     });
+
+    renderCurrentCvInfo(profile.cvPath);
 }
 
 // ======================
@@ -160,7 +170,7 @@ function validateStudentId(id) {
 // ======================
 // 保存 Profile（无自动创建申请）
 // ======================
-function saveProfile() {
+async function saveProfile() {
     const fullName = document.getElementById("fullName").value.trim();
     const studentId = document.getElementById("studentId").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -168,6 +178,13 @@ function saveProfile() {
     if (!validateName(fullName)) return;
     if (!validateStudentId(studentId)) return;
     if (!validateEmail(email)) return;
+
+    const cvFileInput = document.getElementById("cvFile");
+    const cvFile = cvFileInput ? cvFileInput.files[0] : null;
+    if (cvFile && !isAllowedCvFile(cvFile.name)) {
+        alert("Invalid CV file type. Please upload a .pdf or .doc file.");
+        return;
+    }
 
     const availability = {};
     document.querySelectorAll(".availability").forEach(cb => {
@@ -183,13 +200,78 @@ function saveProfile() {
         email,
         degreeProgram: document.getElementById("degreeProgram").value,
         skills: document.getElementById("skills").value.trim(),
-        availability
+        availability,
+        cvPath: getProfile().cvPath || ""
     };
+
+    const taId = getCurrentTaId();
+    if (cvFile) {
+        try {
+            profile.cvPath = await uploadCvFile(cvFile, taId);
+        } catch (e) {
+            alert("CV upload failed: " + e.message);
+            return;
+        }
+    }
 
     saveProfileToStorage(profile);
 
     alert("Profile saved successfully!");
     location.href = "ta-profile.html";
+}
+
+function getCurrentTaId() {
+    const existing = localStorage.getItem(TA_USER_ID_KEY);
+    if (existing) return existing;
+    const demoId = "TA-DEMO";
+    localStorage.setItem(TA_USER_ID_KEY, demoId);
+    return demoId;
+}
+
+function renderCurrentCvInfo(cvPath) {
+    const info = document.getElementById("currentCvInfo");
+    const viewBtn = document.getElementById("viewCvBtn");
+    if (!info) return;
+    if (!cvPath) {
+        info.textContent = "Current CV: Not uploaded";
+        if (viewBtn) viewBtn.style.display = "none";
+        return;
+    }
+    const fileName = cvPath.split("/").pop() || cvPath;
+    info.textContent = `Current CV: ${fileName} (kept unless you upload a new file)`;
+    if (viewBtn) viewBtn.style.display = "inline-block";
+}
+
+function viewCurrentCv() {
+    const profile = getProfile();
+    if (!profile.cvPath) {
+        alert("No CV uploaded yet.");
+        return;
+    }
+    const url = `${API_BASE}/api/ta/cv/view?path=${encodeURIComponent(profile.cvPath)}`;
+    window.open(url, "_blank", "noopener");
+}
+
+function isAllowedCvFile(fileName) {
+    if (!fileName) return false;
+    const lower = fileName.toLowerCase();
+    return ALLOWED_CV_EXTENSIONS.some(ext => lower.endsWith(ext));
+}
+
+async function uploadCvFile(file, taId) {
+    const formData = new FormData();
+    formData.append("taId", taId);
+    formData.append("cvFile", file);
+
+    const response = await fetch(`${API_BASE}/api/ta/cv/upload`, {
+        method: "POST",
+        body: formData
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.success) {
+        throw new Error(payload.message || "Upload rejected");
+    }
+    return payload.data;
 }
 
 // ======================
