@@ -92,7 +92,7 @@
                     <c:forEach var="app" items="${activeApps}">
                         <tr>
                             <td>${app.jobId}</td>
-                            <td>${app.appliedAt != null ? app.appliedAt.toString().substring(0,10) : '-'}</td>
+                            <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
                             <td><span class="status status-${app.status}">${app.status}</span></td>
                             <td>
                                 <c:if test="${app.status == 'PENDING'}">
@@ -127,9 +127,9 @@
                     <c:forEach var="app" items="${historyApps}">
                         <tr>
                             <td>${app.jobId}</td>
-                            <td>${app.appliedAt != null ? app.appliedAt.toString().substring(0,10) : '-'}</td>
+                            <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
                             <td><span class="status status-${app.status}">${app.status}</span></td>
-                            <td style="color:#64748b;font-size:12px;">${not empty app.feedback ? app.feedback : '-'}</td>
+                            <td style="color:#64748b;font-size:12px;">${not empty app.reviewNote ? app.reviewNote : '-'}</td>
                         </tr>
                     </c:forEach>
                     </tbody>

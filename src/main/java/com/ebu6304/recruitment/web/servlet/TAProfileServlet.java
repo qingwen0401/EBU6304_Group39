@@ -5,11 +5,18 @@ import com.ebu6304.recruitment.models.User;
 import com.ebu6304.recruitment.repositories.UserRepository;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +26,16 @@ import java.util.stream.Collectors;
  * TA 个人档案 Servlet
  * GET  /ta/profile          → 显示档案页
  * GET  /ta/profile?action=edit → 显示编辑页
- * POST /ta/profile          → 保存档案，跳转回档案页
+ * POST /ta/profile          → 保存档案（含文件上传），跳转回档案页
  *
  * @author Group39
  * @version 1.0
  */
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024,      // 1 MB
+    maxFileSize       = 10 * 1024 * 1024, // 10 MB
+    maxRequestSize    = 15 * 1024 * 1024  // 15 MB
+)
 public class TAProfileServlet extends HttpServlet {
 
     @Override
@@ -66,27 +78,15 @@ public class TAProfileServlet extends HttpServlet {
         String fullName   = request.getParameter("fullName");
         String email      = request.getParameter("email");
         String studentId  = request.getParameter("studentId");
-        String department = request.getParameter("department");
-        String major      = request.getParameter("major");
-        String year       = request.getParameter("year");
-        String gpaStr     = request.getParameter("gpa");
+        String degreeProgram = request.getParameter("degreeProgram");
         String skillsStr  = request.getParameter("skills");
         String bio        = request.getParameter("bio");
 
-        if (fullName   != null && !fullName.trim().isEmpty())   ta.setFullName(fullName.trim());
-        if (email      != null && !email.trim().isEmpty())      ta.setEmail(email.trim());
-        if (studentId  != null && !studentId.trim().isEmpty())  ta.setStudentId(studentId.trim());
-        if (department != null)                                  ta.setDepartment(department.trim());
-        if (major      != null)                                  ta.setMajor(major.trim());
-        if (year       != null)                                  ta.setYear(year.trim());
-        if (bio        != null)                                  ta.setBio(bio.trim());
-
-        if (gpaStr != null && !gpaStr.trim().isEmpty()) {
-            try {
-                double gpa = Double.parseDouble(gpaStr.trim());
-                if (gpa >= 0.0 && gpa <= 4.0) ta.setGpa(gpa);
-            } catch (NumberFormatException ignored) { }
-        }
+        if (fullName     != null && !fullName.trim().isEmpty())     ta.setFullName(fullName.trim());
+        if (email        != null && !email.trim().isEmpty())        ta.setEmail(email.trim());
+        if (studentId    != null && !studentId.trim().isEmpty())    ta.setStudentId(studentId.trim());
+        if (degreeProgram != null)                                   ta.setMajor(degreeProgram.trim());
+        if (bio          != null)                                    ta.setBio(bio.trim());
 
         // 解析技能列表（逗号或换行分隔）
         if (skillsStr != null && !skillsStr.trim().isEmpty()) {
@@ -96,6 +96,49 @@ public class TAProfileServlet extends HttpServlet {
                     .distinct()
                     .collect(Collectors.toList());
             ta.setSkills(skills);
+        }
+
+        // 处理每周可用时间（收集复选框值，构建JSON字符串）
+        String[] times = {"morning", "afternoon", "evening"};
+        String[] days  = {"mon", "tue", "wed", "thu", "fri", "sat", "sun"};
+        StringBuilder availJson = new StringBuilder("{");
+        for (int ti = 0; ti < times.length; ti++) {
+            if (ti > 0) availJson.append(",");
+            availJson.append("\"").append(times[ti]).append("\":{");
+            for (int di = 0; di < days.length; di++) {
+                if (di > 0) availJson.append(",");
+                String paramName = "avail_" + times[ti] + "_" + days[di];
+                boolean checked = "on".equals(request.getParameter(paramName));
+                availJson.append("\"").append(days[di]).append("\":").append(checked);
+            }
+            availJson.append("}");
+        }
+        availJson.append("}");
+        ta.setAvailability(availJson.toString());
+
+        // 处理 CV 文件上传
+        try {
+            Part cvPart = request.getPart("cvFile");
+            if (cvPart != null && cvPart.getSize() > 0) {
+                String submittedFileName = cvPart.getSubmittedFileName();
+                if (submittedFileName != null && submittedFileName.toLowerCase().endsWith(".pdf")) {
+                    // 保存到 data/cv/ 目录
+                    String dataDir = getServletContext().getRealPath("/") + "../../data/cv/";
+                    File cvDir = new File(dataDir);
+                    if (!cvDir.exists()) {
+                        cvDir.mkdirs();
+                    }
+                    String fileName = ta.getUserId() + "_cv.pdf";
+                    File dest = new File(cvDir, fileName);
+                    try (InputStream in = cvPart.getInputStream()) {
+                        Files.copy(in, dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    ta.setCvPath("cv/" + fileName);
+                }
+            }
+        } catch (Exception e) {
+            // 文件上传失败不影响其他字段保存
+            getServletContext().log("CV upload failed: " + e.getMessage());
         }
 
         userRepository.saveTA(ta);

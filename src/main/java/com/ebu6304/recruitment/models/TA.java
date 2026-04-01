@@ -45,6 +45,9 @@ public class TA extends User {
     /** 个人简介 */
     private String bio;
 
+    /** 每周可用时间（JSON字符串，格式：{"morning":{"mon":true,...},...}） */
+    private String availability;
+
     /** 该TA提交的所有申请ID列表 */
     private List<String> applicationIds;
 
@@ -187,6 +190,9 @@ public class TA extends User {
 
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }
+
+    public String getAvailability() { return availability; }
+    public void setAvailability(String availability) { this.availability = availability; }
 
     public List<String> getApplicationIds() { return applicationIds; }
     public void setApplicationIds(List<String> applicationIds) { this.applicationIds = applicationIds; }

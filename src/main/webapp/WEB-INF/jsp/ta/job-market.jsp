@@ -88,21 +88,21 @@
                     <div class="job-title">${job.title}</div>
                     <div class="job-meta">
                         <c:if test="${not empty job.moduleCode}">Module: ${job.moduleCode} &nbsp;|&nbsp;</c:if>
-                        <c:if test="${job.hoursPerWeek != null}">Hours: ${job.hoursPerWeek}/week &nbsp;|&nbsp;</c:if>
-                        <c:if test="${not empty job.salary}">Pay: ${job.salary}</c:if>
+                        <c:if test="${job.hoursPerWeek > 0}">Hours: ${job.hoursPerWeek}/week &nbsp;|&nbsp;</c:if>
+                        <c:if test="${job.hourlyRate > 0}">Pay: ¥${job.hourlyRate}/hr</c:if>
                     </div>
                     <c:if test="${not empty job.description}">
                         <p style="font-size:13px;color:#475569;margin-bottom:10px;">${job.description}</p>
                     </c:if>
                     <div class="job-tags">
-                        <c:if test="${not empty job.type}"><span class="tag">${job.type}</span></c:if>
-                        <c:if test="${not empty job.term}"><span class="tag">${job.term}</span></c:if>
-                        <c:forEach var="req" items="${job.requirements}">
+                        <c:if test="${not empty job.jobType}"><span class="tag">${job.jobType}</span></c:if>
+                        <c:if test="${not empty job.semester}"><span class="tag">${job.semester}</span></c:if>
+                        <c:forEach var="req" items="${job.requiredSkills}">
                             <span class="tag">${req}</span>
                         </c:forEach>
                     </div>
-                    <c:if test="${job.deadline != null}">
-                        <div class="deadline">Deadline: ${job.deadline.toString().substring(0,10)}</div>
+                    <c:if test="${not empty job.deadline}">
+                        <div class="deadline">Deadline: ${job.deadline.length() >= 10 ? job.deadline.substring(0,10) : job.deadline}</div>
                     </c:if>
                     <c:choose>
                         <c:when test="${appliedJobIds.contains(job.jobId)}">
