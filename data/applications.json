@@ -46,5 +46,21 @@
     "reviewNote": "Great candidate!",
     "taGpa": 0.0,
     "taSkillsSnapshot": null
+  },
+  {
+    "applicationId": "APP20260331163446002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260331163446001",
+    "jobTitle": "Lab TA for EBU6304",
+    "moId": "MO20260329164406001",
+    "coverLetter": "I am passionate about software engineering and have strong Java skills.",
+    "cvPath": null,
+    "status": "ACCEPTED",
+    "appliedAt": "2026-03-31T16:34:46.067744",
+    "reviewedAt": "2026-03-31T16:34:46.076997500",
+    "reviewNote": "Great candidate!",
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null
   }
 ]

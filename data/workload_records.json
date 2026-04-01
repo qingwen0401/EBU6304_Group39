@@ -40,5 +40,19 @@
     "createdAt": "2026-03-29T16:50:51.293608200",
     "applicationId": "APP20260329165051002",
     "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260331163446003",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260331163446001",
+    "jobTitle": "Lab TA for EBU6304",
+    "moduleCode": "EBU6304",
+    "moId": "MO20260329164406001",
+    "weeklyHours": 8,
+    "semester": "2026 Spring",
+    "createdAt": "2026-03-31T16:34:46.078011",
+    "applicationId": "APP20260331163446002",
+    "status": "ACTIVE"
   }
 ]

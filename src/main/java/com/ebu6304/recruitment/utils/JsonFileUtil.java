@@ -30,6 +30,36 @@ public class JsonFileUtil {
             .create();
 
     /**
+     * 可选的基础目录，用于Web应用中将相对路径解析到正确位置。
+     * 例如设置为 WEB-INF 目录的绝对路径，则 "data/xxx.json" 会解析到
+     * WEB-INF/data/xxx.json。
+     */
+    private static String baseDir = null;
+
+    /**
+     * 设置数据文件的基础目录（Web应用启动时调用）。
+     *
+     * @param dir 基础目录的绝对路径
+     */
+    public static void setBaseDir(String dir) {
+        baseDir = dir;
+    }
+
+    /**
+     * 将相对路径解析为实际路径。
+     * 如果设置了 baseDir 且路径是相对路径，则相对于 baseDir 解析。
+     *
+     * @param filePath 文件路径
+     * @return 解析后的 Path 对象
+     */
+    private static Path resolvePath(String filePath) {
+        if (baseDir != null && !Paths.get(filePath).isAbsolute()) {
+            return Paths.get(baseDir, filePath);
+        }
+        return Paths.get(filePath);
+    }
+
+    /**
      * 将对象列表写入JSON文件。
      * 如果文件不存在，则自动创建；如果存在，则覆盖。
      *
@@ -41,7 +71,7 @@ public class JsonFileUtil {
     public static <T> void writeList(String filePath, List<T> data) {
         try {
             // 确保父目录存在
-            Path path = Paths.get(filePath);
+            Path path = resolvePath(filePath);
             if (path.getParent() != null) {
                 Files.createDirectories(path.getParent());
             }
@@ -63,7 +93,7 @@ public class JsonFileUtil {
      * @return 反序列化后的对象列表，文件不存在时返回空列表
      */
     public static <T> List<T> readList(String filePath, Class<T> type) {
-        Path path = Paths.get(filePath);
+        Path path = resolvePath(filePath);
         if (!Files.exists(path)) {
             return new ArrayList<>();
         }
@@ -90,7 +120,7 @@ public class JsonFileUtil {
      */
     public static <T> void writeObject(String filePath, T data) {
         try {
-            Path path = Paths.get(filePath);
+            Path path = resolvePath(filePath);
             if (path.getParent() != null) {
                 Files.createDirectories(path.getParent());
             }
@@ -110,7 +140,7 @@ public class JsonFileUtil {
      * @return 反序列化后的对象，文件不存在时返回null
      */
     public static <T> T readObject(String filePath, Class<T> type) {
-        Path path = Paths.get(filePath);
+        Path path = resolvePath(filePath);
         if (!Files.exists(path)) {
             return null;
         }
@@ -132,7 +162,7 @@ public class JsonFileUtil {
      * @return 文件存在返回true，否则返回false
      */
     public static boolean fileExists(String filePath) {
-        return Files.exists(Paths.get(filePath));
+        return Files.exists(resolvePath(filePath));
     }
 
     /**
