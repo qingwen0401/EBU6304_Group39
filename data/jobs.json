@@ -79,5 +79,194 @@
     "applicationIds": [
       "APP20260329165051002"
     ]
+  },
+  {
+    "jobId": "JOB20260329194653001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-29T19:46:53.452685500",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260329194653002"
+    ]
+  },
+  {
+    "jobId": "JOB20260329210503001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-29T21:05:03.665672200",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260329210503002"
+    ]
+  },
+  {
+    "jobId": "JOB20260331211532001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-31T21:15:32.701117600",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260331211532002"
+    ]
+  },
+  {
+    "jobId": "JOB20260331213649001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-31T21:36:49.654107800",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260331213649002"
+    ]
+  },
+  {
+    "jobId": "JOB20260331215017001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-31T21:50:17.680349",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260331215017002"
+    ]
+  },
+  {
+    "jobId": "JOB20260331215133001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-31T21:51:33.819317",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260331215133002"
+    ]
+  },
+  {
+    "jobId": "JOB20260331215916001",
+    "moId": "MO20260329164406001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Lab TA for EBU6304",
+    "description": "Assist students in lab sessions",
+    "requiredSkills": [
+      "Java",
+      "OOP",
+      "Git"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 15.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-03-31T21:59:16.529777500",
+    "deadline": "2026-04-30",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260331215916002"
+    ]
   }
 ]

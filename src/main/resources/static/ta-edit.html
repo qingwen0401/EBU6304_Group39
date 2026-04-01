@@ -81,8 +81,13 @@
                     <textarea id="skills" rows="4" placeholder="List your technical skills, e.g., Python, ARM Assembly, Java..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Upload your latest CV (PDF only)</label>
-                    <input type="file" id="cvFile" accept=".pdf" style="padding: 3px;">
+                    <label>Upload your latest CV (.pdf or .doc)</label>
+                    <input type="file" id="cvFile" style="padding: 3px;">
+                    <small id="cvUploadHint" style="display:block;color:#666;margin-top:6px;">Allowed formats: .pdf, .doc</small>
+                    <small id="currentCvInfo" style="display:block;color:#1f2937;margin-top:6px;">Current CV: Not uploaded</small>
+                    <div style="margin-top:8px;">
+                        <button type="button" class="btn" id="viewCvBtn" style="background:#111827;color:white;display:none;" onclick="viewCurrentCv()">View current CV</button>
+                    </div>
                 </div>
             </div>
 

@@ -1,6 +1,7 @@
 package com.ebu6304.recruitment.controllers;
 
 import com.ebu6304.recruitment.models.Application;
+import com.ebu6304.recruitment.models.CvFileData;
 import com.ebu6304.recruitment.services.ApplicationService;
 import com.ebu6304.recruitment.services.WorkloadService;
 
@@ -76,6 +77,20 @@ public class MOApplicationController {
                     .orElse(ControllerResult.failure("Application not found: " + applicationId));
         } catch (Exception e) {
             return ControllerResult.failure("Failed to retrieve application: " + e.getMessage());
+        }
+    }
+
+    /**
+     * MO查看申请关联CV（仅该职位所属MO可见）。
+     */
+    public ControllerResult<CvFileData> getApplicationCv(String moId, String applicationId) {
+        try {
+            CvFileData cv = applicationService.getCvForApplicationAsMo(moId, applicationId);
+            return ControllerResult.success("CV retrieved", cv);
+        } catch (IllegalArgumentException e) {
+            return ControllerResult.failure(e.getMessage());
+        } catch (Exception e) {
+            return ControllerResult.failure("Failed to retrieve CV: " + e.getMessage());
         }
     }
 
