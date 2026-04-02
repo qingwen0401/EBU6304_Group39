@@ -10,9 +10,9 @@
       "Python",
       "SQL"
     ],
-    "cvPath": null,
+    "cvPath": "data/uploads/cv/TA20260329164406002_1775047332312_f3fab134-7ad0-4431-9f6b-353d5f954291.pdf",
     "bio": "I am a third-year Software Engineering student passionate about teaching.",
-    "availability": null,
+    "availability": "{\"morning\":{\"mon\":false,\"tue\":false,\"wed\":false,\"thu\":false,\"fri\":false,\"sat\":false,\"sun\":false},\"afternoon\":{\"mon\":false,\"tue\":false,\"wed\":false,\"thu\":false,\"fri\":false,\"sat\":false,\"sun\":false},\"evening\":{\"mon\":false,\"tue\":false,\"wed\":false,\"thu\":false,\"fri\":false,\"sat\":false,\"sun\":false}}",
     "applicationIds": [],
     "currentWeeklyHours": 0,
     "maxWeeklyHours": 20,
