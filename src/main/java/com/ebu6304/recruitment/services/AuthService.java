@@ -45,8 +45,43 @@ public class AuthService {
     public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.sessionStore = new HashMap<>();
+        // 自动初始化默认 Admin 账户（首次启动时创建）
+        initDefaultAdmin();
+        initDefaultMO();
     }
-
+    /**
+     * 初始化默认MO账户。
+     * 默认账户：用户名 test_mo，密码 Test1234
+     * 仅在没有任何 MO 账户时自动创建。
+     */
+    private void initDefaultMO() {
+        try {
+            if (userRepository.findAllMOs().isEmpty()) {
+                registerMO("test_mo", "Test1234", "mo@bupt.edu.cn",
+                        "Test MO", "CS", "EBU6304", "Software Engineering");
+                System.out.println("[AuthService] Default MO created: test_mo / Test1234");
+            } else {
+                System.out.println("[AuthService] MO list not empty, skip default MO creation.");
+            }
+        } catch (Exception e) {
+            System.err.println("[AuthService] initDefaultMO failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 初始化默认管理员账户。
+     * 默认账户：用户名 admin，密码 admin123456
+     * 仅在没有任何 Admin 账户时自动创建。
+     */
+    private void initDefaultAdmin() {
+        if (userRepository.findAllAdmins().isEmpty()) {
+            String adminId   = "ADMIN_001";
+            String passHash  = PasswordUtil.hashPassword("admin123456");
+            User admin = new User(adminId, "admin", passHash,
+                    "admin@system.edu", "ADMIN", "System Administrator");
+            userRepository.saveAdmin(admin);
+        }
+    }
     // ==================== 注册 ====================
 
     /**

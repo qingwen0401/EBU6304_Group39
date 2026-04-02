@@ -15,20 +15,21 @@ import java.util.Optional;
 /**
  * 登录 Servlet
  * GET  /login  → 显示登录页面
- * POST /login  → 处理登录，成功后跳转到对应角色的首页
+ * POST /login  → 处理登录，成功后根据角色跳转到对应首页
  *
- * @author Group39
- * @version 1.0
+ * @author Group39 / Fang Zixi
+ * @version 1.1
  */
 public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 如果已登录，直接跳转到 TA 仪表盘
+        // 如果已登录，根据角色跳转到对应 dashboard
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("currentUser") != null) {
-            response.sendRedirect(request.getContextPath() + "/ta/dashboard");
+            User user = (User) session.getAttribute("currentUser");
+            redirectByRole(user.getRole(), request, response);
             return;
         }
         request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
@@ -59,25 +60,34 @@ public class LoginServlet extends HttpServlet {
             }
             User user = userOpt.get();
 
-            // 创建会话，存储用户信息
+            // 创建会话
             HttpSession session = request.getSession(true);
             session.setAttribute("currentUser", user);
             session.setAttribute("authToken", token);
 
-            // 根据角色跳转
-            String role = user.getRole();
-            if ("TA".equals(role)) {
-                response.sendRedirect(request.getContextPath() + "/ta/dashboard");
-            } else if ("MO".equals(role)) {
-                // TODO: MO dashboard (暂时跳转到 TA dashboard)
-                response.sendRedirect(request.getContextPath() + "/ta/dashboard");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/ta/dashboard");
-            }
+            // 根据角色跳转到各自首页
+            redirectByRole(user.getRole(), request, response);
 
         } catch (Exception e) {
             request.setAttribute("error", "Invalid username or password.");
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+        }
+    }
+
+    /**
+     * 根据角色跳转到对应 dashboard。
+     */
+    private void redirectByRole(String role, HttpServletRequest request,
+                                HttpServletResponse response) throws IOException {
+        String ctx = request.getContextPath();
+        if ("TA".equals(role)) {
+            response.sendRedirect(ctx + "/ta/dashboard");
+        } else if ("MO".equals(role)) {
+            response.sendRedirect(ctx + "/mo/dashboard");
+        } else if ("ADMIN".equals(role)) {
+            response.sendRedirect(ctx + "/admin/dashboard");
+        } else {
+            response.sendRedirect(ctx + "/login");
         }
     }
 }
