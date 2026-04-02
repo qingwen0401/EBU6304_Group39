@@ -121,6 +121,7 @@
     <servlet-mapping>
         <servlet-name>AdminDashboardServlet</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
+    </servlet-mapping>
     <!-- CV Upload API -->
     <servlet>
         <servlet-name>CvUploadServlet</servlet-name>

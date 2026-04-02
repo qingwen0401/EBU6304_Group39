@@ -14,5 +14,21 @@
     "createdAt": "2026-04-02T14:18:09.741501300",
     "active": true,
     "fullName": "Test MO"
+  },
+  {
+    "department": "CS Department",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "postedJobIds": [],
+    "phone": null,
+    "officeLocation": null,
+    "userId": "MO20260402180227001",
+    "username": "dr.smith",
+    "passwordHash": "NU54ZvYkZDDeQ/7xP43kvQ\u003d\u003d:nPER38N0MzZiQ7QYGaaTZ9AZabpQzR5j1HzvBZlWDkI\u003d",
+    "email": "smith@bupt.edu.cn",
+    "role": "MO",
+    "createdAt": "2026-04-02T18:02:27.820795400",
+    "active": true,
+    "fullName": "Dr. Smith"
   }
 ]
