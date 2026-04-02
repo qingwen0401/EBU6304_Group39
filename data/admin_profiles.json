@@ -1,0 +1,12 @@
+[
+  {
+    "userId": "ADMIN_001",
+    "username": "admin",
+    "passwordHash": "SCuBglLhntufroo2goPx4A\u003d\u003d:krqH786c97FVM4XWjvQWGSABuJHt5UgJZdTVElw9Etc\u003d",
+    "email": "admin@system.edu",
+    "role": "ADMIN",
+    "createdAt": "2026-04-02T11:51:38.282744100",
+    "active": true,
+    "fullName": "System Administrator"
+  }
+]

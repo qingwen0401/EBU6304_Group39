@@ -1,23 +1,18 @@
 [
   {
-    "department": "CS Department",
+    "department": "CS",
     "moduleCode": "EBU6304",
     "moduleName": "Software Engineering",
-    "postedJobIds": [
-      "JOB20260329164406003",
-      "JOB20260329164716001",
-      "JOB20260329165051001",
-      "JOB20260331163446001"
-    ],
+    "postedJobIds": [],
     "phone": null,
     "officeLocation": null,
-    "userId": "MO20260329164406001",
-    "username": "dr.smith",
-    "passwordHash": "lOrtGS5OD5CBOVTaCBTQsA\u003d\u003d:FKxWH5mHG1THP7nD1nQEnhrNtyuHZenTxaTC1WR5FlU\u003d",
-    "email": "smith@bupt.edu.cn",
+    "userId": "MO20260402141809001",
+    "username": "test_mo",
+    "passwordHash": "50PgDoGF7eDJAlk5LGeTuA\u003d\u003d:oJ18lAj6O9uCx/HzQF1lUth2puYJqso8ZMC5apJd8J0\u003d",
+    "email": "mo@bupt.edu.cn",
     "role": "MO",
-    "createdAt": "2026-03-29T16:44:06.893238800",
+    "createdAt": "2026-04-02T14:18:09.741501300",
     "active": true,
-    "fullName": "Dr. Smith"
+    "fullName": "Test MO"
   }
 ]

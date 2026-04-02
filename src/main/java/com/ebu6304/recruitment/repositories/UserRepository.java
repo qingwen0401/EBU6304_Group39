@@ -215,7 +215,7 @@ public class UserRepository {
     // ==================== 通用用户操作 ====================
 
     /**
-     * 根据用户名查找用户（先查MO，再查TA）。
+     * 根据用户名查找用户（先查MO，再查TA，再查Admin）。
      * 用于登录验证。
      *
      * @param username 用户名
@@ -228,30 +228,55 @@ public class UserRepository {
         // 再查TA
         Optional<TA> ta = findTAByUsername(username);
         if (ta.isPresent()) return Optional.of(ta.get());
+        // 最后查Admin（从admin_profiles.json）
+        Optional<User> admin = findAllAdmins().stream()
+                .filter(u -> u.getUsername().equals(username))
+                .findFirst();
+        if (admin.isPresent()) return admin;
         return Optional.empty();
     }
 
+    /** Admin数据文件路径 */
+    private static final String ADMIN_FILE = "data/admin_profiles.json";
+
     /**
-     * 检查用户名是否已被使用。
-     *
-     * @param username 用户名
-     * @return 已使用返回true
+     * 获取所有Admin列表。
      */
-    public boolean usernameExists(String username) {
-        return findUserByUsername(username).isPresent();
+    public List<User> findAllAdmins() {
+        return JsonFileUtil.readList(ADMIN_FILE, User.class);
     }
 
     /**
-     * 检查邮箱是否已被使用。
-     *
-     * @param email 邮箱地址
-     * @return 已使用返回true
+     * 保存Admin账户。
+     */
+    public void saveAdmin(User admin) {
+        List<User> list = findAllAdmins();
+        boolean found = false;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUserId().equals(admin.getUserId())) {
+                list.set(i, admin);
+                found = true;
+                break;
+            }
+        }
+        if (!found) list.add(admin);
+        JsonFileUtil.writeList(ADMIN_FILE, list);
+    }
+
+    /**
+     * 检查邮箱是否已被使用（含Admin）。
      */
     public boolean emailExists(String email) {
-        boolean inMO = findAllMOs().stream()
-                .anyMatch(mo -> email.equals(mo.getEmail()));
-        boolean inTA = findAllTAs().stream()
-                .anyMatch(ta -> email.equals(ta.getEmail()));
-        return inMO || inTA;
+        boolean inMO    = findAllMOs().stream().anyMatch(mo -> email.equals(mo.getEmail()));
+        boolean inTA    = findAllTAs().stream().anyMatch(ta -> email.equals(ta.getEmail()));
+        boolean inAdmin = findAllAdmins().stream().anyMatch(a  -> email.equals(a.getEmail()));
+        return inMO || inTA || inAdmin;
     }
-}
+
+    /**
+     * 检查用户名是否已被使用（含Admin）。
+     */
+    public boolean usernameExists(String username) {
+        return findUserByUsername(username).isPresent();
+    }}
+

@@ -30,6 +30,7 @@
         .register-link { text-align: center; margin-top: 16px; font-size: 13px; color: #64748b; }
         .register-link a { color: #2563eb; text-decoration: none; }
         .register-link a:hover { text-decoration: underline; }
+        .hint { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 12px; }
     </style>
 </head>
 <body>
@@ -41,17 +42,19 @@
     <div class="error-msg"><%= request.getAttribute("error") %></div>
     <% } %>
     <% if ("true".equals(request.getParameter("registered"))) { %>
-    <div class="success-msg">Registration successful! Please sign in.</div>
+    <div class="success-msg">✓ Registration successful! Please sign in.</div>
     <% } %>
 
     <form method="post" action="${pageContext.request.contextPath}/login">
         <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required autofocus>
+            <input type="text" id="username" name="username"
+                   placeholder="Enter your username" required autofocus>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <input type="password" id="password" name="password"
+                   placeholder="Enter your password" required>
         </div>
         <button type="submit" class="btn-login">Sign In</button>
     </form>
@@ -59,6 +62,7 @@
     <div class="register-link">
         Don't have an account? <a href="${pageContext.request.contextPath}/register">Register as TA</a>
     </div>
+    <p class="hint">MO and Admin accounts are created by the system administrator.</p>
 </div>
 </body>
 </html>

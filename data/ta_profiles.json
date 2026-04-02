@@ -24,5 +24,27 @@
     "createdAt": "2026-03-29T16:44:06.920678800",
     "active": true,
     "fullName": "Alice Wang"
+  },
+  {
+    "studentId": "2023001",
+    "department": "CS",
+    "major": "Computer Science",
+    "year": null,
+    "gpa": 0.0,
+    "skills": [],
+    "cvPath": null,
+    "bio": null,
+    "availability": null,
+    "applicationIds": [],
+    "currentWeeklyHours": 0,
+    "maxWeeklyHours": 20,
+    "userId": "TA20260402121615001",
+    "username": "test_ta",
+    "passwordHash": "g/oyf4BOr64BcT7/mYZMxQ\u003d\u003d:hg5vA1+NxChNeL5PnfC8k1zFNWeGd9G8+KPPjVhXkNU\u003d",
+    "email": "test@student.bupt.edu.cn",
+    "role": "TA",
+    "createdAt": "2026-04-02T12:16:15.489549100",
+    "active": true,
+    "fullName": "Test TA"
   }
 ]

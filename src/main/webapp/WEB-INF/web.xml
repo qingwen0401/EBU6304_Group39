@@ -22,6 +22,14 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/ta/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/mo/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
 
     <!-- ==================== Servlets ==================== -->
 
@@ -95,6 +103,24 @@
         <url-pattern>/ta/profile</url-pattern>
     </servlet-mapping>
 
+    <!-- MO Dashboard -->
+    <servlet>
+        <servlet-name>MODashboardServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.MODashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MODashboardServlet</servlet-name>
+        <url-pattern>/mo/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <!-- Admin Dashboard -->
+    <servlet>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.AdminDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <url-pattern>/admin/dashboard</url-pattern>
     <!-- CV Upload API -->
     <servlet>
         <servlet-name>CvUploadServlet</servlet-name>
@@ -124,5 +150,7 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+
+
 
 </web-app>
