@@ -95,6 +95,26 @@
         <url-pattern>/ta/profile</url-pattern>
     </servlet-mapping>
 
+    <!-- CV Upload API -->
+    <servlet>
+        <servlet-name>CvUploadServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.CvUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CvUploadServlet</servlet-name>
+        <url-pattern>/api/ta/cv/upload</url-pattern>
+    </servlet-mapping>
+
+    <!-- CV View API -->
+    <servlet>
+        <servlet-name>CvViewServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.CvViewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CvViewServlet</servlet-name>
+        <url-pattern>/api/ta/cv/view</url-pattern>
+    </servlet-mapping>
+
     <!-- ==================== Welcome Files ==================== -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
