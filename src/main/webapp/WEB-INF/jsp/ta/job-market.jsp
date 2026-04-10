@@ -6,68 +6,363 @@
     <meta charset="UTF-8">
     <title>Job Market - TA Recruitment System</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background: #f9fafb; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
         .sidebar {
-            width: 120px; height: 100vh; background: #f0f0f0;
-            padding: 20px 10px; position: fixed; left: 0; top: 0;
+            width: 230px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1e3a8a, #1d4ed8);
+            padding: 28px 18px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: white;
+            box-shadow: 4px 0 18px rgba(15, 23, 42, 0.08);
         }
-        .sidebar p { font-size: 12px; font-weight: bold; margin-bottom: 15px; }
-        .sidebar a { display: block; text-decoration: none; color: #333; font-size: 12px; margin: 8px 0; }
-        .sidebar a.active { font-weight: bold; color: #0066cc; }
-        .sidebar a:hover { color: #0066cc; }
-        .logout-link { color: #dc2626 !important; margin-top: 20px; }
-        .main { margin-left: 120px; padding: 20px; }
-        .breadcrumb { font-size: 12px; color: #666; margin-bottom: 15px; }
+
+        .sidebar .brand {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 28px;
+        }
+
+        .sidebar .nav-title {
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #bfdbfe;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #dbeafe;
+            font-size: 14px;
+            margin: 8px 0;
+            padding: 11px 14px;
+            border-radius: 10px;
+            transition: 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: white;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .sidebar .logout-link {
+            margin-top: 22px;
+            color: #fecaca;
+        }
+
+        .sidebar .logout-link:hover {
+            background: rgba(239, 68, 68, 0.18);
+            color: white;
+        }
+
+        .main {
+            margin-left: 230px;
+            padding: 32px;
+        }
+
+        .page-header {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 26px 28px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+            margin-bottom: 22px;
+        }
+
+        .breadcrumb {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 18px;
+        }
+
         .job-card {
-            background: white; border: 1px solid #e2e8f0; border-radius: 8px;
-            padding: 18px; margin-bottom: 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
         }
-        .job-title { font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #1e293b; }
-        .job-meta { font-size: 12px; color: #64748b; margin-bottom: 8px; }
-        .job-tags { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-        .tag { background: #f1f5f9; padding: 3px 8px; border-radius: 3px; font-size: 11px; color: #475569; }
-        .deadline { color: #dc2626; font-weight: bold; font-size: 13px; margin: 10px 0; }
-        .btn-apply {
-            background: #2563eb; color: white; border: none;
-            padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px;
+
+        .job-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #0f172a;
+            line-height: 1.4;
         }
-        .btn-apply:hover { background: #1d4ed8; }
+
+        .job-meta {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .job-desc {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 14px;
+            line-height: 1.7;
+            min-height: 68px;
+        }
+
+        .job-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .deadline {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 13px;
+            margin: 10px 0 16px;
+        }
+
+        .card-footer {
+            margin-top: auto;
+        }
+
+        .btn-apply,
         .btn-applied {
-            background: #94a3b8; color: white; border: none;
-            padding: 8px 16px; border-radius: 4px; font-size: 13px; cursor: default;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            width: 100%;
         }
-        .empty-msg { color: #94a3b8; font-size: 14px; padding: 40px; text-align: center; }
-        /* Modal */
+
+        .btn-apply {
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-apply:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-applied {
+            background: #cbd5e1;
+            color: white;
+            cursor: default;
+        }
+
+        .empty-msg {
+            color: #64748b;
+            font-size: 15px;
+            padding: 42px 24px;
+            text-align: center;
+            border: 1px dashed #cbd5e1;
+            border-radius: 18px;
+            background: white;
+        }
+
         .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
-        }
-        .modal-overlay.show { display: flex; }
-        .modal {
-            background: white; border-radius: 8px; padding: 30px; width: 480px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-        .modal h3 { font-size: 16px; margin-bottom: 16px; color: #1e293b; }
-        .modal textarea {
-            width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px;
-            font-size: 13px; resize: vertical; min-height: 100px;
-        }
-        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
-        .btn-cancel { background: #f1f5f9; color: #475569; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
-        .btn-submit { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
-        .toast {
-            position: fixed; bottom: 20px; right: 20px; padding: 12px 20px;
-            border-radius: 6px; color: white; font-size: 13px; z-index: 2000;
             display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            width: 100%;
+            max-width: 560px;
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
+        }
+
+        .modal h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #0f172a;
+            line-height: 1.5;
+        }
+
+        .modal .modal-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 14px;
+            line-height: 1.7;
+        }
+
+        .modal label {
+            font-size: 14px;
+            color: #334155;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .modal textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .modal textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn-cancel,
+        .btn-submit {
+            border: none;
+            padding: 11px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-cancel:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-submit {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #1d4ed8;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 13px 20px;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+        }
+
         .toast.success { background: #22c55e; }
         .toast.error { background: #ef4444; }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+                border-radius: 0 0 18px 18px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .page-header,
+            .job-card,
+            .modal {
+                padding: 18px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="sidebar">
-    <p>Navigation</p>
+    <div class="brand">TA Recruitment System</div>
+    <div class="nav-title">Navigation</div>
+
     <a href="${pageContext.request.contextPath}/ta/dashboard">Dashboard</a>
     <a href="${pageContext.request.contextPath}/ta/jobs" class="active">Job Market</a>
     <a href="${pageContext.request.contextPath}/ta/applications">My Applications</a>
@@ -76,53 +371,73 @@
 </div>
 
 <div class="main">
-    <div class="breadcrumb">Home &gt; Job Market</div>
+    <div class="page-header">
+        <div class="breadcrumb">Home &gt; Job Market</div>
+        <div class="page-title">Job Market</div>
+        <div class="page-subtitle">
+            Explore available TA opportunities, review key job details,
+            and apply directly to positions that match your interests and skills.
+        </div>
+    </div>
 
     <c:choose>
         <c:when test="${empty jobs}">
             <div class="empty-msg">No open positions available at the moment. Please check back later.</div>
         </c:when>
         <c:otherwise>
-            <c:forEach var="job" items="${jobs}">
-                <div class="job-card">
-                    <div class="job-title">${job.title}</div>
-                    <div class="job-meta">
-                        <c:if test="${not empty job.moduleCode}">Module: ${job.moduleCode} &nbsp;|&nbsp;</c:if>
-                        <c:if test="${job.hoursPerWeek > 0}">Hours: ${job.hoursPerWeek}/week &nbsp;|&nbsp;</c:if>
-                        <c:if test="${job.hourlyRate > 0}">Pay: ¥${job.hourlyRate}/hr</c:if>
+            <div class="jobs-grid">
+                <c:forEach var="job" items="${jobs}">
+                    <div class="job-card">
+                        <div class="job-title">${job.title}</div>
+
+                        <div class="job-meta">
+                            <c:if test="${not empty job.moduleCode}">Module: ${job.moduleCode}<br></c:if>
+                            <c:if test="${job.hoursPerWeek > 0}">Hours: ${job.hoursPerWeek}/week<br></c:if>
+                            <c:if test="${job.hourlyRate > 0}">Pay: ¥${job.hourlyRate}/hr</c:if>
+                        </div>
+
+                        <c:if test="${not empty job.description}">
+                            <div class="job-desc">${job.description}</div>
+                        </c:if>
+
+                        <div class="job-tags">
+                            <c:if test="${not empty job.jobType}"><span class="tag">${job.jobType}</span></c:if>
+                            <c:if test="${not empty job.semester}"><span class="tag">${job.semester}</span></c:if>
+                            <c:forEach var="req" items="${job.requiredSkills}">
+                                <span class="tag">${req}</span>
+                            </c:forEach>
+                        </div>
+
+                        <c:if test="${not empty job.deadline}">
+                            <div class="deadline">
+                                Deadline: ${job.deadline.length() >= 10 ? job.deadline.substring(0,10) : job.deadline}
+                            </div>
+                        </c:if>
+
+                        <div class="card-footer">
+                            <c:choose>
+                                <c:when test="${appliedJobIds.contains(job.jobId)}">
+                                    <button class="btn-applied" disabled>Already Applied</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button class="btn-apply" onclick="openApplyModal('${job.jobId}', '${job.title}')">Apply Now</button>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
-                    <c:if test="${not empty job.description}">
-                        <p style="font-size:13px;color:#475569;margin-bottom:10px;">${job.description}</p>
-                    </c:if>
-                    <div class="job-tags">
-                        <c:if test="${not empty job.jobType}"><span class="tag">${job.jobType}</span></c:if>
-                        <c:if test="${not empty job.semester}"><span class="tag">${job.semester}</span></c:if>
-                        <c:forEach var="req" items="${job.requiredSkills}">
-                            <span class="tag">${req}</span>
-                        </c:forEach>
-                    </div>
-                    <c:if test="${not empty job.deadline}">
-                        <div class="deadline">Deadline: ${job.deadline.length() >= 10 ? job.deadline.substring(0,10) : job.deadline}</div>
-                    </c:if>
-                    <c:choose>
-                        <c:when test="${appliedJobIds.contains(job.jobId)}">
-                            <button class="btn-applied" disabled>Already Applied</button>
-                        </c:when>
-                        <c:otherwise>
-                            <button class="btn-apply" onclick="openApplyModal('${job.jobId}', '${job.title}')">Apply Now</button>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </c:otherwise>
     </c:choose>
 </div>
 
-<!-- Apply Modal -->
 <div class="modal-overlay" id="applyModal">
     <div class="modal">
         <h3>Apply for: <span id="modalJobTitle"></span></h3>
-        <label style="font-size:13px;color:#374151;display:block;margin-bottom:6px;">Cover Letter (optional)</label>
+        <div class="modal-subtitle">
+            You can optionally add a short cover letter to explain why you are a good fit for this position.
+        </div>
+        <label>Cover Letter (optional)</label>
         <textarea id="coverLetter" placeholder="Briefly describe why you are a good fit for this position..."></textarea>
         <div class="modal-buttons">
             <button class="btn-cancel" onclick="closeModal()">Cancel</button>
@@ -160,17 +475,17 @@
             method: 'POST',
             body: formData
         })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            closeModal();
-            showToast(data.message, data.success ? 'success' : 'error');
-            if (data.success) {
-                setTimeout(function() { location.reload(); }, 1500);
-            }
-        })
-        .catch(function() {
-            showToast('Network error. Please try again.', 'error');
-        });
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                closeModal();
+                showToast(data.message, data.success ? 'success' : 'error');
+                if (data.success) {
+                    setTimeout(function() { location.reload(); }, 1500);
+                }
+            })
+            .catch(function() {
+                showToast('Network error. Please try again.', 'error');
+            });
     }
 
     function showToast(msg, type) {
