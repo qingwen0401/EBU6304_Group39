@@ -113,6 +113,16 @@
         <url-pattern>/mo/dashboard</url-pattern>
     </servlet-mapping>
 
+    <!-- MO Create Job -->
+    <servlet>
+        <servlet-name>MOCreateJobServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.MOCreateJobServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MOCreateJobServlet</servlet-name>
+        <url-pattern>/mo/create-job</url-pattern>
+    </servlet-mapping>
+
     <!-- Admin Dashboard -->
     <servlet>
         <servlet-name>AdminDashboardServlet</servlet-name>
