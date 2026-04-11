@@ -13,7 +13,7 @@ Supports three user roles: **Module Organiser (MO)**, **Teaching Assistant (TA)*
 | [qingwen0401] | 尹晴尚 | 231222992 | 2023213197 | Leader |
 | [Fzx501] | 方紫熙 | 231222981 | 2023213198 | Member |
 | [Baooo118] | 杨舒涵 | 231222350 | 2023213204 | Member |
-| [joycegjy] | J郭佳仪 | 231222110 | 2023213199 | Member |
+| [joycegjy] | 郭佳仪 | 231222110 | 2023213199 | Member |
 | [manyuemei0423] | 吕雨蔓 | 231220862 | 2023213200 | Member |
 | [willing] | 张乐怡 | 231220161 | 2023213203 | Member |
 | Shuyue-Xing | 邢舒悦 | - | - | Support TA |
@@ -165,41 +165,46 @@ EBU6304_Group39/
 ├── data/                                # JSON data storage (auto-created)
 │   ├── ta_profiles.json
 │   ├── mo_profiles.json
+│   ├── admin_profiles.json
 │   ├── jobs.json
 │   ├── applications.json
-│   └── workload_records.json
+│   ├── workload_records.json
+│   └── job_templates.json
 ├── src/main/
 │   ├── java/com/ebu6304/recruitment/
-│   │   ├── models/                      # Domain models
+│   │   ├── models/                      # Domain Models (8 files)
 │   │   │   ├── User.java               # Base user entity
 │   │   │   ├── TA.java                 # Teaching Assistant
 │   │   │   ├── ModuleOrganiser.java    # Module Organiser
 │   │   │   ├── JobPosting.java         # Job posting entity
 │   │   │   ├── Application.java        # Application entity
-│   │   │   └── WorkloadRecord.java     # Workload tracking
-│   │   ├── repositories/               # Data access layer (JSON I/O)
-│   │   │   ├── UserRepository.java
-│   │   │   ├── JobRepository.java
-│   │   │   ├── ApplicationRepository.java
-│   │   │   └── WorkloadRepository.java
-│   │   ├── services/                   # Business logic
-│   │   │   ├── AuthService.java
-│   │   │   ├── JobService.java
-│   │   │   ├── ApplicationService.java
-│   │   │   └── WorkloadService.java
-│   │   ├── controllers/                # Business controllers (used by servlets)
-│   │   │   ├── TAController.java
-│   │   │   ├── MOJobController.java
-│   │   │   ├── MOApplicationController.java
-│   │   │   └── AdminController.java
-│   │   ├── utils/                      # Utilities
-│   │   │   ├── JsonFileUtil.java       # JSON file operations
-│   │   │   ├── PasswordUtil.java       # Password hashing
-│   │   │   └── IdGenerator.java        # ID generation
-│   │   └── web/                        # ⭐ Web layer (CORE: Servlets handle all HTTP requests)
-│   │       ├── AppInitializer.java     # ServletContextListener (initializes services)
+│   │   │   ├── WorkloadRecord.java     # Workload tracking
+│   │   │   ├── JobTemplate.java        # Job template entity
+│   │   │   └── CvFileData.java         # CV file data transfer object
+│   │   ├── repositories/               # Data Access Layer (4 files)
+│   │   │   ├── UserRepository.java     # User CRUD operations
+│   │   │   ├── JobRepository.java      # Job CRUD operations
+│   │   │   ├── ApplicationRepository.java  # Application CRUD operations
+│   │   │   └── WorkloadRepository.java # Workload CRUD operations
+│   │   ├── services/                   # Business Logic Layer (4 files)
+│   │   │   ├── AuthService.java        # Authentication & authorization
+│   │   │   ├── JobService.java         # Job posting management
+│   │   │   ├── ApplicationService.java # Application processing
+│   │   │   └── WorkloadService.java    # Workload tracking
+│   │   ├── controllers/                # Business Controllers (5 files)
+│   │   │   ├── TAController.java       # TA-specific operations
+│   │   │   ├── MOJobController.java    # MO job management
+│   │   │   ├── MOApplicationController.java  # MO application review
+│   │   │   ├── AdminController.java    # Admin operations
+│   │   │   └── ControllerResult.java   # Controller response wrapper
+│   │   ├── utils/                      # Utilities (3 files)
+│   │   │   ├── JsonFileUtil.java       # JSON file I/O operations
+│   │   │   ├── PasswordUtil.java       # Password hashing (SHA-256)
+│   │   │   └── IdGenerator.java        # Unique ID generation
+│   │   └── web/                        # Web Layer (17 files)
+│   │       ├── AppInitializer.java     # ServletContextListener (DI container)
 │   │       ├── AuthFilter.java         # Authentication filter
-│   │       └── servlet/                # ⭐ Servlets (the actual backend endpoints)
+│   │       └── servlet/                # Servlets (15 files - THE BACKEND)
 │   │           ├── LoginServlet.java
 │   │           ├── RegisterServlet.java
 │   │           ├── LogoutServlet.java
@@ -211,24 +216,30 @@ EBU6304_Group39/
 │   │           ├── CvViewServlet.java
 │   │           ├── MODashboardServlet.java
 │   │           ├── MOCreateJobServlet.java
+│   │           ├── MOApplicationReviewServlet.java
+│   │           ├── MOAnalyticsServlet.java
+│   │           ├── MOTemplateServlet.java
 │   │           └── AdminDashboardServlet.java
 │   └── webapp/
 │       ├── index.jsp                   # Entry point
 │       └── WEB-INF/
 │           ├── web.xml                 # Servlet mappings & filters
-│           └── jsp/                    # JSP views
+│           └── jsp/                    # JSP views (13 files)
 │               ├── login.jsp
 │               ├── register.jsp
-│               ├── ta/                 # TA views
+│               ├── ta/                 # TA views (5 files)
 │               │   ├── dashboard.jsp
 │               │   ├── job-market.jsp
 │               │   ├── applications.jsp
 │               │   ├── profile.jsp
 │               │   └── edit-profile.jsp
-│               ├── mo/                 # MO views
+│               ├── mo/                 # MO views (5 files)
 │               │   ├── dashboard.jsp
-│               │   └── create-job.jsp
-│               └── admin/              # Admin views
+│               │   ├── create-job.jsp
+│               │   ├── applications.jsp
+│               │   ├── analytics.jsp
+│               │   └── templates.jsp
+│               └── admin/              # Admin views (1 file)
 │                   └── dashboard.jsp
 └── doc/
     ├── ProductBacklog_group39.xlsx
@@ -236,16 +247,173 @@ EBU6304_Group39/
     └── Report_group39.pdf
 ```
 
-### Architecture Notes
+---
 
-**Backend Core: Servlets**  
-The backend is built entirely with **Java Servlets** (no Spring Boot, no REST controllers). Each Servlet handles HTTP requests for specific routes:
-- Servlets receive requests, call service/controller methods, and forward to JSP views
-- Business logic resides in `services/` and `controllers/`
-- Data persistence uses JSON files via `repositories/`
+## Architecture: Layered Design Explained
 
-**Frontend: JSP + JSTL**  
-Views are rendered server-side using JSP with JSTL tags. No frontend framework (React/Vue) is used.
+This project follows a **classic 4-tier architecture** without using Spring Boot or any framework. All layers are manually implemented using pure Java Servlets.
+
+###  Layer Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  WEB LAYER (Servlets)                                   │  ← HTTP Entry Point
+│  • Receives HTTP requests                               │
+│  • Calls Services/Controllers                           │
+│  • Forwards to JSP views                                │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  SERVICE LAYER (Business Logic)                         │  ← Core Logic
+│  • AuthService, JobService, ApplicationService          │
+│  • Validates business rules                             │
+│  • Orchestrates multiple repositories                   │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  REPOSITORY LAYER (Data Access)                         │  ← Data Persistence
+│  • UserRepository, JobRepository, etc.                  │
+│  • CRUD operations on JSON files                        │
+│  • No business logic, pure data access                  │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  MODEL LAYER (Domain Entities)                          │  ← Data Structures
+│  • User, TA, JobPosting, Application, etc.              │
+│  • POJOs with getters/setters                           │
+│  • No logic, just data containers                       │
+└─────────────────────────────────────────────────────────┘
+```
+
+###  Why This Layering?
+
+#### 1. **Models** (Domain Entities)
+**Purpose**: Define the data structures that represent business concepts.
+
+**Why separate?**
+- **Single Responsibility**: Each model represents ONE business entity
+- **Reusability**: Models are used across all layers
+- **Type Safety**: Strongly-typed objects prevent data errors
+
+**Example**: `Application.java` defines what an application IS (fields, status constants), but NOT how to save it or process it.
+
+#### 2. **Repositories** (Data Access Layer)
+**Purpose**: Handle ALL data persistence operations (read/write JSON files).
+
+**Why separate?**
+- **Separation of Concerns**: Data access logic is isolated from business logic
+- **Testability**: Can mock repositories to test services without touching files
+- **Flexibility**: Can switch from JSON to database without changing services
+
+**Example**: `ApplicationRepository.java` knows HOW to save/load applications from JSON, but NOT WHEN or WHY to save them.
+
+**Actual Usage in Servlets**: ❌ **NOT directly called**. Servlets call Services, which call Repositories.
+
+#### 3. **Services** (Business Logic Layer)
+**Purpose**: Implement core business rules and orchestrate operations.
+
+**Why separate?**
+- **Business Rules Centralization**: All validation, authorization, and workflow logic in one place
+- **Transaction Management**: Services coordinate multiple repository calls
+- **Reusability**: Same service methods used by multiple servlets
+
+**Example**: `ApplicationService.acceptApplication()` validates permissions, checks job vacancies, updates application status, creates workload record, and updates job filled count — orchestrating multiple repositories.
+
+**Actual Usage in Servlets**: ✅ **HEAVILY USED**. 13 out of 15 servlets directly call services via `AppInitializer.getXxxService()`.
+
+**Example from MODashboardServlet.java:34-36**:
+```java
+this.jobService = AppInitializer.getJobService();
+this.applicationService = AppInitializer.getApplicationService();
+```
+
+#### 4. **Controllers** (Optional Business Coordinators)
+**Purpose**: Provide higher-level business operations that combine multiple services.
+
+**Why separate?**
+- **Complex Workflows**: Some operations need coordination across multiple services
+- **Code Reuse**: Avoid duplicating complex logic in multiple servlets
+- **Cleaner Servlets**: Keep servlets thin by delegating complex operations
+
+**Example**: `MOJobController.createJob()` validates input, calls `JobService.postJob()`, and returns a structured result.
+
+**Actual Usage in Servlets**: ⚠️ **PARTIALLY USED**. Only 4 out of 15 servlets use controllers (MOCreateJobServlet, MOApplicationReviewServlet, CvUploadServlet, CvViewServlet). Most servlets call services directly.
+
+**Why not always used?** Controllers are optional — when a servlet only needs one service call, it calls the service directly. Controllers are only used for complex multi-step operations.
+
+#### 5. **Servlets** (Web Layer / HTTP Handlers)
+**Purpose**: Handle HTTP requests and responses.
+
+**Why separate?**
+- **Web-Specific Logic**: HTTP parsing, session management, request/response handling
+- **Thin Layer**: Servlets should be thin — just route requests to services and forward to views
+- **Framework Boundary**: Isolates web framework (Servlet API) from business logic
+
+**Example**: `MODashboardServlet.doGet()` gets the current user from session, calls services to fetch data, puts data in request attributes, and forwards to JSP.
+
+**Actual Usage**: ✅ **THE BACKEND**. All 15 servlets are the actual HTTP endpoints. They are mapped in `web.xml` to URL patterns.
+
+---
+
+### 🔄 Dependency Injection (Manual)
+
+Since we don't use Spring Boot, dependency injection is done manually via `AppInitializer.java`:
+
+**AppInitializer.java:32-73** (ServletContextListener):
+```java
+// 1. Create repositories
+UserRepository userRepository = new UserRepository();
+JobRepository jobRepository = new JobRepository();
+ApplicationRepository applicationRepository = new ApplicationRepository();
+WorkloadRepository workloadRepository = new WorkloadRepository();
+
+// 2. Create services (inject repositories)
+AuthService authService = new AuthService(userRepository);
+JobService jobService = new JobService(jobRepository, userRepository);
+ApplicationService applicationService = new ApplicationService(
+    applicationRepository, jobRepository, userRepository, workloadRepository);
+WorkloadService workloadService = new WorkloadService(workloadRepository, userRepository);
+
+// 3. Store in ServletContext (acts as DI container)
+ctx.setAttribute("authService", authService);
+ctx.setAttribute("jobService", jobService);
+ctx.setAttribute("applicationService", applicationService);
+ctx.setAttribute("workloadService", workloadService);
+```
+
+**Servlets retrieve services via static helper methods**:
+```java
+// In MODashboardServlet.init()
+this.jobService = AppInitializer.getJobService();
+this.applicationService = AppInitializer.getApplicationService();
+```
+
+---
+
+### 📊 Layer Usage Statistics
+
+| Layer | Files | Used by Servlets? | Usage Pattern |
+|-------|-------|-------------------|---------------|
+| **Models** | 8 | ✅ Yes | Data containers passed between layers |
+| **Repositories** | 4 | ❌ No | Only called by Services |
+| **Services** | 4 | ✅ Yes (13/15) | Primary business logic entry point |
+| **Controllers** | 5 | ⚠️ Partial (4/15) | Optional for complex workflows |
+| **Utils** | 3 | ✅ Yes | Helper functions (ID generation, JSON I/O, password hashing) |
+| **Servlets** | 15 | N/A | **THE BACKEND** - all HTTP endpoints |
+
+---
+
+### 🎯 Key Takeaway
+
+**Servlets ARE the backend** — they are the HTTP entry points. But they are kept thin by delegating to:
+- **Services** for business logic (heavily used)
+- **Controllers** for complex multi-service operations (occasionally used)
+- **Repositories** for data access (never called directly by servlets)
+
+This layering ensures:
+- ✅ **Testability**: Each layer can be tested independently
+- ✅ **Maintainability**: Changes to one layer don't affect others
+- ✅ **Clarity**: Each class has a single, clear responsibility
 
 ---
 
