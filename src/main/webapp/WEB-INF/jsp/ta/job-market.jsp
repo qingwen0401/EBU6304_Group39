@@ -465,15 +465,19 @@
 
     function submitApplication() {
         if (!currentJobId) return;
+
         var coverLetter = document.getElementById('coverLetter').value;
 
-        var formData = new FormData();
-        formData.append('jobId', currentJobId);
-        formData.append('coverLetter', coverLetter);
+        var body = new URLSearchParams();
+        body.append('jobId', currentJobId);
+        body.append('coverLetter', coverLetter);
 
         fetch('${pageContext.request.contextPath}/ta/jobs', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: body.toString()
         })
             .then(function(r) { return r.json(); })
             .then(function(data) {
