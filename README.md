@@ -249,9 +249,7 @@ EBU6304_Group39/
 
 ---
 
-## Architecture: Layered Design Explained
 
-This project follows a **classic 4-tier architecture** without using Spring Boot or any framework. All layers are manually implemented using pure Java Servlets.
 
 ###  Layer Overview
 
@@ -285,75 +283,7 @@ This project follows a **classic 4-tier architecture** without using Spring Boot
 └─────────────────────────────────────────────────────────┘
 ```
 
-###  Why This Layering?
 
-#### 1. **Models** (Domain Entities)
-**Purpose**: Define the data structures that represent business concepts.
-
-**Why separate?**
-- **Single Responsibility**: Each model represents ONE business entity
-- **Reusability**: Models are used across all layers
-- **Type Safety**: Strongly-typed objects prevent data errors
-
-**Example**: `Application.java` defines what an application IS (fields, status constants), but NOT how to save it or process it.
-
-#### 2. **Repositories** (Data Access Layer)
-**Purpose**: Handle ALL data persistence operations (read/write JSON files).
-
-**Why separate?**
-- **Separation of Concerns**: Data access logic is isolated from business logic
-- **Testability**: Can mock repositories to test services without touching files
-- **Flexibility**: Can switch from JSON to database without changing services
-
-**Example**: `ApplicationRepository.java` knows HOW to save/load applications from JSON, but NOT WHEN or WHY to save them.
-
-**Actual Usage in Servlets**: ❌ **NOT directly called**. Servlets call Services, which call Repositories.
-
-#### 3. **Services** (Business Logic Layer)
-**Purpose**: Implement core business rules and orchestrate operations.
-
-**Why separate?**
-- **Business Rules Centralization**: All validation, authorization, and workflow logic in one place
-- **Transaction Management**: Services coordinate multiple repository calls
-- **Reusability**: Same service methods used by multiple servlets
-
-**Example**: `ApplicationService.acceptApplication()` validates permissions, checks job vacancies, updates application status, creates workload record, and updates job filled count — orchestrating multiple repositories.
-
-**Actual Usage in Servlets**: ✅ **HEAVILY USED**. 13 out of 15 servlets directly call services via `AppInitializer.getXxxService()`.
-
-**Example from MODashboardServlet.java:34-36**:
-```java
-this.jobService = AppInitializer.getJobService();
-this.applicationService = AppInitializer.getApplicationService();
-```
-
-#### 4. **Controllers** (Optional Business Coordinators)
-**Purpose**: Provide higher-level business operations that combine multiple services.
-
-**Why separate?**
-- **Complex Workflows**: Some operations need coordination across multiple services
-- **Code Reuse**: Avoid duplicating complex logic in multiple servlets
-- **Cleaner Servlets**: Keep servlets thin by delegating complex operations
-
-**Example**: `MOJobController.createJob()` validates input, calls `JobService.postJob()`, and returns a structured result.
-
-**Actual Usage in Servlets**: ⚠️ **PARTIALLY USED**. Only 4 out of 15 servlets use controllers (MOCreateJobServlet, MOApplicationReviewServlet, CvUploadServlet, CvViewServlet). Most servlets call services directly.
-
-**Why not always used?** Controllers are optional — when a servlet only needs one service call, it calls the service directly. Controllers are only used for complex multi-step operations.
-
-#### 5. **Servlets** (Web Layer / HTTP Handlers)
-**Purpose**: Handle HTTP requests and responses.
-
-**Why separate?**
-- **Web-Specific Logic**: HTTP parsing, session management, request/response handling
-- **Thin Layer**: Servlets should be thin — just route requests to services and forward to views
-- **Framework Boundary**: Isolates web framework (Servlet API) from business logic
-
-**Example**: `MODashboardServlet.doGet()` gets the current user from session, calls services to fetch data, puts data in request attributes, and forwards to JSP.
-
-**Actual Usage**: ✅ **THE BACKEND**. All 15 servlets are the actual HTTP endpoints. They are mapped in `web.xml` to URL patterns.
-
----
 
 ### 🔄 Dependency Injection (Manual)
 
