@@ -211,6 +211,10 @@ public class ApplicationService {
         app.accept(feedback);
         applicationRepository.save(app);
 
+        // 更新职位的已录用人数
+        job.incrementFilledCount();
+        jobRepository.save(job);
+
         // 自动创建工作量记录
         createWorkloadRecord(app, job);
 

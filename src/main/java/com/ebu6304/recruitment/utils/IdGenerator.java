@@ -31,6 +31,7 @@ public class IdGenerator {
     public static final String PREFIX_TA = "TA";
     public static final String PREFIX_ADMIN = "ADM";
     public static final String PREFIX_WORKLOAD = "WL";
+    public static final String PREFIX_TEMPLATE = "TPL";
 
     /**
      * 生成带指定前缀的唯一ID。
@@ -97,5 +98,14 @@ public class IdGenerator {
      */
     public static String generateWorkloadId() {
         return generate(PREFIX_WORKLOAD);
+    }
+
+    /**
+     * 生成模板ID。
+     *
+     * @return 模板唯一ID，格式：TPL{timestamp}{seq}
+     */
+    public static String generateTemplateId() {
+        return generate(PREFIX_TEMPLATE);
     }
 }

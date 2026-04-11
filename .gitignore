@@ -42,3 +42,4 @@ sources.txt
 sources.txtjavac
 
 # 注意：不要忽略 .txt, .csv, .json 等数据文件，因为项目要求使用这些格式存储数据
+.claude/

@@ -1,7 +1,7 @@
 [
   {
     "jobId": "JOB20260329164406003",
-    "moId": "MO20260329164406001",
+    "moId": "MO20260402141809001",
     "moName": "Dr. Smith",
     "moduleCode": "EBU6304",
     "moduleName": "Software Engineering",
@@ -15,7 +15,7 @@
     "hoursPerWeek": 8,
     "hourlyRate": 15.0,
     "vacancies": 2,
-    "filledCount": 0,
+    "filledCount": 1,
     "status": "OPEN",
     "postedAt": "2026-03-29T16:44:06.926871",
     "deadline": "2026-04-30",
@@ -28,7 +28,7 @@
   },
   {
     "jobId": "JOB20260329164716001",
-    "moId": "MO20260329164406001",
+    "moId": "MO20260402141809001",
     "moName": "Dr. Smith",
     "moduleCode": "EBU6304",
     "moduleName": "Software Engineering",
@@ -42,7 +42,7 @@
     "hoursPerWeek": 8,
     "hourlyRate": 15.0,
     "vacancies": 2,
-    "filledCount": 0,
+    "filledCount": 1,
     "status": "OPEN",
     "postedAt": "2026-03-29T16:47:16.575793",
     "deadline": "2026-04-30",
@@ -55,7 +55,7 @@
   },
   {
     "jobId": "JOB20260329165051001",
-    "moId": "MO20260329164406001",
+    "moId": "MO20260402141809001",
     "moName": "Dr. Smith",
     "moduleCode": "EBU6304",
     "moduleName": "Software Engineering",
@@ -69,7 +69,7 @@
     "hoursPerWeek": 8,
     "hourlyRate": 15.0,
     "vacancies": 2,
-    "filledCount": 0,
+    "filledCount": 1,
     "status": "OPEN",
     "postedAt": "2026-03-29T16:50:51.246256800",
     "deadline": "2026-04-30",
@@ -82,7 +82,7 @@
   },
   {
     "jobId": "JOB20260331163446001",
-    "moId": "MO20260329164406001",
+    "moId": "MO20260402141809001",
     "moName": "Dr. Smith",
     "moduleCode": "EBU6304",
     "moduleName": "Software Engineering",
@@ -96,7 +96,7 @@
     "hoursPerWeek": 8,
     "hourlyRate": 15.0,
     "vacancies": 2,
-    "filledCount": 0,
+    "filledCount": 1,
     "status": "OPEN",
     "postedAt": "2026-03-31T16:34:46.044501600",
     "deadline": "2026-04-30",
@@ -105,6 +105,114 @@
     "minGpa": 3.5,
     "applicationIds": [
       "APP20260331163446002"
+    ]
+  },
+  {
+    "jobId": "JOB20260411001",
+    "moId": "MO20260402141809001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Tutorial TA for EBU6304",
+    "description": "Lead tutorial sessions and help students with coursework",
+    "requiredSkills": [
+      "Java",
+      "Teaching",
+      "Communication"
+    ],
+    "hoursPerWeek": 6,
+    "hourlyRate": 16.5,
+    "vacancies": 3,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-04-11T10:00:00",
+    "deadline": "2026-05-15",
+    "semester": "2026 Spring",
+    "jobType": "TUTORIAL_TA",
+    "minGpa": 3.6,
+    "applicationIds": []
+  },
+  {
+    "jobId": "JOB20260411002",
+    "moId": "MO20260402141809001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6305",
+    "moduleName": "Database Systems",
+    "title": "Lab TA for Database Systems",
+    "description": "Assist students with SQL queries and database design",
+    "requiredSkills": [
+      "SQL",
+      "PostgreSQL",
+      "Database Design"
+    ],
+    "hoursPerWeek": 10,
+    "hourlyRate": 17.0,
+    "vacancies": 2,
+    "filledCount": 1,
+    "status": "OPEN",
+    "postedAt": "2026-04-10T14:30:00",
+    "deadline": "2026-05-01",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.7,
+    "applicationIds": [
+      "APP20260411001"
+    ]
+  },
+  {
+    "jobId": "JOB20260411003",
+    "moId": "MO20260402141809001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6306",
+    "moduleName": "Web Development",
+    "title": "Project TA for Web Development",
+    "description": "Guide students through web development projects",
+    "requiredSkills": [
+      "JavaScript",
+      "React",
+      "Node.js"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 18.0,
+    "vacancies": 2,
+    "filledCount": 1,
+    "status": "REVIEWING",
+    "postedAt": "2026-04-09T09:00:00",
+    "deadline": "2026-04-25",
+    "semester": "2026 Spring",
+    "jobType": "PROJECT_TA",
+    "minGpa": 3.5,
+    "applicationIds": [
+      "APP20260411002",
+      "APP20260411003"
+    ]
+  },
+  {
+    "jobId": "JOB20260411004",
+    "moId": "MO20260402141809001",
+    "moName": "Dr. Smith",
+    "moduleCode": "EBU6304",
+    "moduleName": "Software Engineering",
+    "title": "Exam Invigilator",
+    "description": "Supervise exams and ensure academic integrity",
+    "requiredSkills": [
+      "Attention to Detail",
+      "Responsibility"
+    ],
+    "hoursPerWeek": 4,
+    "hourlyRate": 14.0,
+    "vacancies": 5,
+    "filledCount": 2,
+    "status": "OPEN",
+    "postedAt": "2026-04-08T16:00:00",
+    "deadline": "2026-04-20",
+    "semester": "2026 Spring",
+    "jobType": "INVIGILATION",
+    "minGpa": 3.0,
+    "applicationIds": [
+      "APP20260411004",
+      "APP20260411005",
+      "APP20260411006"
     ]
   }
 ]
