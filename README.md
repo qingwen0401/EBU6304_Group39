@@ -13,7 +13,7 @@ Supports three user roles: **Module Organiser (MO)**, **Teaching Assistant (TA)*
 | [qingwen0401] | 尹晴尚 | 231222992 | 2023213197 | Leader |
 | [Fzx501] | 方紫熙 | 231222981 | 2023213198 | Member |
 | [Baooo118] | 杨舒涵 | 231222350 | 2023213204 | Member |
-| [joycegjy] | J郭佳仪 | 231222110 | 2023213199 | Member |
+| [joycegjy] | 郭佳仪 | 231222110 | 2023213199 | Member |
 | [manyuemei0423] | 吕雨蔓 | 231220862 | 2023213200 | Member |
 | [willing] | 张乐怡 | 231220161 | 2023213203 | Member |
 | Shuyue-Xing | 邢舒悦 | - | - | Support TA |
@@ -165,41 +165,46 @@ EBU6304_Group39/
 ├── data/                                # JSON data storage (auto-created)
 │   ├── ta_profiles.json
 │   ├── mo_profiles.json
+│   ├── admin_profiles.json
 │   ├── jobs.json
 │   ├── applications.json
-│   └── workload_records.json
+│   ├── workload_records.json
+│   └── job_templates.json
 ├── src/main/
 │   ├── java/com/ebu6304/recruitment/
-│   │   ├── models/                      # Domain models
+│   │   ├── models/                      # Domain Models (8 files)
 │   │   │   ├── User.java               # Base user entity
 │   │   │   ├── TA.java                 # Teaching Assistant
 │   │   │   ├── ModuleOrganiser.java    # Module Organiser
 │   │   │   ├── JobPosting.java         # Job posting entity
 │   │   │   ├── Application.java        # Application entity
-│   │   │   └── WorkloadRecord.java     # Workload tracking
-│   │   ├── repositories/               # Data access layer (JSON I/O)
-│   │   │   ├── UserRepository.java
-│   │   │   ├── JobRepository.java
-│   │   │   ├── ApplicationRepository.java
-│   │   │   └── WorkloadRepository.java
-│   │   ├── services/                   # Business logic
-│   │   │   ├── AuthService.java
-│   │   │   ├── JobService.java
-│   │   │   ├── ApplicationService.java
-│   │   │   └── WorkloadService.java
-│   │   ├── controllers/                # Business controllers (used by servlets)
-│   │   │   ├── TAController.java
-│   │   │   ├── MOJobController.java
-│   │   │   ├── MOApplicationController.java
-│   │   │   └── AdminController.java
-│   │   ├── utils/                      # Utilities
-│   │   │   ├── JsonFileUtil.java       # JSON file operations
-│   │   │   ├── PasswordUtil.java       # Password hashing
-│   │   │   └── IdGenerator.java        # ID generation
-│   │   └── web/                        # ⭐ Web layer (CORE: Servlets handle all HTTP requests)
-│   │       ├── AppInitializer.java     # ServletContextListener (initializes services)
+│   │   │   ├── WorkloadRecord.java     # Workload tracking
+│   │   │   ├── JobTemplate.java        # Job template entity
+│   │   │   └── CvFileData.java         # CV file data transfer object
+│   │   ├── repositories/               # Data Access Layer (4 files)
+│   │   │   ├── UserRepository.java     # User CRUD operations
+│   │   │   ├── JobRepository.java      # Job CRUD operations
+│   │   │   ├── ApplicationRepository.java  # Application CRUD operations
+│   │   │   └── WorkloadRepository.java # Workload CRUD operations
+│   │   ├── services/                   # Business Logic Layer (4 files)
+│   │   │   ├── AuthService.java        # Authentication & authorization
+│   │   │   ├── JobService.java         # Job posting management
+│   │   │   ├── ApplicationService.java # Application processing
+│   │   │   └── WorkloadService.java    # Workload tracking
+│   │   ├── controllers/                # Business Controllers (5 files)
+│   │   │   ├── TAController.java       # TA-specific operations
+│   │   │   ├── MOJobController.java    # MO job management
+│   │   │   ├── MOApplicationController.java  # MO application review
+│   │   │   ├── AdminController.java    # Admin operations
+│   │   │   └── ControllerResult.java   # Controller response wrapper
+│   │   ├── utils/                      # Utilities (3 files)
+│   │   │   ├── JsonFileUtil.java       # JSON file I/O operations
+│   │   │   ├── PasswordUtil.java       # Password hashing (SHA-256)
+│   │   │   └── IdGenerator.java        # Unique ID generation
+│   │   └── web/                        # Web Layer (17 files)
+│   │       ├── AppInitializer.java     # ServletContextListener (DI container)
 │   │       ├── AuthFilter.java         # Authentication filter
-│   │       └── servlet/                # ⭐ Servlets (the actual backend endpoints)
+│   │       └── servlet/                # Servlets (15 files - THE BACKEND)
 │   │           ├── LoginServlet.java
 │   │           ├── RegisterServlet.java
 │   │           ├── LogoutServlet.java
@@ -211,24 +216,30 @@ EBU6304_Group39/
 │   │           ├── CvViewServlet.java
 │   │           ├── MODashboardServlet.java
 │   │           ├── MOCreateJobServlet.java
+│   │           ├── MOApplicationReviewServlet.java
+│   │           ├── MOAnalyticsServlet.java
+│   │           ├── MOTemplateServlet.java
 │   │           └── AdminDashboardServlet.java
 │   └── webapp/
 │       ├── index.jsp                   # Entry point
 │       └── WEB-INF/
 │           ├── web.xml                 # Servlet mappings & filters
-│           └── jsp/                    # JSP views
+│           └── jsp/                    # JSP views (13 files)
 │               ├── login.jsp
 │               ├── register.jsp
-│               ├── ta/                 # TA views
+│               ├── ta/                 # TA views (5 files)
 │               │   ├── dashboard.jsp
 │               │   ├── job-market.jsp
 │               │   ├── applications.jsp
 │               │   ├── profile.jsp
 │               │   └── edit-profile.jsp
-│               ├── mo/                 # MO views
+│               ├── mo/                 # MO views (5 files)
 │               │   ├── dashboard.jsp
-│               │   └── create-job.jsp
-│               └── admin/              # Admin views
+│               │   ├── create-job.jsp
+│               │   ├── applications.jsp
+│               │   ├── analytics.jsp
+│               │   └── templates.jsp
+│               └── admin/              # Admin views (1 file)
 │                   └── dashboard.jsp
 └── doc/
     ├── ProductBacklog_group39.xlsx
@@ -236,16 +247,41 @@ EBU6304_Group39/
     └── Report_group39.pdf
 ```
 
-### Architecture Notes
+---
 
-**Backend Core: Servlets**  
-The backend is built entirely with **Java Servlets** (no Spring Boot, no REST controllers). Each Servlet handles HTTP requests for specific routes:
-- Servlets receive requests, call service/controller methods, and forward to JSP views
-- Business logic resides in `services/` and `controllers/`
-- Data persistence uses JSON files via `repositories/`
 
-**Frontend: JSP + JSTL**  
-Views are rendered server-side using JSP with JSTL tags. No frontend framework (React/Vue) is used.
+
+###  Layer Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  WEB LAYER (Servlets)                                   │  ← HTTP Entry Point
+│  • Receives HTTP requests                               │
+│  • Calls Services/Controllers                           │
+│  • Forwards to JSP views                                │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  SERVICE LAYER (Business Logic)                         │  ← Core Logic
+│  • AuthService, JobService, ApplicationService          │
+│  • Validates business rules                             │
+│  • Orchestrates multiple repositories                   │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  REPOSITORY LAYER (Data Access)                         │  ← Data Persistence
+│  • UserRepository, JobRepository, etc.                  │
+│  • CRUD operations on JSON files                        │
+│  • No business logic, pure data access                  │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  MODEL LAYER (Domain Entities)                          │  ← Data Structures
+│  • User, TA, JobPosting, Application, etc.              │
+│  • POJOs with getters/setters                           │
+│  • No logic, just data containers                       │
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
 
