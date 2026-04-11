@@ -132,6 +132,37 @@
         <servlet-name>AdminDashboardServlet</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
     </servlet-mapping>
+
+    <!-- MO Application Review -->
+    <servlet>
+        <servlet-name>MOApplicationReviewServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.MOApplicationReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MOApplicationReviewServlet</servlet-name>
+        <url-pattern>/mo/applications</url-pattern>
+    </servlet-mapping>
+
+    <!-- MO Analytics -->
+    <servlet>
+        <servlet-name>MOAnalyticsServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.MOAnalyticsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MOAnalyticsServlet</servlet-name>
+        <url-pattern>/mo/analytics</url-pattern>
+    </servlet-mapping>
+
+    <!-- MO Templates -->
+    <servlet>
+        <servlet-name>MOTemplateServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.MOTemplateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MOTemplateServlet</servlet-name>
+        <url-pattern>/mo/templates</url-pattern>
+    </servlet-mapping>
+
     <!-- CV Upload API -->
     <servlet>
         <servlet-name>CvUploadServlet</servlet-name>

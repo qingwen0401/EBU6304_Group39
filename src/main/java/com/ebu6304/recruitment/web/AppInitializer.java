@@ -26,9 +26,12 @@ import java.io.File;
  */
 public class AppInitializer implements ServletContextListener {
 
+    private static ServletContext servletContext;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext ctx = sce.getServletContext();
+        servletContext = ctx;
 
         // ==================== 配置数据目录 ====================
         // 优先使用 WEB-INF/data（适用于部署到独立Tomcat的WAR包）
@@ -74,5 +77,25 @@ public class AppInitializer implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         sce.getServletContext().log("[AppInitializer] TA Recruitment System shutting down.");
+        servletContext = null;
+    }
+
+    // ==================== 静态辅助方法 ====================
+
+    public static JobService getJobService() {
+        return (JobService) servletContext.getAttribute("jobService");
+    }
+
+    public static ApplicationService getApplicationService() {
+        return (ApplicationService) servletContext.getAttribute("applicationService");
+    }
+
+    public static AuthService getAuthService() {
+        return (AuthService) servletContext.getAttribute("authService");
+    }
+
+    public static WorkloadService getWorkloadService() {
+        return (WorkloadService) servletContext.getAttribute("workloadService");
     }
 }
+

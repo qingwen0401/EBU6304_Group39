@@ -54,5 +54,19 @@
     "createdAt": "2026-03-31T16:34:46.078011",
     "applicationId": "APP20260331163446002",
     "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260411135955001",
+    "taId": "TA20260411003",
+    "taName": "David Zhang",
+    "jobId": "JOB20260411003",
+    "jobTitle": "Project TA for Web Development",
+    "moduleCode": "EBU6306",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 8,
+    "semester": "2026 Spring",
+    "createdAt": "2026-04-11T13:59:55.929477900",
+    "applicationId": "APP20260411003",
+    "status": "ACTIVE"
   }
 ]

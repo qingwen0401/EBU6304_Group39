@@ -160,61 +160,108 @@ All data is stored as JSON files. By default they are created in the `data/` dir
 
 ```
 EBU6304_Group39/
-├── pom.xml                              # Maven config (dependencies, plugins)
+├── pom.xml                              # Maven configuration
 ├── README.md
-├── data/                                # JSON data files (auto-created at runtime)
+├── data/                                # JSON data storage (auto-created)
+│   ├── ta_profiles.json
+│   ├── mo_profiles.json
+│   ├── jobs.json
+│   ├── applications.json
+│   └── workload_records.json
 ├── src/main/
 │   ├── java/com/ebu6304/recruitment/
-│   │   ├── RecruitmentApp.java          # Standalone demo (non-web)
-│   │   ├── models/                      # Data models (User, TA, JobPosting, etc.)
-│   │   ├── repositories/               # Data access layer (reads/writes JSON)
-│   │   ├── services/                   # Business logic layer
-│   │   ├── controllers/                # Legacy controller layer
-│   │   ├── utils/                      # Utilities (JsonFileUtil, PasswordUtil, etc.)
-│   │   └── web/                        # Web layer (Servlets + Filter)
-│   │       ├── AppInitializer.java     # Initializes services on startup
+│   │   ├── models/                      # Domain models
+│   │   │   ├── User.java               # Base user entity
+│   │   │   ├── TA.java                 # Teaching Assistant
+│   │   │   ├── ModuleOrganiser.java    # Module Organiser
+│   │   │   ├── JobPosting.java         # Job posting entity
+│   │   │   ├── Application.java        # Application entity
+│   │   │   └── WorkloadRecord.java     # Workload tracking
+│   │   ├── repositories/               # Data access layer (JSON I/O)
+│   │   │   ├── UserRepository.java
+│   │   │   ├── JobRepository.java
+│   │   │   ├── ApplicationRepository.java
+│   │   │   └── WorkloadRepository.java
+│   │   ├── services/                   # Business logic
+│   │   │   ├── AuthService.java
+│   │   │   ├── JobService.java
+│   │   │   ├── ApplicationService.java
+│   │   │   └── WorkloadService.java
+│   │   ├── controllers/                # Business controllers (used by servlets)
+│   │   │   ├── TAController.java
+│   │   │   ├── MOJobController.java
+│   │   │   ├── MOApplicationController.java
+│   │   │   └── AdminController.java
+│   │   ├── utils/                      # Utilities
+│   │   │   ├── JsonFileUtil.java       # JSON file operations
+│   │   │   ├── PasswordUtil.java       # Password hashing
+│   │   │   └── IdGenerator.java        # ID generation
+│   │   └── web/                        # ⭐ Web layer (CORE: Servlets handle all HTTP requests)
+│   │       ├── AppInitializer.java     # ServletContextListener (initializes services)
 │   │       ├── AuthFilter.java         # Authentication filter
-│   │       └── servlet/
+│   │       └── servlet/                # ⭐ Servlets (the actual backend endpoints)
 │   │           ├── LoginServlet.java
 │   │           ├── RegisterServlet.java
 │   │           ├── LogoutServlet.java
 │   │           ├── TADashboardServlet.java
+│   │           ├── TAProfileServlet.java
 │   │           ├── JobServlet.java
 │   │           ├── ApplicationServlet.java
-│   │           └── TAProfileServlet.java
-│   ├── resources/
-│   │   └── static/                     # Original static HTML prototypes
+│   │           ├── CvUploadServlet.java
+│   │           ├── CvViewServlet.java
+│   │           ├── MODashboardServlet.java
+│   │           ├── MOCreateJobServlet.java
+│   │           └── AdminDashboardServlet.java
 │   └── webapp/
-│       ├── index.jsp                   # Entry point (redirects to login)
+│       ├── index.jsp                   # Entry point
 │       └── WEB-INF/
-│           ├── web.xml                 # Servlet mappings
-│           └── jsp/
+│           ├── web.xml                 # Servlet mappings & filters
+│           └── jsp/                    # JSP views
 │               ├── login.jsp
 │               ├── register.jsp
-│               └── ta/
-│                   ├── dashboard.jsp
-│                   ├── job-market.jsp
-│                   ├── applications.jsp
-│                   ├── profile.jsp
-│                   └── edit-profile.jsp
+│               ├── ta/                 # TA views
+│               │   ├── dashboard.jsp
+│               │   ├── job-market.jsp
+│               │   ├── applications.jsp
+│               │   ├── profile.jsp
+│               │   └── edit-profile.jsp
+│               ├── mo/                 # MO views
+│               │   ├── dashboard.jsp
+│               │   └── create-job.jsp
+│               └── admin/              # Admin views
+│                   └── dashboard.jsp
 └── doc/
     ├── ProductBacklog_group39.xlsx
     ├── Prototype_group39.pdf
     └── Report_group39.pdf
 ```
 
+### Architecture Notes
+
+**Backend Core: Servlets**  
+The backend is built entirely with **Java Servlets** (no Spring Boot, no REST controllers). Each Servlet handles HTTP requests for specific routes:
+- Servlets receive requests, call service/controller methods, and forward to JSP views
+- Business logic resides in `services/` and `controllers/`
+- Data persistence uses JSON files via `repositories/`
+
+**Frontend: JSP + JSTL**  
+Views are rendered server-side using JSP with JSTL tags. No frontend framework (React/Vue) is used.
+
 ---
 
 ## URL Routes
 
+### Authentication & Common
 | URL | Method | Description |
 |-----|--------|-------------|
 | `/` | GET | Redirects to `/login` |
-| `/login` | GET | Login page |
-| `/login` | POST | Authenticate user |
-| `/register` | GET | Registration page |
-| `/register` | POST | Create TA account |
+| `/login` | GET/POST | Login page / Authenticate user |
+| `/register` | GET/POST | Registration page / Create TA account |
 | `/logout` | GET | Logout and clear session |
+
+### TA Routes
+| URL | Method | Description |
+|-----|--------|-------------|
 | `/ta/dashboard` | GET | TA dashboard (stats + recent apps) |
 | `/ta/jobs` | GET | Browse open job postings |
 | `/ta/jobs` | POST | Submit a job application (JSON response) |
@@ -223,6 +270,26 @@ EBU6304_Group39/
 | `/ta/profile` | GET | View TA profile |
 | `/ta/profile?action=edit` | GET | Edit profile form |
 | `/ta/profile` | POST | Save profile changes |
+| `/api/ta/cv/upload` | POST | Upload CV file |
+| `/api/ta/cv/view` | GET | View/download CV file |
+
+### MO (Module Organiser) Routes
+| URL | Method | Description |
+|-----|--------|-------------|
+| `/mo/dashboard` | GET | MO dashboard with overview |
+| `/mo/create-job` | GET/POST | Create new job posting form / Submit job |
+| `/mo/applications` | GET | View all applications for MO's jobs |
+| `/mo/applications/review` | POST | Review application (accept/reject) |
+| `/mo/applications/bulk-reject` | POST | Bulk reject multiple applications |
+| `/mo/analytics` | GET | Recruitment analytics & statistics |
+| `/mo/templates` | GET | Job templates library |
+| `/mo/templates/save` | POST | Save job posting as template |
+| `/mo/templates/use` | POST | Use template to create new job |
+
+### Admin Routes
+| URL | Method | Description |
+|-----|--------|-------------|
+| `/admin/dashboard` | GET | Admin dashboard (system overview) |
 
 ---
 
