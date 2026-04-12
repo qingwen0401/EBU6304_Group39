@@ -38,12 +38,12 @@
 <body>
 
     <div class="sidebar">
-        <h2>TA System</h2>
-        <a href="#" class="active">Dashboard / Overview</a>
-        <a href="#">Workload Monitor</a>
-        <a href="#">Fairness Audit</a>
-        <a href="#">System Logs</a>
-    </div>
+            <h2>TA System</h2>
+            <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">Dashboard / Overview</a>
+            <a href="${pageContext.request.contextPath}/admin/workload">Workload Monitor</a>
+            <a href="#">Fairness Audit</a>
+            <a href="#">System Logs</a>
+        </div>
 
     <div class="main-content">
 

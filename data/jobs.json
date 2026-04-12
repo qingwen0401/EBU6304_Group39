@@ -23,7 +23,8 @@
     "jobType": "LAB_TA",
     "minGpa": 3.5,
     "applicationIds": [
-      "APP20260329164406004"
+      "APP20260329164406004",
+      "APP20260412123310002"
     ]
   },
   {
@@ -214,5 +215,28 @@
       "APP20260411005",
       "APP20260411006"
     ]
+  },
+  {
+    "jobId": "JOB20260412123716003",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "111",
+    "moduleName": "111",
+    "title": "111",
+    "description": "111",
+    "requiredSkills": [
+      "java"
+    ],
+    "hoursPerWeek": 1,
+    "hourlyRate": 0.1,
+    "vacancies": 1,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-04-12T12:37:16.517485800",
+    "deadline": "2026-04-12",
+    "semester": "2026",
+    "jobType": "lab_ta",
+    "minGpa": 0.1,
+    "applicationIds": []
   }
 ]
