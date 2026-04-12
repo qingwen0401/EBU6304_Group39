@@ -475,7 +475,7 @@
         fetch('${pageContext.request.contextPath}/ta/jobs', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                'Content-Type': 'application/x-www-form-urlencoded; chargit push -u origin LeyiZhang/fix-application-bugset=UTF-8'
             },
             body: body.toString()
         })
