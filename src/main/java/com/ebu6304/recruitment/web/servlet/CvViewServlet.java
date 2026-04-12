@@ -33,14 +33,14 @@ public class CvViewServlet extends HttpServlet {
             return;
         }
 
-        Path requested = resolveCvPath(pathParam);
+        Path requested = resolveCvPath(pathParam);//解析后的文件路径是否在CV_ROOT或LEGACY_CV_ROOT目录下
         if (requested == null || !(requested.startsWith(CV_ROOT) || requested.startsWith(LEGACY_CV_ROOT))) {
             writeJson(resp, HttpServletResponse.SC_FORBIDDEN, ControllerResult.failure("Access denied"));
             return;
         }
 
         String lower = requested.getFileName().toString().toLowerCase();
-        if (!(lower.endsWith(".pdf") || lower.endsWith(".doc"))) {
+        if (!(lower.endsWith(".pdf") || lower.endsWith(".doc"))) {//文件类型验证必须是pdf
             writeJson(resp, HttpServletResponse.SC_BAD_REQUEST,
                     ControllerResult.failure("Invalid CV file type. Only .pdf or .doc is allowed"));
             return;
@@ -51,8 +51,9 @@ public class CvViewServlet extends HttpServlet {
         }
 
         byte[] bytes = Files.readAllBytes(requested);
-        String contentType = lower.endsWith(".pdf") ? "application/pdf" : "application/msword";
-        String disposition = lower.endsWith(".pdf") ? "inline" : "attachment";
+        String contentType = lower.endsWith(".pdf") ? "application/pdf" : "application/msword";//
+        String disposition = lower.endsWith(".pdf") ? "inline" : "attachment";//inline：在新标签直接预览。disposition用于指定浏览器如何处理下载的文件
+
 
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType(contentType);
@@ -62,7 +63,7 @@ public class CvViewServlet extends HttpServlet {
     }
 
     private Path resolveCvPath(String pathParam) {
-        String normalized = pathParam.replace('\\', '/').trim();
+        String normalized = pathParam.replace('\\', '/').trim();//
         if (normalized.isEmpty() || normalized.contains("..")) {
             return null;
         }
@@ -82,6 +83,7 @@ public class CvViewServlet extends HttpServlet {
     }
 
     private void writeJson(HttpServletResponse resp, int statusCode, Object payload) throws IOException {
+        //
         byte[] bytes = GSON.toJson(payload).getBytes(StandardCharsets.UTF_8);
         resp.setStatus(statusCode);
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());

@@ -19,6 +19,12 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*验证 ApplicationService 的 CV 上传功能，用内存版 ApplicationRepository 和仅识别固定测试 TA（TA_TEST_1）的 UserRepository，覆盖：
+
+上传允许的 PDF 简历
+上传拒绝的非法扩展名
+绑定 CV 到申请
+ */
 class ApplicationCvValidationTest {
     private Path tempUploadDir;
     private InMemoryApplicationRepository applicationRepository;
