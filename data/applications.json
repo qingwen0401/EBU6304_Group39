@@ -206,21 +206,5 @@
     "reviewNote": "Insufficient database experience.",
     "taGpa": 3.5,
     "taSkillsSnapshot": "SQL"
-  },
-  {
-    "applicationId": "APP20260412123310002",
-    "taId": "TA20260412123144001",
-    "taName": "gjy",
-    "jobId": "JOB20260329164406003",
-    "jobTitle": "Lab TA for EBU6304",
-    "moId": "MO20260402141809001",
-    "coverLetter": "111111",
-    "cvPath": null,
-    "status": "PENDING",
-    "appliedAt": "2026-04-12T12:33:10.850242",
-    "reviewedAt": null,
-    "reviewNote": null,
-    "taGpa": 0.0,
-    "taSkillsSnapshot": null
   }
 ]
