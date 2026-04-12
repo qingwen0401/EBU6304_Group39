@@ -416,15 +416,12 @@
     function withdrawApp(applicationId) {
         if (!confirm('Are you sure you want to withdraw this application?')) return;
 
-        var body = new URLSearchParams();
-        body.append('applicationId', applicationId);
+        var formData = new FormData();
+        formData.append('applicationId', applicationId);
 
         fetch('${pageContext.request.contextPath}/ta/applications', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            body: body.toString()
+            body: formData
         })
             .then(function(r) { return r.json(); })
             .then(function(data) {
