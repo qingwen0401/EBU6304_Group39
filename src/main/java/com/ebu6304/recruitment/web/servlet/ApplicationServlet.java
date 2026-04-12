@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 /**
  * 申请管理 Servlet
  * GET  /ta/applications → 显示 TA 的申请列表（活跃 + 历史）
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
  * @author Group39
  * @version 1.0
  */
-
 public class ApplicationServlet extends HttpServlet {
 
     @Override
