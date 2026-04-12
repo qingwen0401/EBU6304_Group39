@@ -323,10 +323,10 @@ EBU6304_Group39/
 | `/mo/templates/use` | POST | Use template to create new job |
 
 ### Admin Routes
-| URL                | Method | Description |
-|--------------------|--------|-------------|
+| URL | Method | Description |
+|-----|--------|-------------|
 | `/admin/dashboard` | GET | Admin dashboard (system overview) |
-| `/admin/workload`  | GET    | Admin workload monitor (View overloaded TAs) |
+
 ---
 
 ## Tech Stack
