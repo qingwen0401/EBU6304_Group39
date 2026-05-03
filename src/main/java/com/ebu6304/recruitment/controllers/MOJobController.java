@@ -150,24 +150,6 @@ public class MOJobController {
         }
     }
 
-    /**
-     * MO将职位状态改为审核中。
-     *
-     * @param moId  MO用户ID
-     * @param jobId 职位ID
-     * @return 操作结果
-     */
-    public ControllerResult<Void> startReviewing(String moId, String jobId) {
-        try {
-            jobService.startReviewing(moId, jobId);
-            return ControllerResult.success("Job status changed to REVIEWING", null);
-        } catch (IllegalArgumentException e) {
-            return ControllerResult.failure(e.getMessage());
-        } catch (Exception e) {
-            return ControllerResult.failure("Failed to update job status: " + e.getMessage());
-        }
-    }
-
     // ==================== 职位查询 ====================
 
     /**

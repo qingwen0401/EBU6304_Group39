@@ -40,6 +40,40 @@ public class MOCreateJobServlet extends HttpServlet {
         request.setAttribute("currentUser", currentUser);
         request.setAttribute("myJobs", result.isSuccess() ? result.getData() : Collections.emptyList());
 
+        // 检查是否有模板数据需要预填充
+        if (session != null) {
+            com.ebu6304.recruitment.models.JobTemplate templateData =
+                (com.ebu6304.recruitment.models.JobTemplate) session.getAttribute("templateData");
+
+            if (templateData != null) {
+                // 预填充表单数据
+                request.setAttribute("moduleCode", templateData.getModuleCode());
+                request.setAttribute("moduleName", templateData.getModuleName());
+                request.setAttribute("title", templateData.getTitle());
+                request.setAttribute("description", templateData.getDescription());
+                request.setAttribute("requiredSkills", String.join(", ", templateData.getRequiredSkills()));
+                request.setAttribute("hoursPerWeek", String.valueOf(templateData.getHoursPerWeek()));
+                request.setAttribute("jobType", templateData.getJobType());
+                request.setAttribute("minGpa", String.valueOf(templateData.getMinGpa()));
+                request.setAttribute("hourlyRate", String.valueOf(templateData.getHourlyRate()));
+
+                // 从 session 获取用户填写的 vacancies, deadline, semester
+                String vacancies = (String) session.getAttribute("templateVacancies");
+                String deadline = (String) session.getAttribute("templateDeadline");
+                String semester = (String) session.getAttribute("templateSemester");
+
+                if (vacancies != null) request.setAttribute("vacancies", vacancies);
+                if (deadline != null) request.setAttribute("deadline", deadline);
+                if (semester != null) request.setAttribute("semester", semester);
+
+                // 清除 session 中的模板数据，避免重复使用
+                session.removeAttribute("templateData");
+                session.removeAttribute("templateVacancies");
+                session.removeAttribute("templateDeadline");
+                session.removeAttribute("templateSemester");
+            }
+        }
+
         request.getRequestDispatcher("/WEB-INF/jsp/mo/create-job.jsp").forward(request, response);
     }
 

@@ -43,19 +43,20 @@ public class MOApplicationReviewServlet extends HttpServlet {
             throws ServletException, IOException {
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         String moId = currentUser.getUserId();
+        String jobId = request.getParameter("jobId");
 
-        // 获取该MO的所有职位的申请
-        List<Application> applications = applicationService.getAllApplications().stream()
-                .filter(app -> app.getMoId().equals(moId))
-                .toList();
+        // 获取该MO的所有职位的申请，如果提供了jobId则过滤
+        List<Application> applications = applicationService.getApplicationsByMo(moId);
+        if (jobId != null && !jobId.isEmpty()) {
+            applications = applications.stream()
+                    .filter(app -> jobId.equals(app.getJobId()))
+                    .toList();
+        }
 
         // 按状态分类
         Map<String, List<Application>> applicationsByStatus = new HashMap<>();
         applicationsByStatus.put("PENDING", applications.stream()
                 .filter(app -> Application.STATUS_PENDING.equals(app.getStatus()))
-                .toList());
-        applicationsByStatus.put("REVIEWING", applications.stream()
-                .filter(app -> Application.STATUS_REVIEWING.equals(app.getStatus()))
                 .toList());
         applicationsByStatus.put("ACCEPTED", applications.stream()
                 .filter(app -> Application.STATUS_ACCEPTED.equals(app.getStatus()))
@@ -67,6 +68,7 @@ public class MOApplicationReviewServlet extends HttpServlet {
         request.setAttribute("applications", applications);
         request.setAttribute("applicationsByStatus", applicationsByStatus);
         request.setAttribute("currentUser", currentUser);
+        request.setAttribute("filterJobId", jobId);
 
         request.getRequestDispatcher("/WEB-INF/jsp/mo/applications.jsp").forward(request, response);
     }

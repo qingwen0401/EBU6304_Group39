@@ -194,7 +194,6 @@
         }
 
         .status-PENDING { background: #f59e0b; }
-        .status-REVIEWING { background: #2563eb; }
         .status-ACCEPTED { background: #22c55e; }
         .status-REJECTED { background: #ef4444; }
         .status-WITHDRAWN { background: #94a3b8; }

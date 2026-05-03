@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * 申请管理 Servlet
- * GET  /ta/applications → 显示 TA 的申请列表（活跃 + 历史）
+ * GET  /ta/applications → 显示 TA 的申请列表（活跃：PENDING / 历史：ACCEPTED/REJECTED/WITHDRAWN）
  * POST /ta/applications → 撤回申请（AJAX，返回 JSON）
  *
  * @author Group39
@@ -37,17 +37,15 @@ public class ApplicationServlet extends HttpServlet {
 
         List<Application> allApps = applicationService.getApplicationsByTA(currentUser.getUserId());
 
-        // 活跃申请：PENDING 或 REVIEWING
+        // 活跃申请：PENDING
         List<Application> activeApps = allApps.stream()
-                .filter(a -> Application.STATUS_PENDING.equals(a.getStatus())
-                        || Application.STATUS_REVIEWING.equals(a.getStatus()))
+                .filter(a -> Application.STATUS_PENDING.equals(a.getStatus()))
                 .sorted(Comparator.comparing(Application::getAppliedAt).reversed())
                 .collect(Collectors.toList());
 
         // 历史申请：ACCEPTED / REJECTED / WITHDRAWN
         List<Application> historyApps = allApps.stream()
-                .filter(a -> !Application.STATUS_PENDING.equals(a.getStatus())
-                        && !Application.STATUS_REVIEWING.equals(a.getStatus()))
+                .filter(a -> !Application.STATUS_PENDING.equals(a.getStatus()))
                 .sorted(Comparator.comparing(Application::getAppliedAt).reversed())
                 .collect(Collectors.toList());
 

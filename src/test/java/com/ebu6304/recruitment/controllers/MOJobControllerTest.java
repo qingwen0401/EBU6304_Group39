@@ -179,19 +179,6 @@ class MOJobControllerTest {
                 jobRepository.findById(jobId).orElseThrow().getStatus());
     }
 
-    @Test
-    void startReviewingSuccess() {
-        String jobId = controller.postJob(
-                MO_ID, "EBU6304", "SE", "J", "D",
-                List.of(), 8, 1, "2026-12-31", "2026 Spring", "TA", 0, 10)
-                .getData().getJobId();
-
-        ControllerResult<Void> r = controller.startReviewing(MO_ID, jobId);
-        assertTrue(r.isSuccess());
-        assertEquals(JobPosting.STATUS_REVIEWING,
-                jobRepository.findById(jobId).orElseThrow().getStatus());
-    }
-
     private static class InMemoryJobRepository extends JobRepository {
         private final Map<String, JobPosting> storage = new HashMap<>();
 

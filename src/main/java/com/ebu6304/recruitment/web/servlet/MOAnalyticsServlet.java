@@ -43,9 +43,16 @@ public class MOAnalyticsServlet extends HttpServlet {
         String moId = currentUser.getUserId();
 
         // 获取该MO的所有职位
-        List<JobPosting> jobs = jobService.getAllJobs().stream()
-                .filter(job -> job.getMoId().equals(moId))
-                .toList();
+        List<JobPosting> jobs = jobService.getJobsByMo(moId);
+
+        // Sort jobs: CANCELLED jobs at the bottom
+        jobs.sort((j1, j2) -> {
+            boolean isCancelled1 = JobPosting.STATUS_CANCELLED.equals(j1.getStatus());
+            boolean isCancelled2 = JobPosting.STATUS_CANCELLED.equals(j2.getStatus());
+            if (isCancelled1 && !isCancelled2) return 1;
+            if (!isCancelled1 && isCancelled2) return -1;
+            return 0;
+        });
 
         // 统计数据
         Map<String, Object> analytics = calculateAnalytics(jobs, moId);
@@ -67,6 +74,7 @@ public class MOAnalyticsServlet extends HttpServlet {
         int totalJobs = jobs.size();
         int openJobs = (int) jobs.stream().filter(JobPosting::isOpen).count();
         int closedJobs = (int) jobs.stream().filter(j -> JobPosting.STATUS_CLOSED.equals(j.getStatus())).count();
+        int cancelledJobs = (int) jobs.stream().filter(j -> JobPosting.STATUS_CANCELLED.equals(j.getStatus())).count();
 
         // 职位统计
         int totalVacancies = jobs.stream().mapToInt(JobPosting::getVacancies).sum();
@@ -74,9 +82,7 @@ public class MOAnalyticsServlet extends HttpServlet {
         double fillRate = totalVacancies > 0 ? (double) totalFilled / totalVacancies * 100 : 0;
 
         // 申请统计 - 获取该MO所有职位的申请
-        List<Application> allApplications = applicationService.getAllApplications().stream()
-                .filter(app -> app.getMoId().equals(moId))
-                .toList();
+        List<Application> allApplications = applicationService.getApplicationsByMo(moId);
 
         int totalApplications = allApplications.size();
         int pendingApplications = (int) allApplications.stream()
@@ -117,12 +123,13 @@ public class MOAnalyticsServlet extends HttpServlet {
         Map<String, Integer> jobStatusData = new HashMap<>();
         jobStatusData.put("Open", openJobs);
         jobStatusData.put("Closed", closedJobs);
-        jobStatusData.put("Other", totalJobs - openJobs - closedJobs);
+        jobStatusData.put("Cancelled", cancelledJobs);
 
         // 组装结果
         analytics.put("totalJobs", totalJobs);
         analytics.put("openJobs", openJobs);
         analytics.put("closedJobs", closedJobs);
+        analytics.put("cancelledJobs", cancelledJobs);
         analytics.put("totalVacancies", totalVacancies);
         analytics.put("totalFilled", totalFilled);
         analytics.put("fillRate", String.format("%.1f", fillRate));

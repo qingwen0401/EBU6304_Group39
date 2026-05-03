@@ -14,7 +14,6 @@ import java.util.List;
  * <p>MO可执行的操作：
  * <ul>
  *   <li>查看某职位的所有申请</li>
- *   <li>将申请标记为审核中</li>
  *   <li>录用申请人</li>
  *   <li>拒绝申请人</li>
  * </ul>
@@ -97,24 +96,6 @@ public class MOApplicationController {
     // ==================== 申请审核 ====================
 
     /**
-     * MO将申请标记为审核中。
-     *
-     * @param moId          MO用户ID
-     * @param applicationId 申请ID
-     * @return 操作结果（包含更新后的申请）
-     */
-    public ControllerResult<Application> markAsReviewing(String moId, String applicationId) {
-        try {
-            Application app = applicationService.markAsReviewing(moId, applicationId);
-            return ControllerResult.success("Application marked as reviewing", app);
-        } catch (IllegalArgumentException e) {
-            return ControllerResult.failure(e.getMessage());
-        } catch (Exception e) {
-            return ControllerResult.failure("Failed to update application: " + e.getMessage());
-        }
-    }
-
-    /**
      * MO录用申请人。
      * 录用前会检查TA的工作量，若超载则给出警告（但仍允许录用）。
      *
@@ -193,8 +174,7 @@ public class MOApplicationController {
             int rejectedCount = 0;
 
             for (Application app : applications) {
-                if (Application.STATUS_PENDING.equals(app.getStatus())
-                        || Application.STATUS_REVIEWING.equals(app.getStatus())) {
+                if (Application.STATUS_PENDING.equals(app.getStatus())) {
                     applicationService.rejectApplication(moId, app.getApplicationId(),
                             "Position has been filled");
                     rejectedCount++;

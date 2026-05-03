@@ -176,7 +176,7 @@
     "hourlyRate": 18.0,
     "vacancies": 2,
     "filledCount": 1,
-    "status": "REVIEWING",
+    "status": "OPEN",
     "postedAt": "2026-04-09T09:00:00",
     "deadline": "2026-04-25",
     "semester": "2026 Spring",
@@ -214,5 +214,83 @@
       "APP20260411005",
       "APP20260411006"
     ]
+  },
+  {
+    "jobId": "JOB20260503135503001",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "EBU6335123",
+    "moduleName": "mC",
+    "title": "MicTest0503",
+    "description": "123",
+    "requiredSkills": [
+      "Java",
+      "CST suite",
+      "Electromagnetic",
+      "Microwave"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 300.0,
+    "vacancies": 1,
+    "filledCount": 0,
+    "status": "CANCELLED",
+    "postedAt": "2026-05-03T13:55:03.046552600",
+    "deadline": "2026-04-30",
+    "semester": "2026 aUTUMN",
+    "jobType": "LAB_TA",
+    "minGpa": 3.2,
+    "applicationIds": []
+  },
+  {
+    "jobId": "JOB20260503135628002",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "EBU6335123",
+    "moduleName": "mC",
+    "title": "TEst2",
+    "description": "123",
+    "requiredSkills": [
+      "Java",
+      "CST suite",
+      "Electromagnetic",
+      "Microwave"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 300.0,
+    "vacancies": 1,
+    "filledCount": 0,
+    "status": "CANCELLED",
+    "postedAt": "2026-05-03T13:56:28.203153400",
+    "deadline": "2026-04-30",
+    "semester": "2026 aUTUMN",
+    "jobType": "LAB_TA",
+    "minGpa": 3.2,
+    "applicationIds": []
+  },
+  {
+    "jobId": "JOB20260503151807001",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "EBU6335123",
+    "moduleName": "mC",
+    "title": "test3",
+    "description": "123",
+    "requiredSkills": [
+      "Java",
+      "CST suite",
+      "Electromagnetic",
+      "Microwave"
+    ],
+    "hoursPerWeek": 8,
+    "hourlyRate": 30.0,
+    "vacancies": 1,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-05-03T15:18:07.175528600",
+    "deadline": "2026-05-17",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.2,
+    "applicationIds": []
   }
 ]

@@ -371,6 +371,9 @@
     </a>
 
     <div class="nav-title">Management</div>
+    <a href="${pageContext.request.contextPath}/mo/jobs">
+        <span class="icon">📄</span> My Jobs
+    </a>
     <a href="${pageContext.request.contextPath}/mo/applications">
         <span class="icon">📋</span> Applications
     </a>
@@ -396,6 +399,14 @@
         <p>Store standardized job descriptions for quick re-posting and consistent recruitment.</p>
     </div>
 
+    <div style="margin-bottom: 24px; position: relative;">
+        <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search templates by title, module code, or module name..."
+               style="width: 100%; padding: 12px 16px 12px 44px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.04);"
+               onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 4px 12px rgba(59,130,246,0.15)';"
+               onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.04)';">
+    </div>
+
     <c:choose>
         <c:when test="${empty templates}">
             <div class="empty-state">
@@ -416,7 +427,7 @@
                                 <div class="template-title">${template.templateName}</div>
                                 <div class="template-module">${template.moduleCode} - ${template.moduleName}</div>
                             </div>
-                            <span class="usage-badge">${template.usageCount} uses</span>
+                            <span class="usage-badge">Status: ${template.usageCount}</span>
                         </div>
 
                         <div class="template-meta">
@@ -439,10 +450,7 @@
 
                         <div class="template-actions">
                             <button class="btn btn-primary" onclick="useTemplate('${template.templateId}', '${template.templateName}')">
-                                Use Template
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteTemplate('${template.templateId}', '${template.templateName}')">
-                                Delete
+                                Use as Template
                             </button>
                         </div>
                     </div>
@@ -566,6 +574,25 @@
             console.error(err);
         });
     }
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const templateCards = document.querySelectorAll('.template-card');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+
+        templateCards.forEach(card => {
+            const title = card.querySelector('.template-title').textContent.toLowerCase();
+            const module = card.querySelector('.template-module').textContent.toLowerCase();
+
+            if (title.includes(searchTerm) || module.includes(searchTerm)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
 </script>
 </body>
 </html>

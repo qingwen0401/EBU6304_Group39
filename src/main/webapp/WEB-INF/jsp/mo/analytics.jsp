@@ -275,6 +275,39 @@
             color: #991b1b;
         }
 
+        .cancelled-row {
+            background: #f8f9fa;
+            opacity: 0.6;
+        }
+
+        .cancelled-row td {
+            color: #94a3b8;
+        }
+
+        .cancelled-row .job-title-cell {
+            text-decoration: line-through;
+        }
+
+        .collapsible-row {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collapsible-row:hover {
+            background: #f1f5f9;
+        }
+
+        .collapse-icon {
+            display: inline-block;
+            margin-right: 8px;
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+
+        .collapse-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
         @media (max-width: 1200px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -308,6 +341,9 @@
     </a>
 
     <div class="nav-title">Management</div>
+    <a href="${pageContext.request.contextPath}/mo/jobs">
+        <span class="icon">📄</span> My Jobs
+    </a>
     <a href="${pageContext.request.contextPath}/mo/applications">
         <span class="icon">📋</span> Applications
     </a>
@@ -385,41 +421,98 @@
                     <th>Applications</th>
                     <th>Accepted</th>
                     <th>Fill Rate</th>
+                    <th>Performance</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach var="job" items="${jobs}">
                     <c:set var="jobStat" value="${analytics.jobStats[job.jobId]}" />
-                    <tr>
-                        <td><strong>${job.title}</strong></td>
-                        <td>${job.moduleCode}</td>
-                        <td>${jobStat.totalApplications}</td>
-                        <td>${jobStat.accepted}</td>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div class="progress-bar" style="flex: 1;">
-                                    <div class="progress-fill" style="width: ${jobStat.fillRate}%"></div>
-                                </div>
-                                <span style="font-size: 13px; font-weight: 600; color: #64748b; min-width: 45px;">
-                                    ${String.format("%.0f", jobStat.fillRate)}%
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${jobStat.fillRate >= 80}">
-                                    <span class="metric-badge metric-high">High</span>
-                                </c:when>
-                                <c:when test="${jobStat.fillRate >= 50}">
-                                    <span class="metric-badge metric-medium">Medium</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <span class="metric-badge metric-low">Low</span>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                    </tr>
+                    <c:choose>
+                        <c:when test="${job.status == 'CANCELLED'}">
+                            <tr class="cancelled-row collapsible-row" onclick="toggleCancelledRow(this)">
+                                <td class="job-title-cell">
+                                    <span class="collapse-icon collapsed">▼</span>
+                                    <strong>${job.title}</strong>
+                                    <span style="color: #ef4444; font-size: 12px; margin-left: 8px;">(Cancelled)</span>
+                                </td>
+                                <td colspan="6" style="text-align: right; font-size: 12px;">Click to expand details</td>
+                            </tr>
+                            <tr class="cancelled-row cancelled-details" style="display: none;">
+                                <td class="job-title-cell"><strong>${job.title}</strong></td>
+                                <td>${job.moduleCode}</td>
+                                <td>${jobStat.totalApplications}</td>
+                                <td>${jobStat.accepted}</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <div class="progress-bar" style="flex: 1;">
+                                            <div class="progress-fill" style="width: ${jobStat.fillRate}%"></div>
+                                        </div>
+                                        <span style="font-size: 13px; font-weight: 600; color: #64748b; min-width: 45px;">
+                                            ${String.format("%.0f", jobStat.fillRate)}%
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${jobStat.fillRate >= 80}">
+                                            <span class="metric-badge metric-high">High</span>
+                                        </c:when>
+                                        <c:when test="${jobStat.fillRate >= 50}">
+                                            <span class="metric-badge metric-medium">Medium</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="metric-badge metric-low">Low</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <span class="job-badge badge-cancelled">Cancelled</span>
+                                </td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td><strong>${job.title}</strong></td>
+                                <td>${job.moduleCode}</td>
+                                <td>${jobStat.totalApplications}</td>
+                                <td>${jobStat.accepted}</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <div class="progress-bar" style="flex: 1;">
+                                            <div class="progress-fill" style="width: ${jobStat.fillRate}%"></div>
+                                        </div>
+                                        <span style="font-size: 13px; font-weight: 600; color: #64748b; min-width: 45px;">
+                                            ${String.format("%.0f", jobStat.fillRate)}%
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${jobStat.fillRate >= 80}">
+                                            <span class="metric-badge metric-high">High</span>
+                                        </c:when>
+                                        <c:when test="${jobStat.fillRate >= 50}">
+                                            <span class="metric-badge metric-medium">Medium</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="metric-badge metric-low">Low</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${job.status == 'OPEN'}">
+                                            <span class="job-badge badge-open">Open</span>
+                                        </c:when>
+                                        <c:when test="${job.status == 'CLOSED'}">
+                                            <span class="job-badge badge-closed">Closed</span>
+                                        </c:when>
+                                    </c:choose>
+                                </td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </c:forEach>
             </tbody>
         </table>
@@ -480,14 +573,14 @@
     new Chart(jobStatusCtx, {
         type: 'pie',
         data: {
-            labels: ['Open', 'Closed', 'Other'],
+            labels: ['Open', 'Closed', 'Cancelled'],
             datasets: [{
                 data: [
                     ${analytics.jobStatusData['Open']},
                     ${analytics.jobStatusData['Closed']},
-                    ${analytics.jobStatusData['Other']}
+                    ${analytics.jobStatusData['Cancelled']}
                 ],
-                backgroundColor: ['#3b82f6', '#6366f1', '#94a3b8'],
+                backgroundColor: ['#3b82f6', '#6366f1', '#ef4444'],
                 borderWidth: 2,
                 borderColor: '#fff'
             }]
@@ -520,6 +613,20 @@
             }
         }
     });
+
+    // Toggle cancelled job details
+    function toggleCancelledRow(row) {
+        const detailsRow = row.nextElementSibling;
+        const icon = row.querySelector('.collapse-icon');
+
+        if (detailsRow.style.display === 'none') {
+            detailsRow.style.display = '';
+            icon.classList.remove('collapsed');
+        } else {
+            detailsRow.style.display = 'none';
+            icon.classList.add('collapsed');
+        }
+    }
 </script>
 </body>
 </html>
