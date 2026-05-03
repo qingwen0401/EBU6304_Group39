@@ -193,8 +193,7 @@ public class ApplicationService {
         }
 
         // 状态验证
-        if (!Application.STATUS_PENDING.equals(app.getStatus())
-                && !Application.STATUS_REVIEWING.equals(app.getStatus())) {
+        if (!Application.STATUS_PENDING.equals(app.getStatus())) {
             throw new IllegalArgumentException(
                     "Cannot accept application in status: " + app.getStatus());
         }
@@ -236,8 +235,7 @@ public class ApplicationService {
             throw new IllegalArgumentException("You don't have permission to reject this application");
         }
 
-        if (!Application.STATUS_PENDING.equals(app.getStatus())
-                && !Application.STATUS_REVIEWING.equals(app.getStatus())) {
+        if (!Application.STATUS_PENDING.equals(app.getStatus())) {
             throw new IllegalArgumentException(
                     "Cannot reject application in status: " + app.getStatus());
         }
@@ -247,29 +245,6 @@ public class ApplicationService {
         return app;
     }
 
-    /**
-     * MO将申请标记为审核中。
-     *
-     * @param moId          MO的用户ID
-     * @param applicationId 申请ID
-     * @return 更新后的申请对象
-     */
-    public Application markAsReviewing(String moId, String applicationId) {
-        Application app = getApplicationOrThrow(applicationId);
-
-        if (!moId.equals(app.getMoId())) {
-            throw new IllegalArgumentException("Permission denied");
-        }
-
-        if (!Application.STATUS_PENDING.equals(app.getStatus())) {
-            throw new IllegalArgumentException(
-                    "Can only mark PENDING applications as reviewing");
-        }
-
-        app.setStatus(Application.STATUS_REVIEWING);
-        applicationRepository.save(app);
-        return app;
-    }
 
     // ==================== 查询操作 ====================
 
@@ -281,6 +256,18 @@ public class ApplicationService {
      */
     public List<Application> getApplicationsByTA(String taId) {
         return applicationRepository.findByTaId(taId);
+    }
+
+    /**
+     * MO查看自己职位的所有申请。
+     *
+     * @param moId MO的用户ID
+     * @return 该MO职位的申请列表
+     */
+    public List<Application> getApplicationsByMo(String moId) {
+        return applicationRepository.findAll().stream()
+                .filter(app -> moId.equals(app.getMoId()))
+                .collect(java.util.stream.Collectors.toList());
     }
 
     /**

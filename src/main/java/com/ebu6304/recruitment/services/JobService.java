@@ -190,21 +190,6 @@ public class JobService {
         jobRepository.save(job);
     }
 
-    /**
-     * MO将职位状态改为审核中。
-     *
-     * @param moId  MO的用户ID
-     * @param jobId 职位ID
-     */
-    public void startReviewing(String moId, String jobId) {
-        JobPosting job = getJobByIdOrThrow(jobId);
-        if (!moId.equals(job.getMoId())) {
-            throw new IllegalArgumentException("Permission denied");
-        }
-        job.startReviewing();
-        jobRepository.save(job);
-    }
-
     // ==================== 职位查询 ====================
 
     /**

@@ -6,8 +6,8 @@ package com.ebu6304.recruitment.models;
  *
  * <p>申请状态流转：
  * <pre>
- *   PENDING（待审核）→ REVIEWING（审核中）→ ACCEPTED（已录用）
- *                                         → REJECTED（已拒绝）
+ *   PENDING（待审核）→ ACCEPTED（已录用）
+ *                   → REJECTED（已拒绝）
  *   PENDING → WITHDRAWN（已撤回，由TA主动撤回）
  * </pre>
  * </p>
@@ -21,9 +21,6 @@ public class Application {
 
     /** 申请状态：待审核 */
     public static final String STATUS_PENDING = "PENDING";
-
-    /** 申请状态：审核中 */
-    public static final String STATUS_REVIEWING = "REVIEWING";
 
     /** 申请状态：已录用 */
     public static final String STATUS_ACCEPTED = "ACCEPTED";
@@ -60,7 +57,7 @@ public class Application {
     /** 简历文件路径（可选） */
     private String cvPath;
 
-    /** 申请状态：PENDING / REVIEWING / ACCEPTED / REJECTED / WITHDRAWN */
+    /** 申请状态：PENDING / ACCEPTED / REJECTED / WITHDRAWN */
     private String status;
 
     /** 申请提交时间（ISO-8601字符串） */

@@ -439,6 +439,9 @@
     </a>
 
     <div class="nav-title">Management</div>
+    <a href="${pageContext.request.contextPath}/mo/jobs">
+        <span class="icon">📄</span> My Jobs
+    </a>
     <a href="${pageContext.request.contextPath}/mo/applications">
         <span class="icon">📋</span> Applications
         <c:if test="${stats.pendingApplications > 0}">
@@ -600,9 +603,6 @@
                             <c:choose>
                                 <c:when test="${app.status == 'PENDING'}">
                                     <span class="status-badge status-pending">Pending</span>
-                                </c:when>
-                                <c:when test="${app.status == 'REVIEWING'}">
-                                    <span class="status-badge status-reviewing">Reviewing</span>
                                 </c:when>
                                 <c:otherwise>
                                     <span class="status-badge">${app.status}</span>

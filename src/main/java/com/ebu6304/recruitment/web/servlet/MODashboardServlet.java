@@ -43,14 +43,10 @@ public class MODashboardServlet extends HttpServlet {
         String moId = currentUser.getUserId();
 
         // 获取该MO的所有职位
-        List<JobPosting> allJobs = jobService.getAllJobs().stream()
-                .filter(job -> job.getMoId().equals(moId))
-                .toList();
+        List<JobPosting> allJobs = jobService.getJobsByMo(moId);
 
         // 获取该MO的所有申请
-        List<Application> allApplications = applicationService.getAllApplications().stream()
-                .filter(app -> app.getMoId().equals(moId))
-                .toList();
+        List<Application> allApplications = applicationService.getApplicationsByMo(moId);
 
         // 统计数据
         Map<String, Object> stats = new HashMap<>();
@@ -65,8 +61,6 @@ public class MODashboardServlet extends HttpServlet {
         stats.put("totalApplications", allApplications.size());
         stats.put("pendingApplications", allApplications.stream()
                 .filter(app -> Application.STATUS_PENDING.equals(app.getStatus())).count());
-        stats.put("reviewingApplications", allApplications.stream()
-                .filter(app -> Application.STATUS_REVIEWING.equals(app.getStatus())).count());
         stats.put("acceptedApplications", allApplications.stream()
                 .filter(app -> Application.STATUS_ACCEPTED.equals(app.getStatus())).count());
         stats.put("rejectedApplications", allApplications.stream()

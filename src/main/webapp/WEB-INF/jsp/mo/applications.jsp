@@ -264,10 +264,6 @@
             color: #991b1b;
         }
 
-        .status-reviewing {
-            background: #dbeafe;
-            color: #1e40af;
-        }
 
         .action-buttons {
             display: flex;
@@ -358,7 +354,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin-bottom: 28px;
         }
@@ -401,6 +397,9 @@
     </a>
 
     <div class="nav-title">Management</div>
+    <a href="${pageContext.request.contextPath}/mo/jobs">
+        <span class="icon">📄</span> My Jobs
+    </a>
     <a href="${pageContext.request.contextPath}/mo/applications" class="active">
         <span class="icon">📋</span> Applications
     </a>
@@ -432,10 +431,6 @@
             <div class="stat-label">Pending Review</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value">${applicationsByStatus['REVIEWING'].size()}</div>
-            <div class="stat-label">In Review</div>
-        </div>
-        <div class="stat-card">
             <div class="stat-value">${applicationsByStatus['ACCEPTED'].size()}</div>
             <div class="stat-label">Accepted</div>
         </div>
@@ -448,7 +443,6 @@
     <div class="tabs">
         <button class="tab active" data-tab="all">All Applications</button>
         <button class="tab" data-tab="pending">Pending</button>
-        <button class="tab" data-tab="reviewing">Reviewing</button>
         <button class="tab" data-tab="accepted">Accepted</button>
         <button class="tab" data-tab="rejected">Rejected</button>
     </div>

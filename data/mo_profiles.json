@@ -3,7 +3,11 @@
     "department": "CS",
     "moduleCode": "EBU6304",
     "moduleName": "Software Engineering",
-    "postedJobIds": [],
+    "postedJobIds": [
+      "JOB20260503135503001",
+      "JOB20260503135628002",
+      "JOB20260503151807001"
+    ],
     "phone": null,
     "officeLocation": null,
     "userId": "MO20260402141809001",

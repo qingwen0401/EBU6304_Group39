@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 getApplicationsForJob：成功、非职位所属 MO 无权限
 getApplicationDetail：找到 / 未找到
-markAsReviewing：成功、非 PENDING 失败
 acceptApplication：录用成功且无工作量文案；预先写入 18h ACTIVE 工作量后再录用且传入 jobHoursPerWeek=5 时，消息中含工作量 WARNING；错误 MO 拒绝录用
 rejectApplication
 rejectAllPendingApplications：两条 PENDING 被拒绝，已 ACCEPTED 的不变
@@ -129,27 +128,6 @@ class MOApplicationControllerTest {
         assertTrue(r.getMessage().contains("not found"));
     }
 
-    @Test
-    void markAsReviewingSuccess() {
-        applicationRepository.save(pendingApp("APP4"));
-
-        ControllerResult<Application> r =
-                controller.markAsReviewing(MO_ID, "APP4");
-        assertTrue(r.isSuccess());
-        assertEquals(Application.STATUS_REVIEWING, r.getData().getStatus());
-    }
-
-    @Test
-    void markAsReviewingWhenNotPendingFails() {
-        Application app = pendingApp("APP5");
-        app.setStatus(Application.STATUS_ACCEPTED);
-        applicationRepository.save(app);
-
-        ControllerResult<Application> r =
-                controller.markAsReviewing(MO_ID, "APP5");
-        assertFalse(r.isSuccess());
-        assertTrue(r.getMessage().contains("PENDING"));
-    }
 
     @Test
     void acceptApplicationSuccessWithoutWorkloadWarning() {

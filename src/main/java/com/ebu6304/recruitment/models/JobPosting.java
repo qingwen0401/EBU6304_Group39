@@ -25,9 +25,6 @@ public class JobPosting {
     /** 职位状态：开放申请 */
     public static final String STATUS_OPEN = "OPEN";
 
-    /** 职位状态：审核中（MO正在审核申请） */
-    public static final String STATUS_REVIEWING = "REVIEWING";
-
     /** 职位状态：已关闭（招聘完成） */
     public static final String STATUS_CLOSED = "CLOSED";
 
@@ -196,15 +193,6 @@ public class JobPosting {
     }
 
     /**
-     * 将职位状态改为审核中。
-     */
-    public void startReviewing() {
-        if (STATUS_OPEN.equals(this.status)) {
-            this.status = STATUS_REVIEWING;
-        }
-    }
-
-    /**
      * 关闭职位。
      */
     public void close() {
@@ -216,15 +204,6 @@ public class JobPosting {
      */
     public void cancel() {
         this.status = STATUS_CANCELLED;
-    }
-
-    /**
-     * 重新开放职位（从REVIEWING回到OPEN）。
-     */
-    public void reopen() {
-        if (STATUS_REVIEWING.equals(this.status)) {
-            this.status = STATUS_OPEN;
-        }
     }
 
     // ==================== Getter / Setter ====================
