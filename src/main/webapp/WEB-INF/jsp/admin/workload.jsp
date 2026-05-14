@@ -7,76 +7,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workload Monitor - Admin Portal</title>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; height: 100vh; }
-        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
-        .sidebar h2 { text-align: center; padding: 20px 0; margin: 0; border-bottom: 1px solid #34495e; font-size: 20px; }
-        .sidebar a { padding: 15px 25px; text-decoration: none; color: #ecf0f1; display: block; transition: 0.3s; font-size: 15px;}
-        .sidebar a:hover, .sidebar a.active { background-color: #34495e; border-left: 4px solid #3498db; }
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto;}
-        .topbar { background-color: white; padding: 15px 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .topbar h1 { margin: 0; font-size: 22px; color: #333; }
-
-        .container { padding: 30px; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background-color: #f8f9fa; color: #333; font-weight: 600; }
-
-        /* 状态徽章 */
-        .badge { padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; }
-        .status-IDLE { background-color: #95a5a6; }
-        .status-NORMAL { background-color: #2ecc71; }
-        .status-WARNING { background-color: #f39c12; }
-        .status-OVERLOADED { background-color: #e74c3c; animation: blink 1.5s infinite; }
-
-        @keyframes blink { 50% { opacity: 0.6; } }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #f4f7fb; color: #1e293b; }
+        .sidebar { width: 250px; min-height: 100vh; background: linear-gradient(180deg,#1e3a8a,#1d4ed8); padding: 28px 18px; position: fixed; left: 0; top: 0; color: white; box-shadow: 4px 0 18px rgba(15,23,42,.08); }
+        .brand { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .role { font-size: 12px; color: #bfdbfe; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
+        .nav-title { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #bfdbfe; margin: 20px 0 12px; font-weight: 700; }
+        .sidebar a { display: flex; color: #dbeafe; text-decoration: none; font-size: 14px; margin: 6px 0; padding: 11px 14px; border-radius: 10px; transition: .2s ease; }
+        .sidebar a:hover { background: rgba(255,255,255,.12); color: white; }
+        .sidebar a.active { background: white; color: #1d4ed8; font-weight: 700; }
+        .logout-link { margin-top: 30px; color: #fecaca !important; border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px !important; }
+        .main { margin-left: 250px; padding: 32px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .page-title { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .panel, .stat-card { background: white; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,.04); }
+        .panel { padding: 24px; margin-bottom: 24px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+        .stat-card { padding: 20px; }
+        .stat-label { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; margin-bottom: 8px; }
+        .stat-value { font-size: 32px; font-weight: 700; color: #0f172a; }
+        .toolbar { display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 12px; align-items: end; margin-bottom: 18px; }
+        label { display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
+        select, input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: white; color: #0f172a; }
+        .btn { border: none; border-radius: 10px; padding: 10px 14px; background: #2563eb; color: white; font-weight: 700; text-decoration: none; cursor: pointer; text-align: center; }
+        .btn.secondary { background: #0f172a; }
+        .btn.ghost { background: #e2e8f0; color: #0f172a; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; vertical-align: top; }
+        th { color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #dbeafe; color: #1d4ed8; }
+        .status-OVERLOADED { background: #fee2e2; color: #dc2626; }
+        .status-WARNING { background: #ffedd5; color: #ea580c; }
+        .status-NORMAL { background: #dcfce7; color: #16a34a; }
+        .status-IDLE { background: #e2e8f0; color: #475569; }
+        @media (max-width: 900px) { .sidebar { position: static; width: 100%; min-height: auto; } .main { margin-left: 0; } .stats-grid, .toolbar { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+<div class="sidebar">
+    <div class="brand">TA Recruitment</div>
+    <div class="role">Administrator Portal</div>
+    <div class="nav-title">Management</div>
+    <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
+    <a href="${pageContext.request.contextPath}/admin/workload" class="active">Workload Monitor</a>
+    <a href="${pageContext.request.contextPath}/admin/jobs">Job Postings</a>
+    <a href="${pageContext.request.contextPath}/admin/users">User Accounts</a>
+    <a href="${pageContext.request.contextPath}/admin/audit">Audit Log</a>
+    <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
+</div>
 
-    <div class="sidebar">
-        <h2>TA System</h2>
-        <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard / Overview</a>
-        <a href="${pageContext.request.contextPath}/admin/workload" class="active">Workload Monitor</a>
-        <a href="#">Fairness Audit</a>
-        <a href="#">System Logs</a>
+<main class="main">
+    <div class="topbar">
+        <div>
+            <h1 class="page-title">Workload Monitor</h1>
+            <p class="stat-label">Filter by term, module, and workload status.</p>
+        </div>
+        <a class="btn secondary" href="${pageContext.request.contextPath}/admin/workload?semester=${semester}&module=${selectedModule}&status=${selectedStatus}&export=csv">Export CSV</a>
     </div>
 
-    <div class="main-content">
-        <div class="topbar">
-            <h1>TA Workload Monitor</h1>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Max Weekly Threshold</div>
+            <div class="stat-value">${maxWeeklyHours} hrs</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-label">Warning Starts Above</div>
+            <div class="stat-value">${warningWeeklyHours} hrs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Fairness Index</div>
+            <div class="stat-value">${fairnessIndex}</div>
+        </div>
+    </div>
 
-        <div class="container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Student ID</th>
-                        <th>Active Jobs</th>
-                        <th>Weekly Hours</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="ta" items="${workloadReport}">
-                        <tr>
-                            <td>${ta.taName}</td>
-                            <td>${ta.studentId}</td>
-                            <td>${ta.jobCount}</td>
-                            <td style="${ta.isOverloaded ? 'color:#e74c3c; font-weight:bold;' : ''}">
-                                ${ta.totalWeeklyHours} / 20 hrs
-                            </td>
-                            <td>
-                                <span class="badge status-${ta.workloadStatus}">
-                                    ${ta.workloadStatus}
-                                </span>
-                            </td>
-                        </tr>
+    <section class="panel">
+        <form class="toolbar" method="get" action="${pageContext.request.contextPath}/admin/workload">
+            <div>
+                <label>Term</label>
+                <select name="semester">
+                    <option value="">All terms</option>
+                    <c:forEach var="option" items="${semesterOptions}">
+                        <option value="${option}" ${option == semester ? 'selected' : ''}>${option}</option>
                     </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                </select>
+            </div>
+            <div>
+                <label>Module</label>
+                <select name="module">
+                    <option value="">All modules</option>
+                    <c:forEach var="option" items="${moduleOptions}">
+                        <option value="${option}" ${option == selectedModule ? 'selected' : ''}>${option}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select name="status">
+                    <option value="">All statuses</option>
+                    <option value="IDLE" ${selectedStatus == 'IDLE' ? 'selected' : ''}>IDLE</option>
+                    <option value="NORMAL" ${selectedStatus == 'NORMAL' ? 'selected' : ''}>NORMAL</option>
+                    <option value="WARNING" ${selectedStatus == 'WARNING' ? 'selected' : ''}>WARNING</option>
+                    <option value="OVERLOADED" ${selectedStatus == 'OVERLOADED' ? 'selected' : ''}>OVERLOADED</option>
+                </select>
+            </div>
+            <button class="btn" type="submit">Apply</button>
+            <a class="btn ghost" href="${pageContext.request.contextPath}/admin/workload">Clear</a>
+        </form>
 
+        <form class="toolbar" method="post" action="${pageContext.request.contextPath}/admin/workload">
+            <div>
+                <label>Configure Threshold</label>
+                <input type="number" name="maxWeeklyHours" min="1" max="80" value="${maxWeeklyHours}">
+            </div>
+            <button class="btn secondary" type="submit">Save Threshold</button>
+        </form>
+    </section>
+
+    <section class="panel">
+        <table>
+            <thead>
+            <tr><th>TA</th><th>Student ID</th><th>Modules</th><th>Active Jobs</th><th>Weekly Hours</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <c:forEach var="ta" items="${workloadReport}">
+                <tr>
+                    <td>${ta.taName}</td>
+                    <td>${ta.studentId}</td>
+                    <td>${ta.modules}</td>
+                    <td>${ta.jobCount}</td>
+                    <td>${ta.totalWeeklyHours} / ${maxWeeklyHours} hrs</td>
+                    <td><span class="badge status-${ta.workloadStatus}">${ta.workloadStatus}</span></td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty workloadReport}">
+                <tr><td colspan="6">No workload data matches the filters.</td></tr>
+            </c:if>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="panel">
+        <div class="stat-label">Workload History</div>
+        <table>
+            <thead>
+            <tr><th>Created</th><th>TA</th><th>Job</th><th>Module</th><th>Term</th><th>Hours</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <c:forEach var="record" items="${records}">
+                <tr>
+                    <td>${record.createdAt}</td>
+                    <td>${record.taName}</td>
+                    <td>${record.jobTitle}</td>
+                    <td>${record.moduleCode}</td>
+                    <td>${record.semester}</td>
+                    <td>${record.weeklyHours}</td>
+                    <td><span class="badge">${record.status}</span></td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty records}">
+                <tr><td colspan="7">No historical workload records found.</td></tr>
+            </c:if>
+            </tbody>
+        </table>
+    </section>
+</main>
 </body>
 </html>

@@ -1,8 +1,10 @@
 package com.ebu6304.recruitment.web;
 
 import com.ebu6304.recruitment.repositories.ApplicationRepository;
+import com.ebu6304.recruitment.repositories.AuditLogRepository;
 import com.ebu6304.recruitment.repositories.JobRepository;
 import com.ebu6304.recruitment.repositories.UserRepository;
+import com.ebu6304.recruitment.repositories.WorkloadConfigRepository;
 import com.ebu6304.recruitment.repositories.WorkloadRepository;
 import com.ebu6304.recruitment.services.ApplicationService;
 import com.ebu6304.recruitment.services.AuthService;
@@ -54,13 +56,16 @@ public class AppInitializer implements ServletContextListener {
         JobRepository jobRepository = new JobRepository();
         ApplicationRepository applicationRepository = new ApplicationRepository();
         WorkloadRepository workloadRepository = new WorkloadRepository();
+        WorkloadConfigRepository workloadConfigRepository = new WorkloadConfigRepository();
+        AuditLogRepository auditLogRepository = new AuditLogRepository();
 
         // ==================== 初始化服务 ====================
         AuthService authService = new AuthService(userRepository);
         JobService jobService = new JobService(jobRepository, userRepository);
         ApplicationService applicationService = new ApplicationService(
                 applicationRepository, jobRepository, userRepository, workloadRepository);
-        WorkloadService workloadService = new WorkloadService(workloadRepository, userRepository);
+        WorkloadService workloadService = new WorkloadService(
+                workloadRepository, userRepository, workloadConfigRepository);
 
         // ==================== 存储到 ServletContext ====================
         ctx.setAttribute("authService", authService);
@@ -70,6 +75,8 @@ public class AppInitializer implements ServletContextListener {
         ctx.setAttribute("userRepository", userRepository);
         ctx.setAttribute("jobRepository", jobRepository);
         ctx.setAttribute("applicationRepository", applicationRepository);
+        ctx.setAttribute("auditLogRepository", auditLogRepository);
+        ctx.setAttribute("workloadConfigRepository", workloadConfigRepository);
 
         ctx.log("[AppInitializer] TA Recruitment System initialized successfully.");
     }
@@ -96,6 +103,10 @@ public class AppInitializer implements ServletContextListener {
 
     public static WorkloadService getWorkloadService() {
         return (WorkloadService) servletContext.getAttribute("workloadService");
+    }
+
+    public static AuditLogRepository getAuditLogRepository() {
+        return (AuditLogRepository) servletContext.getAttribute("auditLogRepository");
     }
 }
 

@@ -268,6 +268,8 @@ public class AuthService {
             userRepository.saveMO((ModuleOrganiser) user);
         } else if ("TA".equals(user.getRole())) {
             userRepository.saveTA((TA) user);
+        } else if ("ADMIN".equals(user.getRole())) {
+            userRepository.saveAdmin(user);
         }
     }
 

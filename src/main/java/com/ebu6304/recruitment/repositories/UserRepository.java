@@ -278,5 +278,16 @@ public class UserRepository {
      */
     public boolean usernameExists(String username) {
         return findUserByUsername(username).isPresent();
-    }}
+    }
+
+    public void saveUser(User user) {
+        if ("TA".equals(user.getRole()) && user instanceof TA) {
+            saveTA((TA) user);
+        } else if ("MO".equals(user.getRole()) && user instanceof ModuleOrganiser) {
+            saveMO((ModuleOrganiser) user);
+        } else if ("ADMIN".equals(user.getRole())) {
+            saveAdmin(user);
+        }
+    }
+}
 
