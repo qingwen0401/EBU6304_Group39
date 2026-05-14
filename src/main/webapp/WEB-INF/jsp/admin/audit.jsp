@@ -55,6 +55,8 @@
                 <option value="">All actions</option><option value="LOGIN" ${selectedAction == 'LOGIN' ? 'selected' : ''}>LOGIN</option>
                 <option value="CONFIG_UPDATE" ${selectedAction == 'CONFIG_UPDATE' ? 'selected' : ''}>CONFIG_UPDATE</option>
                 <option value="USER_STATUS_UPDATE" ${selectedAction == 'USER_STATUS_UPDATE' ? 'selected' : ''}>USER_STATUS_UPDATE</option>
+                <option value="MO_CREATED" ${selectedAction == 'MO_CREATED' ? 'selected' : ''}>MO_CREATED</option>
+                <option value="MO_DELETED" ${selectedAction == 'MO_DELETED' ? 'selected' : ''}>MO_DELETED</option>
             </select></div>
             <div><label>Role</label><select name="role">
                 <option value="">All roles</option><option value="TA" ${selectedRole == 'TA' ? 'selected' : ''}>TA</option>
