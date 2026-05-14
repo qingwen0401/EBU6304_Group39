@@ -1,40 +1,209 @@
 package com.ebu6304.recruitment.web.servlet;
 
+import com.ebu6304.recruitment.models.TA;
+import com.ebu6304.recruitment.models.User;
+import com.ebu6304.recruitment.models.WorkloadRecord;
+import com.ebu6304.recruitment.repositories.AuditLogRepository;
+import com.ebu6304.recruitment.repositories.UserRepository;
 import com.ebu6304.recruitment.services.WorkloadService;
+import com.ebu6304.recruitment.models.AuditLogEntry;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * Admin 工作量监控 Servlet
- * GET /admin/workload → 显示所有 TA 的工作量及超载状态
- *
- * @author Group39 / Guojiayi
- * @version 1.0
- */
 public class AdminWorkloadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // 从全局上下文中获取队友写好的 WorkloadService
         WorkloadService workloadService =
                 (WorkloadService) getServletContext().getAttribute("workloadService");
+        UserRepository userRepository =
+                (UserRepository) getServletContext().getAttribute("userRepository");
 
-        // 假设当前学期为 "2026 Spring"（根据你们代码中的设定）
-        // 调用底层方法，获取包含所有 TA 工作量状态的详细报告
-        List<Map<String, Object>> workloadReport = workloadService.getWorkloadReport("2026 Spring");
+        String semester = defaultIfBlank(request.getParameter("semester"), "2026 Spring");
+        String module = trim(request.getParameter("module"));
+        String status = trim(request.getParameter("status"));
 
-        // 将数据打包传给前端页面
+        List<WorkloadRecord> allRecords = workloadService.getAllWorkloadRecords();
+        List<Map<String, Object>> workloadReport =
+                buildReport(userRepository.findAllTAs(), allRecords, semester, module, workloadService);
+        if (!isBlank(status)) {
+            workloadReport = workloadReport.stream()
+                    .filter(row -> status.equals(row.get("workloadStatus")))
+                    .collect(Collectors.toList());
+        }
+
+        if ("csv".equalsIgnoreCase(request.getParameter("export"))) {
+            exportWorkloadCsv(response, workloadReport, workloadService.getMaxWeeklyHours());
+            return;
+        }
+
         request.setAttribute("workloadReport", workloadReport);
-
-        // 转发到 JSP 页面进行渲染
+        request.setAttribute("records", filterRecords(allRecords, semester, module));
+        request.setAttribute("semester", semester);
+        request.setAttribute("selectedModule", module);
+        request.setAttribute("selectedStatus", status);
+        request.setAttribute("semesterOptions", collectSemesters(allRecords));
+        request.setAttribute("moduleOptions", collectModules(allRecords));
+        request.setAttribute("maxWeeklyHours", workloadService.getMaxWeeklyHours());
+        request.setAttribute("warningWeeklyHours", workloadService.getWarningWeeklyHours());
+        request.setAttribute("fairnessIndex", calculateFairnessIndex(workloadReport));
         request.getRequestDispatcher("/WEB-INF/jsp/admin/workload.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        WorkloadService workloadService =
+                (WorkloadService) getServletContext().getAttribute("workloadService");
+        AuditLogRepository auditLogRepository =
+                (AuditLogRepository) getServletContext().getAttribute("auditLogRepository");
+        User currentUser = (User) request.getSession().getAttribute("currentUser");
+
+        try {
+            int threshold = Integer.parseInt(request.getParameter("maxWeeklyHours"));
+            workloadService.setMaxWeeklyHours(threshold);
+            if (auditLogRepository != null && currentUser != null) {
+                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
+                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
+                        "CONFIG_UPDATE", "SUCCESS", request.getRemoteAddr(),
+                        "Updated workload threshold to " + threshold + " hours."));
+            }
+        } catch (Exception e) {
+            if (auditLogRepository != null && currentUser != null) {
+                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
+                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
+                        "CONFIG_UPDATE", "FAILED", request.getRemoteAddr(), e.getMessage()));
+            }
+        }
+
+        response.sendRedirect(request.getContextPath() + "/admin/workload");
+    }
+
+    private List<Map<String, Object>> buildReport(List<TA> tas, List<WorkloadRecord> allRecords,
+                                                   String semester, String module,
+                                                   WorkloadService workloadService) {
+        List<Map<String, Object>> report = new ArrayList<>();
+        for (TA ta : tas) {
+            List<WorkloadRecord> records = allRecords.stream()
+                    .filter(r -> ta.getUserId().equals(r.getTaId()))
+                    .filter(r -> isBlank(semester) || semester.equals(r.getSemester()))
+                    .filter(r -> isBlank(module) || module.equalsIgnoreCase(r.getModuleCode()))
+                    .collect(Collectors.toList());
+            int activeHours = records.stream()
+                    .filter(r -> "ACTIVE".equals(r.getStatus()))
+                    .mapToInt(WorkloadRecord::getWeeklyHours)
+                    .sum();
+            Map<String, Object> row = new HashMap<>();
+            row.put("taId", ta.getUserId());
+            row.put("taName", emptyFallback(ta.getFullName(), ta.getUsername()));
+            row.put("studentId", ta.getStudentId());
+            row.put("totalWeeklyHours", activeHours);
+            row.put("jobCount", records.stream().filter(r -> "ACTIVE".equals(r.getStatus())).count());
+            row.put("records", records);
+            row.put("modules", records.stream().map(WorkloadRecord::getModuleCode)
+                    .filter(v -> !isBlank(v)).distinct().collect(Collectors.joining(", ")));
+            row.put("isOverloaded", activeHours > workloadService.getMaxWeeklyHours());
+            row.put("workloadStatus", workloadStatus(activeHours, workloadService));
+            report.add(row);
+        }
+        report.sort(Comparator.comparing(row -> String.valueOf(row.get("taName"))));
+        return report;
+    }
+
+    private List<WorkloadRecord> filterRecords(List<WorkloadRecord> records, String semester, String module) {
+        return records.stream()
+                .filter(r -> isBlank(semester) || semester.equals(r.getSemester()))
+                .filter(r -> isBlank(module) || module.equalsIgnoreCase(r.getModuleCode()))
+                .sorted(Comparator.comparing(WorkloadRecord::getCreatedAt,
+                        Comparator.nullsLast(String::compareTo)).reversed())
+                .collect(Collectors.toList());
+    }
+
+    private String workloadStatus(int hours, WorkloadService workloadService) {
+        if (hours == 0) return "IDLE";
+        if (hours <= workloadService.getWarningWeeklyHours()) return "NORMAL";
+        if (hours <= workloadService.getMaxWeeklyHours()) return "WARNING";
+        return "OVERLOADED";
+    }
+
+    private double calculateFairnessIndex(List<Map<String, Object>> report) {
+        if (report.isEmpty()) return 0.0;
+        double mean = report.stream()
+                .mapToInt(row -> (Integer) row.get("totalWeeklyHours"))
+                .average().orElse(0.0);
+        if (mean == 0.0) return 0.0;
+        double totalDiff = 0.0;
+        for (Map<String, Object> a : report) {
+            for (Map<String, Object> b : report) {
+                totalDiff += Math.abs((Integer) a.get("totalWeeklyHours")
+                        - (Integer) b.get("totalWeeklyHours"));
+            }
+        }
+        return Math.round((totalDiff / (2 * report.size() * report.size() * mean)) * 100.0) / 100.0;
+    }
+
+    private void exportWorkloadCsv(HttpServletResponse response, List<Map<String, Object>> report,
+                                   int threshold) throws IOException {
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=admin-workload-report.csv");
+        StringBuilder csv = new StringBuilder();
+        csv.append("TA Name,Student ID,Modules,Active Jobs,Weekly Hours,Threshold,Status\n");
+        for (Map<String, Object> row : report) {
+            csv.append(csv(row.get("taName"))).append(',')
+                    .append(csv(row.get("studentId"))).append(',')
+                    .append(csv(row.get("modules"))).append(',')
+                    .append(row.get("jobCount")).append(',')
+                    .append(row.get("totalWeeklyHours")).append(',')
+                    .append(threshold).append(',')
+                    .append(csv(row.get("workloadStatus"))).append('\n');
+        }
+        response.getOutputStream().write(csv.toString().getBytes(StandardCharsets.UTF_8));
+    }
+
+    private Set<String> collectSemesters(List<WorkloadRecord> records) {
+        return records.stream().map(WorkloadRecord::getSemester)
+                .filter(v -> !isBlank(v)).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private Set<String> collectModules(List<WorkloadRecord> records) {
+        return records.stream().map(WorkloadRecord::getModuleCode)
+                .filter(v -> !isBlank(v)).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private String csv(Object value) {
+        String text = value == null ? "" : String.valueOf(value);
+        return "\"" + text.replace("\"", "\"\"").replace("\r", " ").replace("\n", " ") + "\"";
+    }
+
+    private String defaultIfBlank(String value, String fallback) {
+        return isBlank(value) ? fallback : value.trim();
+    }
+
+    private String trim(String value) {
+        return value == null ? "" : value.trim();
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    private String emptyFallback(String value, String fallback) {
+        return isBlank(value) ? fallback : value;
     }
 }

@@ -1,6 +1,8 @@
 package com.ebu6304.recruitment.web.servlet;
 
+import com.ebu6304.recruitment.models.AuditLogEntry;
 import com.ebu6304.recruitment.models.User;
+import com.ebu6304.recruitment.repositories.AuditLogRepository;
 import com.ebu6304.recruitment.services.AuthService;
 
 import jakarta.servlet.ServletException;
@@ -59,6 +61,8 @@ public class LoginServlet extends HttpServlet {
                 throw new IllegalArgumentException("Login failed");
             }
             User user = userOpt.get();
+            writeAudit(username.trim(), user.getUserId(), user.getRole(),
+                    "LOGIN", "SUCCESS", request, "User logged in.");
 
             // 创建会话
             HttpSession session = request.getSession(true);
@@ -69,6 +73,8 @@ public class LoginServlet extends HttpServlet {
             redirectByRole(user.getRole(), request, response);
 
         } catch (Exception e) {
+            writeAudit(username.trim(), null, "UNKNOWN",
+                    "LOGIN", "FAILED", request, e.getMessage());
             request.setAttribute("error", "Invalid username or password.");
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
         }
@@ -89,5 +95,21 @@ public class LoginServlet extends HttpServlet {
         } else {
             response.sendRedirect(ctx + "/login");
         }
+    }
+
+    private void writeAudit(String username, String userId, String role, String action,
+                            String outcome, HttpServletRequest request, String details) {
+        AuditLogRepository auditLogRepository =
+                (AuditLogRepository) getServletContext().getAttribute("auditLogRepository");
+        if (auditLogRepository == null) {
+            return;
+        }
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.trim().isEmpty()) {
+            ip = request.getRemoteAddr();
+        }
+        String logId = "AUD" + System.currentTimeMillis();
+        auditLogRepository.save(new AuditLogEntry(
+                logId, username, userId, role, action, outcome, ip, details));
     }
 }
