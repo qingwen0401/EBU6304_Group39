@@ -18,7 +18,6 @@
             color: #1e293b;
         }
 
-        /* 左侧导航栏 */
         .sidebar {
             width: 250px;
             min-height: 100vh;
@@ -96,7 +95,6 @@
             color: white;
         }
 
-        /* 主内容区 */
         .main {
             margin-left: 250px;
             padding: 32px;
@@ -144,7 +142,6 @@
             color: #0f172a;
         }
 
-        /* 统计卡片网格 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -195,7 +192,6 @@
             color: #ea580c;
         }
 
-        /* 内容网格 */
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -235,7 +231,6 @@
             color: #1d4ed8;
         }
 
-        /* 职位卡片 */
         .job-card {
             padding: 16px;
             border: 1px solid #f1f5f9;
@@ -291,6 +286,7 @@
             font-size: 12px;
             color: #64748b;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .job-stat {
@@ -299,7 +295,6 @@
             gap: 4px;
         }
 
-        /* 申请列表 */
         .application-item {
             padding: 14px;
             border-bottom: 1px solid #f1f5f9;
@@ -357,7 +352,6 @@
             opacity: 0.5;
         }
 
-        /* 快速操作按钮 */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -397,6 +391,47 @@
             background: #1d4ed8;
         }
 
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-item {
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .notification-time {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .notification-count {
+            background: #dc2626;
+            color: white;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
         @media (max-width: 1200px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -409,15 +444,21 @@
 
         @media (max-width: 768px) {
             .sidebar {
-                width: 200px;
+                position: static;
+                width: 100%;
+                min-height: auto;
             }
 
             .main {
-                margin-left: 200px;
+                margin-left: 0;
                 padding: 20px;
             }
 
             .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
                 grid-template-columns: 1fr;
             }
         }
@@ -425,7 +466,6 @@
 </head>
 <body>
 
-<!-- 左侧导航栏 -->
 <div class="sidebar">
     <div class="brand">TA Recruitment</div>
     <div class="role">Module Organiser Portal</div>
@@ -445,7 +485,9 @@
     <a href="${pageContext.request.contextPath}/mo/applications">
         <span class="icon">📋</span> Applications
         <c:if test="${stats.pendingApplications > 0}">
-            <span style="margin-left: auto; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700;">${stats.pendingApplications}</span>
+            <span style="margin-left: auto; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700;">
+                    ${stats.pendingApplications}
+            </span>
         </c:if>
     </a>
     <a href="${pageContext.request.contextPath}/mo/analytics">
@@ -462,7 +504,6 @@
     </a>
 </div>
 
-<!-- 主内容区 -->
 <div class="main">
     <div class="topbar">
         <div class="page-title">Dashboard</div>
@@ -472,7 +513,6 @@
         </div>
     </div>
 
-    <!-- 统计卡片 -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-label">Total Applications</div>
@@ -512,7 +552,6 @@
         </div>
     </div>
 
-    <!-- 快速操作 -->
     <div class="quick-actions">
         <a href="${pageContext.request.contextPath}/mo/create-job" class="quick-action-btn primary">
             <span>➕</span> Create New Job Posting
@@ -531,9 +570,40 @@
         </a>
     </div>
 
-    <!-- 内容网格 -->
+    <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+            <div class="panel-title">
+                Notifications
+                <c:if test="${unreadNotificationCount > 0}">
+                    <span class="notification-count">${unreadNotificationCount} unread</span>
+                </c:if>
+            </div>
+        </div>
+
+        <c:choose>
+            <c:when test="${empty recentNotifications}">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔔</div>
+                    <p>No notifications yet</p>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="notification-list">
+                    <c:forEach var="notification" items="${recentNotifications}">
+                        <div class="notification-item">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-message">${notification.message}</div>
+                            <div class="notification-time">
+                                    ${notification.createdAt != null ? notification.createdAt.substring(0, 16) : ''}
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
     <div class="content-grid">
-        <!-- 需要关注的职位 -->
         <div class="panel">
             <div class="panel-header">
                 <div class="panel-title">Jobs Needing Attention</div>
@@ -560,11 +630,11 @@
                                             <c:set var="pendingCount" value="${pendingCount + 1}"/>
                                         </c:if>
                                     </c:forEach>
-                                    ${pendingCount} new applications
+                                        ${pendingCount} new applications
                                 </div>
                                 <div class="job-stat">
                                     <span>👥</span>
-                                    ${job.filledCount}/${job.vacancies} filled
+                                        ${job.filledCount}/${job.vacancies} filled
                                 </div>
                                 <div class="job-stat">
                                     <span>📅</span>
@@ -583,7 +653,6 @@
             </c:choose>
         </div>
 
-        <!-- 最近的申请 -->
         <div class="panel">
             <div class="panel-header">
                 <div class="panel-title">Recent Applications</div>
@@ -597,7 +666,7 @@
                             <div class="application-info">
                                 <div class="applicant-name">${app.taName}</div>
                                 <div class="application-meta">
-                                    ${app.jobTitle} • Applied ${app.appliedAt.substring(0, 10)}
+                                        ${app.jobTitle} • Applied ${app.appliedAt.substring(0, 10)}
                                 </div>
                             </div>
                             <c:choose>

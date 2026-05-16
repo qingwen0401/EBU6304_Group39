@@ -9,44 +9,235 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body { background: #f4f7fb; color: #1e293b; }
-        .sidebar { width: 250px; min-height: 100vh; background: linear-gradient(180deg,#1e3a8a,#1d4ed8); padding: 28px 18px; position: fixed; left: 0; top: 0; color: white; box-shadow: 4px 0 18px rgba(15,23,42,.08); }
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: linear-gradient(180deg,#1e3a8a,#1d4ed8);
+            padding: 28px 18px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: white;
+            box-shadow: 4px 0 18px rgba(15,23,42,.08);
+        }
+
         .brand { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-        .role { font-size: 12px; color: #bfdbfe; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
-        .nav-title { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #bfdbfe; margin: 20px 0 12px; font-weight: 700; }
-        .sidebar a { display: flex; color: #dbeafe; text-decoration: none; font-size: 14px; margin: 6px 0; padding: 11px 14px; border-radius: 10px; transition: .2s ease; }
+        .role {
+            font-size: 12px;
+            color: #bfdbfe;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .nav-title {
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #bfdbfe;
+            margin: 20px 0 12px;
+            font-weight: 700;
+        }
+
+        .sidebar a {
+            display: flex;
+            color: #dbeafe;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 6px 0;
+            padding: 11px 14px;
+            border-radius: 10px;
+            transition: .2s ease;
+        }
+
         .sidebar a:hover { background: rgba(255,255,255,.12); color: white; }
         .sidebar a.active { background: white; color: #1d4ed8; font-weight: 700; }
-        .logout-link { margin-top: 30px; color: #fecaca !important; border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px !important; }
-        .main { margin-left: 250px; padding: 32px; }
-        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-        .page-title { font-size: 28px; font-weight: 700; color: #0f172a; }
-        .panel, .stat-card { background: white; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,.04); }
-        .panel { padding: 24px; margin-bottom: 24px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+
+        .logout-link {
+            margin-top: 30px;
+            color: #fecaca !important;
+            border-top: 1px solid rgba(255,255,255,.1);
+            padding-top: 20px !important;
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 32px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .panel, .stat-card {
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,.04);
+        }
+
+        .panel {
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
         .stat-card { padding: 20px; }
-        .stat-label { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; margin-bottom: 8px; }
-        .stat-value { font-size: 32px; font-weight: 700; color: #0f172a; }
-        .toolbar { display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 12px; align-items: end; margin-bottom: 18px; }
-        label { display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
-        select, input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: white; color: #0f172a; }
-        .btn { border: none; border-radius: 10px; padding: 10px 14px; background: #2563eb; color: white; font-weight: 700; text-decoration: none; cursor: pointer; text-align: center; }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(130px, 1fr));
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: white;
+            color: #0f172a;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: #2563eb;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
         .btn.secondary { background: #0f172a; }
         .btn.ghost { background: #e2e8f0; color: #0f172a; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; vertical-align: top; }
-        th { color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
-        .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #dbeafe; color: #1d4ed8; }
+        .btn.warning { background: #dc2626; }
+
+        .btn.warning:hover {
+            background: #b91c1c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        th {
+            color: #64748b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
         .status-OVERLOADED { background: #fee2e2; color: #dc2626; }
         .status-WARNING { background: #ffedd5; color: #ea580c; }
         .status-NORMAL { background: #dcfce7; color: #16a34a; }
         .status-IDLE { background: #e2e8f0; color: #475569; }
-        @media (max-width: 900px) { .sidebar { position: static; width: 100%; min-height: auto; } .main { margin-left: 0; } .stats-grid, .toolbar { grid-template-columns: 1fr; } }
+
+        .notice {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        .notice.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+
+        .inline-form {
+            display: inline;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .stats-grid, .toolbar {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="sidebar">
     <div class="brand">TA Recruitment</div>
     <div class="role">Administrator Portal</div>
+
     <div class="nav-title">Management</div>
     <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
     <a href="${pageContext.request.contextPath}/admin/workload" class="active">Workload Monitor</a>
@@ -57,12 +248,22 @@
 </div>
 
 <main class="main">
+    <c:if test="${param.notified == '1'}">
+        <div class="notice">Notification has been sent to the selected TA.</div>
+    </c:if>
+    <c:if test="${param.notified == '0'}">
+        <div class="notice error">Failed to send notification. Please try again.</div>
+    </c:if>
+
     <div class="topbar">
         <div>
             <h1 class="page-title">Workload Monitor</h1>
             <p class="stat-label">Filter by term, module, and workload status.</p>
         </div>
-        <a class="btn secondary" href="${pageContext.request.contextPath}/admin/workload?semester=${semester}&module=${selectedModule}&status=${selectedStatus}&export=csv">Export CSV</a>
+        <a class="btn secondary"
+           href="${pageContext.request.contextPath}/admin/workload?semester=${semester}&module=${selectedModule}&status=${selectedStatus}&export=csv">
+            Export CSV
+        </a>
     </div>
 
     <div class="stats-grid">
@@ -126,7 +327,15 @@
     <section class="panel">
         <table>
             <thead>
-            <tr><th>TA</th><th>Student ID</th><th>Modules</th><th>Active Jobs</th><th>Weekly Hours</th><th>Status</th></tr>
+            <tr>
+                <th>TA</th>
+                <th>Student ID</th>
+                <th>Modules</th>
+                <th>Active Jobs</th>
+                <th>Weekly Hours</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
             </thead>
             <tbody>
             <c:forEach var="ta" items="${workloadReport}">
@@ -136,11 +345,32 @@
                     <td>${ta.modules}</td>
                     <td>${ta.jobCount}</td>
                     <td>${ta.totalWeeklyHours} / ${maxWeeklyHours} hrs</td>
-                    <td><span class="badge status-${ta.workloadStatus}">${ta.workloadStatus}</span></td>
+                    <td>
+                        <span class="badge status-${ta.workloadStatus}">
+                                ${ta.workloadStatus}
+                        </span>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${ta.workloadStatus == 'OVERLOADED'}">
+                                <form class="inline-form" method="post" action="${pageContext.request.contextPath}/admin/workload">
+                                    <input type="hidden" name="action" value="notifyOverload">
+                                    <input type="hidden" name="taId" value="${ta.taId}">
+                                    <input type="hidden" name="taName" value="${ta.taName}">
+                                    <input type="hidden" name="totalWeeklyHours" value="${ta.totalWeeklyHours}">
+                                    <input type="hidden" name="semester" value="${semester}">
+                                    <input type="hidden" name="module" value="${selectedModule}">
+                                    <input type="hidden" name="status" value="${selectedStatus}">
+                                    <button class="btn warning" type="submit">Notify TA</button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>-</c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
             </c:forEach>
             <c:if test="${empty workloadReport}">
-                <tr><td colspan="6">No workload data matches the filters.</td></tr>
+                <tr><td colspan="7">No workload data matches the filters.</td></tr>
             </c:if>
             </tbody>
         </table>
@@ -150,7 +380,15 @@
         <div class="stat-label">Workload History</div>
         <table>
             <thead>
-            <tr><th>Created</th><th>TA</th><th>Job</th><th>Module</th><th>Term</th><th>Hours</th><th>Status</th></tr>
+            <tr>
+                <th>Created</th>
+                <th>TA</th>
+                <th>Job</th>
+                <th>Module</th>
+                <th>Term</th>
+                <th>Hours</th>
+                <th>Status</th>
+            </tr>
             </thead>
             <tbody>
             <c:forEach var="record" items="${records}">
