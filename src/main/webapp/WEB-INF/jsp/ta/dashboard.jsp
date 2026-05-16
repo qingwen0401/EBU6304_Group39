@@ -357,6 +357,47 @@
             text-decoration: underline;
         }
 
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: #f8fafc;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .notification-time {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .notification-count {
+            background: #dc2626;
+            color: white;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
         @media (max-width: 1100px) {
             .content-row {
                 grid-template-columns: 1fr;
@@ -453,6 +494,34 @@
             <div class="label">Open Positions</div>
             <div class="number">${openJobCount}</div>
         </div>
+    </div>
+
+    <div class="section" style="margin-bottom: 22px;">
+        <h3>
+            Notifications
+            <c:if test="${unreadNotificationCount > 0}">
+                <span class="notification-count">${unreadNotificationCount} unread</span>
+            </c:if>
+        </h3>
+
+        <c:choose>
+            <c:when test="${empty recentNotifications}">
+                <p class="empty-msg">No notifications yet.</p>
+            </c:when>
+            <c:otherwise>
+                <div class="notification-list">
+                    <c:forEach var="notification" items="${recentNotifications}">
+                        <div class="notification-item">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-message">${notification.message}</div>
+                            <div class="notification-time">
+                                    ${notification.createdAt != null ? notification.createdAt.substring(0, 16) : ''}
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <div class="content-row">
