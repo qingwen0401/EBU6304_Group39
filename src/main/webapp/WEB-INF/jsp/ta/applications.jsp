@@ -331,7 +331,7 @@
                             <thead>
                             <tr>
                                 <th>Job ID</th>
-                                <th>Applied Date</th>
+                                <th>Job Title</th> <th>Applied Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -340,7 +340,7 @@
                             <c:forEach var="app" items="${activeApps}">
                                 <tr>
                                     <td>${app.jobId}</td>
-                                    <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
+                                    <td>${app.jobTitle}</td> <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
                                     <td><span class="status status-${app.status}">${app.status}</span></td>
                                     <td>
                                         <c:if test="${app.status == 'PENDING'}">
@@ -367,7 +367,7 @@
                             <thead>
                             <tr>
                                 <th>Job ID</th>
-                                <th>Applied Date</th>
+                                <th>Job Title</th> <th>Applied Date</th>
                                 <th>Outcome</th>
                                 <th>Feedback</th>
                             </tr>
@@ -376,7 +376,7 @@
                             <c:forEach var="app" items="${historyApps}">
                                 <tr>
                                     <td>${app.jobId}</td>
-                                    <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
+                                    <td>${app.jobTitle}</td> <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
                                     <td><span class="status status-${app.status}">${app.status}</span></td>
                                     <td style="color:#64748b;font-size:13px;">${not empty app.reviewNote ? app.reviewNote : '-'}</td>
                                 </tr>

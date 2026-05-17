@@ -82,5 +82,19 @@
     "createdAt": "2026-05-17T21:33:46.155570700",
     "applicationId": "APP20260517213137001",
     "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260518013419002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260411001",
+    "jobTitle": "Tutorial TA for EBU6304",
+    "moduleCode": "EBU6304",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 6,
+    "semester": "2026 Spring",
+    "createdAt": "2026-05-18T01:34:19.092576100",
+    "applicationId": "APP20260518013400001",
+    "status": "ACTIVE"
   }
 ]
