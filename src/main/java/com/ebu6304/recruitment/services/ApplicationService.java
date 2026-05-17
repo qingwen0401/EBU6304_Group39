@@ -165,6 +165,7 @@ public class ApplicationService {
                     "Cannot reject application in status: " + app.getStatus());
         }
 
+
         app.reject(feedback);
         applicationRepository.save(app);
         return app;

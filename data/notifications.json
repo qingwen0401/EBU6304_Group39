@@ -1,0 +1,112 @@
+[
+  {
+    "notificationId": "NOT1779022719947e9b867",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Tutorial TA for EBU6304.",
+    "relatedEntityId": "APP20260517205834001",
+    "read": true,
+    "createdAt": "2026-05-17T20:58:39.950422700"
+  },
+  {
+    "notificationId": "NOT1779024703656998847",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Tutorial TA for EBU6304.",
+    "relatedEntityId": "APP20260517213140002",
+    "read": true,
+    "createdAt": "2026-05-17T21:31:43.658868300"
+  },
+  {
+    "notificationId": "NOT1779025591667f06043",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Exam Invigilator.",
+    "relatedEntityId": "APP20260517214613001",
+    "read": true,
+    "createdAt": "2026-05-17T21:46:31.668174300"
+  },
+  {
+    "notificationId": "NOT17790277026300e52e4",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Exam Invigilator.",
+    "relatedEntityId": "APP20260517222130001",
+    "read": true,
+    "createdAt": "2026-05-17T22:21:42.635380900"
+  },
+  {
+    "notificationId": "NOT177902774476186fcd5",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Tutorial TA for EBU6304.",
+    "relatedEntityId": "APP20260517222136002",
+    "read": true,
+    "createdAt": "2026-05-17T22:22:24.761334100"
+  },
+  {
+    "notificationId": "NOT17790277872235b4972",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "WORKLOAD_WARNING",
+    "title": "Workload Overload Warning",
+    "message": "Your current workload in 2026 Spring is 42 hours per week, which exceeds the limit of 20 hours. Please consider reducing your workload.",
+    "relatedEntityId": "TA20260329164406002",
+    "read": true,
+    "createdAt": "2026-05-17T22:23:07.223305100"
+  },
+  {
+    "notificationId": "NOT17790279238520310c5",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for test3.",
+    "relatedEntityId": "APP20260517222517004",
+    "read": true,
+    "createdAt": "2026-05-17T22:25:23.852619600"
+  },
+  {
+    "notificationId": "NOT17790285628557fcf64",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Project TA for Web Development.",
+    "relatedEntityId": "APP20260517222508003",
+    "read": true,
+    "createdAt": "2026-05-17T22:36:02.856610400"
+  },
+  {
+    "notificationId": "NOT177903033422184d165",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Exam Invigilator.",
+    "relatedEntityId": "APP20260517230530001",
+    "read": true,
+    "createdAt": "2026-05-17T23:05:34.221553100"
+  },
+  {
+    "notificationId": "NOT1779031150049b70956",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "APPLICATION_WITHDRAWN",
+    "title": "Application Withdrawn",
+    "message": "Alice Wang has withdrawn the application for Tutorial TA for EBU6304.",
+    "relatedEntityId": "APP20260517231901001",
+    "read": false,
+    "createdAt": "2026-05-17T23:19:10.050296500"
+  }
+]

@@ -239,4 +239,13 @@
         <url-pattern>/admin/audit</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>NotificationServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.NotificationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NotificationServlet</servlet-name>
+        <url-pattern>/notifications/read</url-pattern>
+    </servlet-mapping>
+
 </web-app>

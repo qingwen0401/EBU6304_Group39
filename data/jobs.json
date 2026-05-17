@@ -130,7 +130,12 @@
     "semester": "2026 Spring",
     "jobType": "TUTORIAL_TA",
     "minGpa": 3.6,
-    "applicationIds": []
+    "applicationIds": [
+      "APP20260517205834001",
+      "APP20260517213140002",
+      "APP20260517222136002",
+      "APP20260517231901001"
+    ]
   },
   {
     "jobId": "JOB20260411002",
@@ -148,15 +153,16 @@
     "hoursPerWeek": 10,
     "hourlyRate": 17.0,
     "vacancies": 2,
-    "filledCount": 1,
-    "status": "OPEN",
+    "filledCount": 2,
+    "status": "CLOSED",
     "postedAt": "2026-04-10T14:30:00",
     "deadline": "2026-05-01",
     "semester": "2026 Spring",
     "jobType": "LAB_TA",
     "minGpa": 3.7,
     "applicationIds": [
-      "APP20260411001"
+      "APP20260411001",
+      "APP20260517213137001"
     ]
   },
   {
@@ -184,7 +190,9 @@
     "minGpa": 3.5,
     "applicationIds": [
       "APP20260411002",
-      "APP20260411003"
+      "APP20260411003",
+      "APP20260517222508003",
+      "APP20260517231915002"
     ]
   },
   {
@@ -212,7 +220,10 @@
     "applicationIds": [
       "APP20260411004",
       "APP20260411005",
-      "APP20260411006"
+      "APP20260411006",
+      "APP20260517214613001",
+      "APP20260517222130001",
+      "APP20260517230530001"
     ]
   },
   {
@@ -291,6 +302,8 @@
     "semester": "2026 Spring",
     "jobType": "LAB_TA",
     "minGpa": 3.2,
-    "applicationIds": []
+    "applicationIds": [
+      "APP20260517222517004"
+    ]
   }
 ]
