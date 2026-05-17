@@ -339,3 +339,53 @@ function switchTab(tab) {
     document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
     event.target.classList.add("active");
 }
+
+// 监听通知点击变已读事件
+document.addEventListener('DOMContentLoaded', function() {
+    // 找到页面上所有带有 unread 类的通知卡片/列表项
+    const unreadNotifications = document.querySelectorAll('.notification-item.unread');
+
+    unreadNotifications.forEach(item => {
+        item.addEventListener('click', function() {
+            // 获取绑定在 HTML 标签上的通知 ID
+            const notifId = this.getAttribute('data-id');
+
+            // 如果没有 ID，说明数据绑错了，直接跳过
+            if (!notifId) return;
+
+            // 向我们刚写的 Servlet 发送请求
+            fetch('/notifications/read', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'notificationId': notifId
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 后端修改成功后，前端去掉 unread 样式，加上 read 样式（比如消除红点）
+                        this.classList.remove('unread');
+                        this.classList.add('read');
+
+                        // 可选：如果你顶部导航栏有未读消息数字（如 <span id="badgeCount">3</span>）
+                        // 可以在这里获取该元素并减 1
+                        const badge = document.getElementById('badgeCount');
+                        if (badge) {
+                            let count = parseInt(badge.innerText);
+                            if (!isNaN(count) && count > 0) {
+                                count--;
+                                badge.innerText = count > 0 ? count : '';
+                                if(count === 0) badge.style.display = 'none';
+                            }
+                        }
+                    } else {
+                        console.error('Failed to mark as read:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+});

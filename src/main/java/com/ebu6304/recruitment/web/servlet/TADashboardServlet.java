@@ -49,13 +49,20 @@ public class TADashboardServlet extends HttpServlet {
                 .limit(3)
                 .collect(Collectors.toList());
 
-        List<Notification> recentNotifications = notificationService == null
-                ? Collections.emptyList()
-                : notificationService.getRecentNotificationsForUser(currentUser.getUserId(), 5);
 
-        long unreadNotificationCount = notificationService == null
-                ? 0
-                : notificationService.countUnreadNotifications(currentUser.getUserId());
+        // ====== 获取并分类通知 (TA) ======
+        // 1. 获取所有通知（只在这里声明一次 List<Notification> allNotifs）
+        List<Notification> allNotifs = notificationService == null ? Collections.emptyList()
+                : notificationService.getNotificationsForUser(currentUser.getUserId());
+
+        // 2. 重新赋值并排序（直接用 allNotifs，不要重复声明）
+        allNotifs = allNotifs.stream()
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        // 3. 分组
+        List<Notification> unreadNotifs = allNotifs.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
+        List<Notification> readNotifs = allNotifs.stream().filter(Notification::isRead).collect(Collectors.toList());
 
         request.setAttribute("currentUser", currentUser);
         request.setAttribute("activeCount", activeCount);
@@ -63,8 +70,12 @@ public class TADashboardServlet extends HttpServlet {
         request.setAttribute("openJobCount", (long) openJobs.size());
         request.setAttribute("recentApps", recentApps);
         request.setAttribute("recommendedJobs", recommendedJobs);
-        request.setAttribute("recentNotifications", recentNotifications);
-        request.setAttribute("unreadNotificationCount", unreadNotificationCount);
+
+        // 传递给前端新的通知数据
+        request.setAttribute("unreadNotifs", unreadNotifs);
+        request.setAttribute("readNotifs", readNotifs);
+        request.setAttribute("unreadCount", unreadNotifs.size());
+        request.setAttribute("readCount", readNotifs.size());
 
         request.getRequestDispatcher("/WEB-INF/jsp/ta/dashboard.jsp").forward(request, response);
     }

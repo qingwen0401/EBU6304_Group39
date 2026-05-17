@@ -68,5 +68,19 @@
     "createdAt": "2026-04-11T13:59:55.929477900",
     "applicationId": "APP20260411003",
     "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260517213346003",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260411002",
+    "jobTitle": "Lab TA for Database Systems",
+    "moduleCode": "EBU6305",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 10,
+    "semester": "2026 Spring",
+    "createdAt": "2026-05-17T21:33:46.155570700",
+    "applicationId": "APP20260517213137001",
+    "status": "ACTIVE"
   }
 ]

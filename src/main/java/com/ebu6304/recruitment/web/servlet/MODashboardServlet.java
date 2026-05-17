@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MODashboardServlet extends HttpServlet {
 
@@ -81,7 +82,7 @@ public class MODashboardServlet extends HttpServlet {
                 .limit(5)
                 .toList();
 
-        List<Notification> recentNotifications = notificationService == null
+        /*List<Notification> recentNotifications = notificationService == null
                 ? Collections.emptyList()
                 : notificationService.getRecentNotificationsForUser(moId, 5);
 
@@ -95,7 +96,33 @@ public class MODashboardServlet extends HttpServlet {
         request.setAttribute("jobsNeedingAttention", jobsNeedingAttention);
         request.setAttribute("allJobs", allJobs);
         request.setAttribute("recentNotifications", recentNotifications);
-        request.setAttribute("unreadNotificationCount", unreadNotificationCount);
+        request.setAttribute("unreadNotificationCount", unreadNotificationCount);*/
+
+        // ====== 获取并分类通知 (MO) ======
+        // 1. 获取所有通知（只在这里声明一次 List<Notification> allNotifs）
+        List<Notification> allNotifs = notificationService == null ? Collections.emptyList()
+                : notificationService.getNotificationsForUser(moId);
+
+        // 2. 重新赋值并排序（注意这里前面没有 List<Notification>，直接用 allNotifs）
+        allNotifs = allNotifs.stream()
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        // 3. 分组
+        List<Notification> unreadNotifs = allNotifs.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
+        List<Notification> readNotifs = allNotifs.stream().filter(Notification::isRead).collect(Collectors.toList());
+
+        request.setAttribute("currentUser", currentUser);
+        request.setAttribute("stats", stats);
+        request.setAttribute("recentApplications", recentApplications);
+        request.setAttribute("jobsNeedingAttention", jobsNeedingAttention);
+        request.setAttribute("allJobs", allJobs);
+
+        // 传递给前端新的通知数据
+        request.setAttribute("unreadNotifs", unreadNotifs);
+        request.setAttribute("readNotifs", readNotifs);
+        request.setAttribute("unreadCount", unreadNotifs.size());
+        request.setAttribute("readCount", readNotifs.size());
 
         request.getRequestDispatcher("/WEB-INF/jsp/mo/dashboard.jsp").forward(request, response);
     }

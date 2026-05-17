@@ -49,12 +49,16 @@ public class AppInitializer implements ServletContextListener {
         AuditLogRepository auditLogRepository = new AuditLogRepository();
         NotificationRepository notificationRepository = new NotificationRepository();
 
+
         AuthService authService = new AuthService(userRepository);
         JobService jobService = new JobService(jobRepository, userRepository);
+
         NotificationService notificationService = new NotificationService(notificationRepository);
         ApplicationService applicationService = new ApplicationService(
                 applicationRepository, jobRepository, userRepository, workloadRepository);
+
         applicationService.setNotificationService(notificationService);
+
         WorkloadService workloadService = new WorkloadService(
                 workloadRepository, userRepository, workloadConfigRepository);
 
