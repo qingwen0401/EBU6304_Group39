@@ -362,13 +362,13 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 320px; /* 【关键】超过 3 条左右就会出现滚动条 */
+            max-height: 320px; /* 【关键】超�?3 条左右就会出现滚动条 */
             overflow-y: auto;
             padding-right: 5px;
             margin-bottom: 10px;
         }
 
-        /* 美化滚动条（可选，让界面更精致） */
+        /* 美化滚动条（可选，让界面更精致�?*/
         .notification-list::-webkit-scrollbar { width: 5px; }
         .notification-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
@@ -386,7 +386,7 @@
         }
         .history-header:hover { color: #2563eb; }
         .history-header i { font-size: 12px; transition: transform 0.3s; }
-        .history-header.collapsed i { transform: rotate(-90deg); } /* 折叠时旋转箭头 */
+        .history-header.collapsed i { transform: rotate(-90deg); } /* 折叠时旋转箭�?*/
 
         .notification-item {
             border: 1px solid #e2e8f0;
@@ -431,7 +431,7 @@
         /* 通知历史标题 */
         .history-title { font-size: 13px; font-weight: 700; color: #64748b; margin: 20px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; text-transform: uppercase;}
 
-        /* 未读状态（左侧蓝边，带红点） */
+        /* 未读状态（左侧蓝边，带红点�?*/
         .notification-item.unread {
             background-color: #ffffff;
             border-left: 4px solid #2563eb;
@@ -448,6 +448,18 @@
             border-left: 4px solid #22c55e;
             opacity: 0.7;
             transition: all 0.3s ease;
+        }
+
+        .notification-item.type-APPLICATION_ACCEPTED.unread {
+            border-left-color: #16a34a;
+        }
+
+        .notification-item.type-APPLICATION_REJECTED.unread {
+            border-left-color: #dc2626;
+        }
+
+        .notification-item.type-WORKLOAD_WARNING.unread {
+            border-left-color: #ea580c;
         }
 
         @media (max-width: 1100px) {
@@ -558,7 +570,7 @@
                 <p class="empty-msg" id="emptyUnreadMsg">You are all caught up!</p>
             </c:if>
             <c:forEach var="notif" items="${unreadNotifs}">
-                <div class="notification-item unread" data-id="${notif.notificationId}" style="cursor:pointer;">
+                <div class="notification-item unread type-${notif.type}" data-id="${notif.notificationId}" style="cursor:pointer;">
                     <div class="notification-title">${notif.title}</div>
                     <div class="notification-message">${notif.message}</div>
                     <div class="notification-time">${notif.createdAt.substring(0, 16)}</div>
@@ -567,10 +579,10 @@
         </div>
 
         <div class="history-header" onclick="toggleHistory()">
-    <span class="history-title" style="margin:0; border:none; padding:0;">
-        Notification History
-        <small style="font-weight: normal; color: #94a3b8; font-size: 11px; margin-left: 4px;">(Click to view)</small>
-    </span>
+            <span class="history-title" style="margin:0; border:none; padding:0;">
+                Notification History
+                <small style="font-weight: normal; color: #94a3b8; font-size: 11px; margin-left: 4px;">(Click to view)</small>
+            </span>
             <span id="historyToggleBtn">Show ▼</span>
         </div>
 
@@ -580,7 +592,7 @@
                     <p class="empty-msg" id="emptyReadMsg">No notification history.</p>
                 </c:if>
                 <c:forEach var="notif" items="${readNotifs}">
-                    <div class="notification-item read" data-id="${notif.notificationId}">
+                    <div class="notification-item read type-${notif.type}" data-id="${notif.notificationId}">
                         <div class="notification-title">${notif.title}</div>
                         <div class="notification-message">${notif.message}</div>
                         <div class="notification-time">${notif.createdAt.substring(0, 16)}</div>
@@ -649,13 +661,11 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 利用事件委托监听未读列表的点击事件
         const unreadList = document.getElementById('unreadList');
         const readList = document.getElementById('readList');
 
         if (unreadList) {
             unreadList.addEventListener('click', function(e) {
-                // 确保点中的是未读通知卡片
                 const item = e.target.closest('.notification-item.unread');
                 if (!item) return;
 
@@ -670,23 +680,19 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // 1. 修改卡片样式，去掉鼠标指针
                             item.classList.remove('unread');
                             item.classList.add('read');
                             item.style.cursor = 'default';
 
-                            // 2. 将卡片从当前位置移动到历史记录的【最顶端】
                             const emptyRead = document.getElementById('emptyReadMsg');
-                            if (emptyRead) emptyRead.style.display = 'none'; // 隐藏"暂无历史"提示
+                            if (emptyRead) emptyRead.style.display = 'none';
                             readList.insertBefore(item, readList.firstChild);
 
-                            // 如果历史记录当前是隐藏状态（display 为 none），自动调用 toggleHistory 展开它
                             const wrapper = document.getElementById('historyWrapper');
                             if (wrapper && wrapper.style.display === 'none') {
                                 toggleHistory();
                             }
 
-                            // 3. 检查未读列表是否空了，空了就显示"全部已读"提示
                             if (unreadList.querySelectorAll('.notification-item').length === 0) {
                                 let emptyUnread = document.getElementById('emptyUnreadMsg');
                                 if (!emptyUnread) {
@@ -696,12 +702,11 @@
                                 }
                             }
 
-                            // 4. 动态更新顶部的红绿数字角标
                             const unreadBadge = document.getElementById('unreadBadge');
                             const readBadge = document.getElementById('readBadge');
 
                             if (unreadBadge) {
-                                let unreadCount = parseInt(unreadBadge.innerText);
+                                let unreadCount = parseInt(unreadBadge.innerText, 10);
                                 if (!isNaN(unreadCount) && unreadCount > 0) {
                                     unreadCount--;
                                     unreadBadge.innerText = unreadCount + ' unread';
@@ -710,7 +715,7 @@
                             }
 
                             if (readBadge) {
-                                let readCount = parseInt(readBadge.innerText) || 0;
+                                let readCount = parseInt(readBadge.innerText, 10) || 0;
                                 readCount++;
                                 readBadge.innerText = readCount + ' read';
                                 readBadge.style.display = 'inline-block';
@@ -721,6 +726,7 @@
             });
         }
     });
+
     function toggleHistory() {
         const wrapper = document.getElementById('historyWrapper');
         const btn = document.getElementById('historyToggleBtn');
@@ -733,5 +739,6 @@
         }
     }
 </script>
+
 </body>
 </html>

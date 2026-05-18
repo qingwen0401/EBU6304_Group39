@@ -75,7 +75,6 @@ public class TADashboardServlet extends HttpServlet {
         request.setAttribute("recentApps", recentApps);
         request.setAttribute("recommendedJobs", recommendedJobs);
 
-        // 传递给前端新的通知数据
         request.setAttribute("unreadNotifs", unreadNotifs);
         request.setAttribute("readNotifs", readNotifs);
         request.setAttribute("unreadCount", unreadNotifs.size());

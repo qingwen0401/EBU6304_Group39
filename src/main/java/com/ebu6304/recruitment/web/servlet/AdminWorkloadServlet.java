@@ -1,6 +1,7 @@
 package com.ebu6304.recruitment.web.servlet;
 
 import com.ebu6304.recruitment.models.AuditLogEntry;
+import com.ebu6304.recruitment.models.Notification;
 import com.ebu6304.recruitment.models.TA;
 import com.ebu6304.recruitment.models.User;
 import com.ebu6304.recruitment.models.WorkloadRecord;
@@ -35,6 +36,8 @@ public class AdminWorkloadServlet extends HttpServlet {
                 (WorkloadService) getServletContext().getAttribute("workloadService");
         UserRepository userRepository =
                 (UserRepository) getServletContext().getAttribute("userRepository");
+        NotificationService notificationService =
+                (NotificationService) getServletContext().getAttribute("notificationService");
 
         String semester = defaultIfBlank(request.getParameter("semester"), "2026 Spring");
         String module = trim(request.getParameter("module"));
@@ -42,7 +45,8 @@ public class AdminWorkloadServlet extends HttpServlet {
 
         List<WorkloadRecord> allRecords = workloadService.getAllWorkloadRecords();
         List<Map<String, Object>> workloadReport =
-                buildReport(userRepository.findAllTAs(), allRecords, semester, module, workloadService);
+                buildReport(userRepository.findAllTAs(), allRecords, semester, module,
+                        workloadService, notificationService);
 
         if (!isBlank(status)) {
             workloadReport = workloadReport.stream()
@@ -133,6 +137,8 @@ public class AdminWorkloadServlet extends HttpServlet {
                 throw new IllegalArgumentException("TA ID is required");
             }
 
+            boolean isResend = notificationService.hasWorkloadWarningBeenSent(taId, semester);
+
             notificationService.createWorkloadWarning(
                     taId,
                     taName,
@@ -142,13 +148,15 @@ public class AdminWorkloadServlet extends HttpServlet {
             );
 
             if (auditLogRepository != null && currentUser != null) {
+                String actionDetail = isResend
+                        ? "Sent workload reminder to " + taName + "."
+                        : "Sent workload warning to " + taName + ".";
                 auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
                         currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
-                        "SEND_NOTIFICATION", "SUCCESS", request.getRemoteAddr(),
-                        "Sent workload warning to " + taName + "."));
+                        "SEND_NOTIFICATION", "SUCCESS", request.getRemoteAddr(), actionDetail));
             }
 
-            response.sendRedirect(buildWorkloadRedirect(request, semester, module, status, "1"));
+            response.sendRedirect(buildWorkloadRedirect(request, semester, module, status, "1", isResend));
         } catch (Exception e) {
             if (auditLogRepository != null && currentUser != null) {
                 auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
@@ -156,13 +164,14 @@ public class AdminWorkloadServlet extends HttpServlet {
                         "SEND_NOTIFICATION", "FAILED", request.getRemoteAddr(), e.getMessage()));
             }
 
-            response.sendRedirect(buildWorkloadRedirect(request, semester, module, status, "0"));
+            response.sendRedirect(buildWorkloadRedirect(request, semester, module, status, "0", false));
         }
     }
 
     private List<Map<String, Object>> buildReport(List<TA> tas, List<WorkloadRecord> allRecords,
                                                   String semester, String module,
-                                                  WorkloadService workloadService) {
+                                                  WorkloadService workloadService,
+                                                  NotificationService notificationService) {
         List<Map<String, Object>> report = new ArrayList<>();
 
         for (TA ta : tas) {
@@ -188,6 +197,18 @@ public class AdminWorkloadServlet extends HttpServlet {
                     .filter(v -> !isBlank(v)).distinct().collect(Collectors.joining(", ")));
             row.put("isOverloaded", activeHours > workloadService.getMaxWeeklyHours());
             row.put("workloadStatus", workloadStatus(activeHours, workloadService));
+
+            if (notificationService != null) {
+                List<Notification> warnings =
+                        notificationService.getWorkloadWarningsForTa(ta.getUserId(), semester);
+                row.put("workloadNotified", !warnings.isEmpty());
+                row.put("notificationCount", warnings.size());
+                row.put("lastNotifiedAt", warnings.isEmpty() ? "" : warnings.get(0).getCreatedAt());
+            } else {
+                row.put("workloadNotified", false);
+                row.put("notificationCount", 0);
+                row.put("lastNotifiedAt", "");
+            }
 
             report.add(row);
         }
@@ -277,12 +298,14 @@ public class AdminWorkloadServlet extends HttpServlet {
     }
 
     private String buildWorkloadRedirect(HttpServletRequest request, String semester,
-                                         String module, String status, String notified) {
+                                         String module, String status, String notified,
+                                         boolean again) {
         return request.getContextPath()
                 + "/admin/workload?semester=" + url(semester)
                 + "&module=" + url(module)
                 + "&status=" + url(status)
-                + "&notified=" + url(notified);
+                + "&notified=" + url(notified)
+                + (again ? "&again=1" : "");
     }
 
     private String url(String value) {

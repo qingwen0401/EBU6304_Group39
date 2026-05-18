@@ -1,10 +1,8 @@
 package com.ebu6304.recruitment.web.servlet;
 
-import com.ebu6304.recruitment.controllers.MOApplicationController;
 import com.ebu6304.recruitment.models.Application;
 import com.ebu6304.recruitment.models.User;
 import com.ebu6304.recruitment.services.ApplicationService;
-import com.ebu6304.recruitment.web.AppInitializer;
 import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
@@ -29,13 +27,15 @@ import java.util.Optional;
  */
 public class MOApplicationReviewServlet extends HttpServlet {
 
-    private ApplicationService applicationService;
     private Gson gson;
 
     @Override
     public void init() throws ServletException {
-        this.applicationService = AppInitializer.getApplicationService();
         this.gson = new Gson();
+    }
+
+    private ApplicationService getApplicationService() {
+        return (ApplicationService) getServletContext().getAttribute("applicationService");
     }
 
     @Override
@@ -46,6 +46,7 @@ public class MOApplicationReviewServlet extends HttpServlet {
         String jobId = request.getParameter("jobId");
 
         // 获取该MO的所有职位的申请，如果提供了jobId则过滤
+        ApplicationService applicationService = getApplicationService();
         List<Application> applications = applicationService.getApplicationsByMo(moId);
         if (jobId != null && !jobId.isEmpty()) {
             applications = applications.stream()
@@ -100,6 +101,11 @@ public class MOApplicationReviewServlet extends HttpServlet {
 
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         String moId = currentUser.getUserId();
+        ApplicationService applicationService = getApplicationService();
+        if (applicationService == null) {
+            sendJsonError(response, "Application service is not available");
+            return;
+        }
 
         try {
             Optional<Application> appOpt = applicationService.getApplicationById(applicationId);
@@ -147,6 +153,11 @@ public class MOApplicationReviewServlet extends HttpServlet {
 
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         String moId = currentUser.getUserId();
+        ApplicationService applicationService = getApplicationService();
+        if (applicationService == null) {
+            sendJsonError(response, "Application service is not available");
+            return;
+        }
 
         int rejectedCount = 0;
         for (String applicationId : applicationIds) {
@@ -175,6 +186,11 @@ public class MOApplicationReviewServlet extends HttpServlet {
 
         User currentUser = (User) request.getSession().getAttribute("currentUser");
         String moId = currentUser.getUserId();
+        ApplicationService applicationService = getApplicationService();
+        if (applicationService == null) {
+            sendJsonError(response, "Application service is not available");
+            return;
+        }
 
         try {
             Optional<Application> appOpt = applicationService.getApplicationById(applicationId);

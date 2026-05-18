@@ -161,6 +161,24 @@
             background: #b91c1c;
         }
 
+        .btn.warning.outline {
+            background: white;
+            color: #dc2626;
+            border: 1px solid #dc2626;
+        }
+
+        .btn.warning.outline:hover {
+            background: #fef2f2;
+        }
+
+        .notify-meta {
+            display: block;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -248,7 +266,10 @@
 </div>
 
 <main class="main">
-    <c:if test="${param.notified == '1'}">
+    <c:if test="${param.notified == '1' && param.again == '1'}">
+        <div class="notice">Reminder notification has been sent to the selected TA.</div>
+    </c:if>
+    <c:if test="${param.notified == '1' && param.again != '1'}">
         <div class="notice">Notification has been sent to the selected TA.</div>
     </c:if>
     <c:if test="${param.notified == '0'}">
@@ -361,8 +382,21 @@
                                     <input type="hidden" name="semester" value="${semester}">
                                     <input type="hidden" name="module" value="${selectedModule}">
                                     <input type="hidden" name="status" value="${selectedStatus}">
-                                    <button class="btn warning" type="submit">Notify TA</button>
+                                    <c:choose>
+                                        <c:when test="${ta.workloadNotified}">
+                                            <button class="btn warning outline" type="submit">Notify Again</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="btn warning" type="submit">Notify TA</button>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </form>
+                                <c:if test="${ta.workloadNotified}">
+                                    <span class="notify-meta">
+                                        Sent ${ta.notificationCount} time(s),
+                                        last: ${ta.lastNotifiedAt}
+                                    </span>
+                                </c:if>
                             </c:when>
                             <c:otherwise>-</c:otherwise>
                         </c:choose>
