@@ -182,8 +182,8 @@
     "hoursPerWeek": 8,
     "hourlyRate": 18.0,
     "vacancies": 2,
-    "filledCount": 1,
-    "status": "OPEN",
+    "filledCount": 2,
+    "status": "CLOSED",
     "postedAt": "2026-04-09T09:00:00",
     "deadline": "2026-04-25",
     "semester": "2026 Spring",
@@ -193,7 +193,8 @@
       "APP20260411002",
       "APP20260411003",
       "APP20260517222508003",
-      "APP20260517231915002"
+      "APP20260517231915002",
+      "APP20260518144120001"
     ]
   },
   {
@@ -305,6 +306,56 @@
     "minGpa": 3.2,
     "applicationIds": [
       "APP20260517222517004"
+    ]
+  },
+  {
+    "jobId": "JOB20260518145723001",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "Test for TA notification",
+    "moduleName": "Test for TA notification",
+    "title": "Test for TA notification",
+    "description": "123",
+    "requiredSkills": [
+      "JAVA"
+    ],
+    "hoursPerWeek": 12,
+    "hourlyRate": 1.0,
+    "vacancies": 2,
+    "filledCount": 0,
+    "status": "OPEN",
+    "postedAt": "2026-05-18T14:57:23.332014100",
+    "deadline": "2026-05-18",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.0,
+    "applicationIds": [
+      "APP20260518145749002"
+    ]
+  },
+  {
+    "jobId": "JOB20260518150113003",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "Test for TA notification 2",
+    "moduleName": "Test for TA notification 2",
+    "title": "Test for TA notification 2",
+    "description": "1234",
+    "requiredSkills": [
+      "JAVA"
+    ],
+    "hoursPerWeek": 12,
+    "hourlyRate": 1.0,
+    "vacancies": 2,
+    "filledCount": 1,
+    "status": "OPEN",
+    "postedAt": "2026-05-18T15:01:13.655870",
+    "deadline": "2026-05-18",
+    "semester": "2026 Spring",
+    "jobType": "LAB_TA",
+    "minGpa": 3.0,
+    "applicationIds": [
+      "APP20260518150447001"
     ]
   }
 ]
