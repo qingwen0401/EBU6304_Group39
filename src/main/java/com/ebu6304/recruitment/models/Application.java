@@ -75,6 +75,14 @@ public class Application {
     /** TA的技能列表快照（逗号分隔，申请时记录） */
     private String taSkillsSnapshot;
 
+    private String moduleCode;
+    private String moduleName;
+
+    public String getModuleCode() { return moduleCode; }
+    public void setModuleCode(String moduleCode) { this.moduleCode = moduleCode; }
+    public String getModuleName() { return moduleName; }
+    public void setModuleName(String moduleName) { this.moduleName = moduleName; }
+
     // ==================== 构造方法 ====================
 
     /** 无参构造（Gson反序列化需要） */

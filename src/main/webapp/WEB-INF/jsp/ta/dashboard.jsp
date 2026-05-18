@@ -605,15 +605,16 @@
                         <table class="applications-table">
                             <thead>
                             <tr>
-                                <th>Job Title</th>
-                                <th>Date Applied</th>
+                                <th>Job Title</th> <th>Date Applied</th>
                                 <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
                             <c:forEach var="app" items="${recentApps}">
                                 <tr onclick="location.href='${pageContext.request.contextPath}/ta/applications'">
-                                    <td>${app.jobId}</td>
+
+                                    <td>${app.jobTitle}</td>
+
                                     <td>${app.appliedAt != null ? app.appliedAt.toString().substring(0,10) : '-'}</td>
                                     <td><span class="status status-${app.status}">${app.status}</span></td>
                                 </tr>

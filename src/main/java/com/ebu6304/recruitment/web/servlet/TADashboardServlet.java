@@ -44,10 +44,14 @@ public class TADashboardServlet extends HttpServlet {
                 .limit(5)
                 .collect(Collectors.toList());
 
+
+
         List<JobPosting> openJobs = jobService.getOpenJobs();
         List<JobPosting> recommendedJobs = openJobs.stream()
                 .limit(3)
                 .collect(Collectors.toList());
+
+
 
 
         // ====== 获取并分类通知 (TA) ======
