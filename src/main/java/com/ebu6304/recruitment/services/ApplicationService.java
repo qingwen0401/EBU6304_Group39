@@ -150,6 +150,10 @@ public class ApplicationService {
 
         createWorkloadRecord(app, job);
 
+        if (notificationService != null) {
+            notificationService.createApplicationAcceptedNotification(app);
+        }
+
         return app;
     }
 
@@ -168,6 +172,11 @@ public class ApplicationService {
 
         app.reject(feedback);
         applicationRepository.save(app);
+
+        if (notificationService != null) {
+            notificationService.createApplicationRejectedNotification(app);
+        }
+
         return app;
     }
 

@@ -141,5 +141,38 @@
     "relatedEntityId": "TA20260329164406002",
     "read": true,
     "createdAt": "2026-05-17T23:37:59.113566400"
+  },
+  {
+    "notificationId": "NOT1779085830135014c66",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "WORKLOAD_WARNING",
+    "title": "Workload Overload Warning",
+    "message": "Your current workload in 2026 Spring is 48 hours per week, which exceeds the limit of 20 hours. Please consider reducing your workload.",
+    "relatedEntityId": "TA20260329164406002::2026 Spring",
+    "read": true,
+    "createdAt": "2026-05-18T14:30:30.139654900"
+  },
+  {
+    "notificationId": "NOT1779087492809e53cd4",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "APPLICATION_REJECTED",
+    "title": "Application Rejected",
+    "message": "Your application for Test for TA notification has been rejected.",
+    "relatedEntityId": "APP20260518145749002",
+    "read": true,
+    "createdAt": "2026-05-18T14:58:12.811302"
+  },
+  {
+    "notificationId": "NOT177908790644300da78",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "APPLICATION_ACCEPTED",
+    "title": "Application Accepted",
+    "message": "Your application for Test for TA notification 2 has been accepted.",
+    "relatedEntityId": "APP20260518150447001",
+    "read": false,
+    "createdAt": "2026-05-18T15:05:06.444009500"
   }
 ]

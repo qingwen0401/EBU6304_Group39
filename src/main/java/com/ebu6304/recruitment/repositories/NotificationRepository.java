@@ -60,4 +60,21 @@ public class NotificationRepository {
             save(notification);
         }
     }
+
+    public List<Notification> findWorkloadWarningsForTa(String taId, String semester) {
+        String relatedKey = buildWorkloadRelatedId(taId, semester);
+        return findAll().stream()
+                .filter(n -> Notification.TYPE_WORKLOAD_WARNING.equals(n.getType()))
+                .filter(n -> taId.equals(n.getRecipientUserId()))
+                .filter(n -> relatedKey.equals(n.getRelatedEntityId())
+                        || (taId.equals(n.getRelatedEntityId())
+                        && n.getMessage() != null
+                        && n.getMessage().contains("in " + semester)))
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
+
+    public static String buildWorkloadRelatedId(String taId, String semester) {
+        return taId + "::" + semester;
+    }
 }

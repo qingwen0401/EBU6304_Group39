@@ -50,6 +50,40 @@ public class NotificationService {
         );
     }
 
+    public Notification createApplicationAcceptedNotification(Application app) {
+        String title = "Application Accepted";
+        String message = "Your application for " + app.getJobTitle() + " has been accepted.";
+        if (app.getReviewNote() != null && !app.getReviewNote().isBlank()) {
+            message += " Note: " + app.getReviewNote();
+        }
+
+        return createNotification(
+                app.getTaId(),
+                "TA",
+                Notification.TYPE_APPLICATION_ACCEPTED,
+                title,
+                message,
+                app.getApplicationId()
+        );
+    }
+
+    public Notification createApplicationRejectedNotification(Application app) {
+        String title = "Application Rejected";
+        String message = "Your application for " + app.getJobTitle() + " has been rejected.";
+        if (app.getReviewNote() != null && !app.getReviewNote().isBlank()) {
+            message += " Note: " + app.getReviewNote();
+        }
+
+        return createNotification(
+                app.getTaId(),
+                "TA",
+                Notification.TYPE_APPLICATION_REJECTED,
+                title,
+                message,
+                app.getApplicationId()
+        );
+    }
+
     public Notification createWorkloadWarning(String taId, String taName,
                                               int totalWeeklyHours, int maxWeeklyHours,
                                               String semester) {
@@ -64,11 +98,26 @@ public class NotificationService {
                 Notification.TYPE_WORKLOAD_WARNING,
                 title,
                 message,
-                taId
+                NotificationRepository.buildWorkloadRelatedId(taId, semester)
         );
     }
 
+    public List<Notification> getWorkloadWarningsForTa(String taId, String semester) {
+        return notificationRepository.findWorkloadWarningsForTa(taId, semester);
+    }
 
+    public boolean hasWorkloadWarningBeenSent(String taId, String semester) {
+        return !getWorkloadWarningsForTa(taId, semester).isEmpty();
+    }
+
+    public String getLastWorkloadWarningTime(String taId, String semester) {
+        List<Notification> warnings = getWorkloadWarningsForTa(taId, semester);
+        return warnings.isEmpty() ? "" : warnings.get(0).getCreatedAt();
+    }
+
+    public int countWorkloadWarningsForTa(String taId, String semester) {
+        return getWorkloadWarningsForTa(taId, semester).size();
+    }
 
     public List<Notification> getNotificationsForUser(String userId) {
         return notificationRepository.findByRecipientUserId(userId);

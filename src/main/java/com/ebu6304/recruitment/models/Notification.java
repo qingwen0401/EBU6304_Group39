@@ -1,5 +1,7 @@
 package com.ebu6304.recruitment.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Notification {
     public static final String TYPE_WORKLOAD_WARNING = "WORKLOAD_WARNING";
     public static final String TYPE_APPLICATION_WITHDRAWN = "APPLICATION_WITHDRAWN";
@@ -13,7 +15,10 @@ public class Notification {
     private String title;
     private String message;
     private String relatedEntityId;
-    private boolean read;
+
+    @SerializedName("read")
+    private boolean readStatus;
+
     private String createdAt;
 
     public Notification() {
@@ -28,7 +33,7 @@ public class Notification {
         this.title = title;
         this.message = message;
         this.relatedEntityId = relatedEntityId;
-        this.read = false;
+        this.readStatus = false;
         this.createdAt = java.time.LocalDateTime.now().toString();
     }
 
@@ -89,11 +94,11 @@ public class Notification {
     }
 
     public boolean isRead() {
-        return read;
+        return readStatus;
     }
 
     public void setRead(boolean read) {
-        this.read = read;
+        this.readStatus = read;
     }
 
     public String getCreatedAt() {
@@ -109,7 +114,7 @@ public class Notification {
         return "Notification{id='" + notificationId
                 + "', recipientUserId='" + recipientUserId
                 + "', type='" + type
-                + "', read=" + read
+                + "', read=" + readStatus
                 + "}";
     }
 }
