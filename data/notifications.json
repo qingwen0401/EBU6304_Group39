@@ -172,7 +172,18 @@
     "title": "Application Accepted",
     "message": "Your application for Test for TA notification 2 has been accepted.",
     "relatedEntityId": "APP20260518150447001",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-18T15:05:06.444009500"
+  },
+  {
+    "notificationId": "NOT177926920768804ddcf",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "JOB_CANCELLED",
+    "title": "Job Cancelled Notice",
+    "message": "The position you applied for (Job ID: JOB20260520172322001) has been cancelled by the Module Organiser.",
+    "relatedEntityId": "JOB20260520172322001",
+    "read": true,
+    "createdAt": "2026-05-20T17:26:47.693579700"
   }
 ]

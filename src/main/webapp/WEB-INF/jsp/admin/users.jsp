@@ -98,7 +98,19 @@
         </form>
     </section>
 
-    <section class="panel">
+<section class="panel">
+
+        <div class="search-container" style="margin-bottom: 20px;">
+            <div style="position: relative; max-width: 100%;">
+                <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="adminUserSearchInput" placeholder="Search by Username, Name, Email, or Role..."
+                       onkeyup="filterAdminUsers()"
+                       style="width: 100%; padding: 12px 16px 12px 48px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; transition: border-color 0.2s;">
+            </div>
+        </div>
         <form class="toolbar" method="get" action="${pageContext.request.contextPath}/admin/users">
             <div><label>Role</label><select name="role">
                 <option value="">All roles</option><option value="TA" ${selectedRole == 'TA' ? 'selected' : ''}>TA</option>
@@ -146,5 +158,27 @@
         </table>
     </section>
 </main>
+
+<script>
+    function filterAdminUsers() {
+        var input = document.getElementById('adminUserSearchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('table tbody tr');
+
+        rows.forEach(function(row) {
+            // 防止把 "No users match the filters." 这一行也隐藏掉或报错
+            if (row.cells.length === 1 && row.cells[0].colSpan === 6) {
+                return;
+            }
+
+            var rowText = row.innerText.toLowerCase();
+            if (rowText.includes(input)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

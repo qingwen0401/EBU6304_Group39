@@ -372,13 +372,26 @@
 
 <div class="main">
     <div class="page-header">
-        <div class="breadcrumb">Home &gt; Job Market</div>
-        <div class="page-title">Job Market</div>
-        <div class="page-subtitle">
-            Explore available TA opportunities, review key job details,
-            and apply directly to positions that match your interests and skills.
+            <div class="breadcrumb">Home &gt; Job Market</div>
+            <div class="page-title">Job Market</div>
+            <div class="page-subtitle">
+                Explore available TA opportunities, review key job details,
+                and apply directly to positions that match your interests and skills.
+            </div>
         </div>
-    </div>
+
+        <div class="search-container" style="margin-bottom: 24px;">
+            <div style="position: relative; max-width: 600px;">
+                <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="jobSearchInput" placeholder="Search by module code, title, tags..."
+                       onkeyup="filterJobs()"
+                       style="width: 100%; padding: 14px 16px 14px 48px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 15px; color: #1e293b; outline: none; transition: all 0.2s; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.02);">
+            </div>
+        </div>
+
 
     <c:choose>
         <c:when test="${empty jobs}">
@@ -449,6 +462,30 @@
 <div class="toast" id="toast"></div>
 
 <script>
+    // ================= 新增：实时模糊搜索逻辑 =================
+    function filterJobs() {
+        // 1. 获取输入框里的文字并转换成小写
+        var input = document.getElementById('jobSearchInput').value.toLowerCase();
+
+        // 2. 拿到页面上所有的“职位卡片”
+        var jobCards = document.querySelectorAll('.job-card');
+
+        // 3. 遍历每一个卡片
+        jobCards.forEach(function(card) {
+            // 获取这个卡片里的所有纯文本内容（包含标题、描述、标签等）
+            var cardText = card.innerText.toLowerCase();
+
+            // 4. 判断逻辑：如果卡片文本包含输入框的字，就显示；否则隐藏
+            if (cardText.includes(input)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    // =========================================================
+
+
     var currentJobId = null;
 
     function openApplyModal(jobId, jobTitle) {

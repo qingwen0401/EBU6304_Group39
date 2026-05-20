@@ -1,5 +1,126 @@
 [
   {
+    "logId": "AUD1779269245502",
+    "timestamp": "2026-05-20T17:27:25.502110800",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779269233284",
+    "timestamp": "2026-05-20T17:27:13.284190900",
+    "username": "alice.wang",
+    "userId": null,
+    "role": "UNKNOWN",
+    "action": "LOGIN",
+    "outcome": "FAILED",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "Invalid username or password"
+  },
+  {
+    "logId": "AUD1779269192347",
+    "timestamp": "2026-05-20T17:26:32.347525",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779269110526",
+    "timestamp": "2026-05-20T17:25:10.526042200",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779268958418",
+    "timestamp": "2026-05-20T17:22:38.418428200",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779268923596",
+    "timestamp": "2026-05-20T17:22:03.596176700",
+    "username": "test_mo",
+    "userId": null,
+    "role": "UNKNOWN",
+    "action": "LOGIN",
+    "outcome": "FAILED",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "Invalid username or password"
+  },
+  {
+    "logId": "AUD1779268912980",
+    "timestamp": "2026-05-20T17:21:52.980966100",
+    "username": "test_mo",
+    "userId": null,
+    "role": "UNKNOWN",
+    "action": "LOGIN",
+    "outcome": "FAILED",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "Invalid username or password"
+  },
+  {
+    "logId": "AUD1779268306894",
+    "timestamp": "2026-05-20T17:11:46.894800900",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779268306453",
+    "timestamp": "2026-05-20T17:11:46.455008300",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779267348585",
+    "timestamp": "2026-05-20T16:55:48.588479200",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779087915693",
+    "timestamp": "2026-05-18T15:05:15.693039400",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
     "logId": "AUD1779087894432",
     "timestamp": "2026-05-18T15:04:54.432602700",
     "username": "test_mo",
@@ -968,11 +1089,11 @@
     "details": "User logged in."
   },
   {
-    "logId": "AUD1779087915693",
-    "timestamp": "2026-05-18T15:05:15.693039400",
-    "username": "alice.wang",
-    "userId": "TA20260329164406002",
-    "role": "TA",
+    "logId": "AUD1779269273637",
+    "timestamp": "2026-05-20T17:27:53.637064300",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
     "action": "LOGIN",
     "outcome": "SUCCESS",
     "ipAddress": "0:0:0:0:0:0:0:1",
