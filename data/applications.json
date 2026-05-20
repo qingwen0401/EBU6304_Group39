@@ -538,5 +538,41 @@
     "taSkillsSnapshot": null,
     "moduleCode": null,
     "moduleName": null
+  },
+  {
+    "applicationId": "APP20260520234452001",
+    "taId": "TA20260411003",
+    "taName": "David Zhang",
+    "jobId": "JOB20260411001",
+    "jobTitle": "Tutorial TA for EBU6304",
+    "moId": "MO20260402141809001",
+    "coverLetter": "I am interested in this position and would like to apply.",
+    "cvPath": null,
+    "status": "PENDING",
+    "appliedAt": "2026-05-20T23:44:52.433584400",
+    "reviewedAt": null,
+    "reviewNote": null,
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null,
+    "moduleCode": null,
+    "moduleName": null
+  },
+  {
+    "applicationId": "APP20260520234512002",
+    "taId": "TA20260411002",
+    "taName": "Carol Li",
+    "jobId": "JOB20260411001",
+    "jobTitle": "Tutorial TA for EBU6304",
+    "moId": "MO20260402141809001",
+    "coverLetter": "I am interested in this position and would like to apply.",
+    "cvPath": null,
+    "status": "PENDING",
+    "appliedAt": "2026-05-20T23:45:12.213379600",
+    "reviewedAt": null,
+    "reviewNote": null,
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null,
+    "moduleCode": null,
+    "moduleName": null
   }
 ]

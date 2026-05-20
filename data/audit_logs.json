@@ -1,5 +1,181 @@
 [
   {
+    "logId": "AUD1779291920249",
+    "timestamp": "2026-05-20T23:45:20.249131900",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291906841",
+    "timestamp": "2026-05-20T23:45:06.841453500",
+    "username": "carol.li",
+    "userId": "TA20260411002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291885455",
+    "timestamp": "2026-05-20T23:44:45.456768900",
+    "username": "david.zhang",
+    "userId": "TA20260411003",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291867483",
+    "timestamp": "2026-05-20T23:44:27.483199500",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291859004",
+    "timestamp": "2026-05-20T23:44:19.004904800",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291851682",
+    "timestamp": "2026-05-20T23:44:11.696491100",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "FORCE_CANCEL_WORKLOAD",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "Force cancelled 1 workload record(s) for Alice Wang after 5 notifications."
+  },
+  {
+    "logId": "AUD1779291826127",
+    "timestamp": "2026-05-20T23:43:46.134012200",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291661142",
+    "timestamp": "2026-05-20T23:41:01.145746",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291173119",
+    "timestamp": "2026-05-20T23:32:53.119779400",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291164383",
+    "timestamp": "2026-05-20T23:32:44.384741800",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291140082",
+    "timestamp": "2026-05-20T23:32:20.082104500",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "SEND_NOTIFICATION",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "Sent workload reminder to Alice Wang."
+  },
+  {
+    "logId": "AUD1779291130786",
+    "timestamp": "2026-05-20T23:32:10.786944900",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291107422",
+    "timestamp": "2026-05-20T23:31:47.422518700",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291097541",
+    "timestamp": "2026-05-20T23:31:37.541889200",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291075252",
+    "timestamp": "2026-05-20T23:31:15.256431800",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779269273637",
+    "timestamp": "2026-05-20T17:27:53.637064300",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
     "logId": "AUD1779269245502",
     "timestamp": "2026-05-20T17:27:25.502110800",
     "username": "alice.wang",
@@ -1089,8 +1265,8 @@
     "details": "User logged in."
   },
   {
-    "logId": "AUD1779269273637",
-    "timestamp": "2026-05-20T17:27:53.637064300",
+    "logId": "AUD1779291951959",
+    "timestamp": "2026-05-20T23:45:51.959606",
     "username": "admin",
     "userId": "ADMIN_001",
     "role": "ADMIN",

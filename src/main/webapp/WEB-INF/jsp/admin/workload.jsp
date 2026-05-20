@@ -272,6 +272,9 @@
     <c:if test="${param.notified == '1' && param.again != '1'}">
         <div class="notice">Notification has been sent to the selected TA.</div>
     </c:if>
+    <c:if test="${param.notified == '2'}">
+        <div class="notice">Workload has been force cancelled and notifications sent to TA and MO.</div>
+    </c:if>
     <c:if test="${param.notified == '0'}">
         <div class="notice error">Failed to send notification. Please try again.</div>
     </c:if>
@@ -397,6 +400,12 @@
                                         last: ${ta.lastNotifiedAt}
                                     </span>
                                 </c:if>
+                                <c:if test="${ta.notificationCount >= 3}">
+                                    <button class="btn danger"
+                                            onclick="showForceCancelModal('${ta.taId}', '${ta.taName}', '${semester}')">
+                                        Force Cancel
+                                    </button>
+                                </c:if>
                             </c:when>
                             <c:otherwise>-</c:otherwise>
                         </c:choose>
@@ -443,5 +452,113 @@
         </table>
     </section>
 </main>
+
+<div id="forceCancelModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:32px; border-radius:14px; max-width:500px; width:90%;">
+        <h2 style="margin-bottom:16px; color:#dc2626;">Force Cancel Workload</h2>
+        <p style="margin-bottom:20px; color:#475569;">
+            Select which workload assignments to cancel for <strong id="modalTaName"></strong>.
+            Selected records will be cancelled and notifications sent to the TA and affected MOs.
+        </p>
+        <form id="forceCancelForm" method="post" action="${pageContext.request.contextPath}/admin/workload" onsubmit="return validateSelection();">
+            <input type="hidden" name="action" value="forceCancel">
+            <input type="hidden" name="taId" id="modalTaId">
+            <input type="hidden" name="taName" id="modalTaNameHidden">
+            <input type="hidden" name="semester" id="modalSemester">
+            <input type="hidden" name="module" value="${selectedModule}">
+            <input type="hidden" name="status" value="${selectedStatus}">
+            <div id="recordsContainer"></div>
+            <div style="margin-top:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:600;">Reason (optional):</label>
+                <textarea name="reason" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; font-family:inherit;" rows="3" placeholder="Enter reason for cancellation..."></textarea>
+            </div>
+            <div style="margin-top:24px; display:flex; gap:12px; justify-content:flex-end;">
+                <button type="button" class="btn secondary" onclick="closeForceCancelModal()">Cancel</button>
+                <button type="submit" class="btn danger">Confirm Force Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function showForceCancelModal(taId, taName, semester) {
+    document.getElementById('modalTaName').textContent = taName;
+    document.getElementById('modalTaId').value = taId;
+    document.getElementById('modalTaNameHidden').value = taName;
+    document.getElementById('modalSemester').value = semester;
+
+    var recordsContainer = document.getElementById('recordsContainer');
+    recordsContainer.innerHTML = '<p style="color:#64748b; font-size:14px;">Loading workload records...</p>';
+
+    var records = [];
+    <c:forEach var="ta" items="${workloadReport}">
+        if ('${ta.taId}' === taId) {
+            <c:forEach var="record" items="${ta.records}">
+                <c:if test="${record.status == 'ACTIVE'}">
+                    records.push({
+                        recordId: '${record.recordId}',
+                        moduleCode: '${record.moduleCode}',
+                        jobTitle: '${record.jobTitle}',
+                        weeklyHours: ${record.weeklyHours},
+                        moId: '${record.moId}'
+                    });
+                </c:if>
+            </c:forEach>
+        }
+    </c:forEach>
+
+    if (records.length === 0) {
+        recordsContainer.innerHTML = '<p style="color:#dc2626;">No active workload records found.</p>';
+    } else {
+        var html = '<div style="margin-bottom:16px;"><strong>Select workload records to cancel:</strong></div>';
+        html += '<div style="max-height:200px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px; padding:12px;">';
+        records.forEach(function(record, index) {
+            var checkboxId = 'record_' + index;
+            html += '<label for="' + checkboxId + '" style="display:flex; padding:8px; border-bottom:1px solid #f1f5f9; cursor:pointer; align-items:center;">';
+            html += '<input type="checkbox" id="' + checkboxId + '" name="recordId" value="' + record.recordId + '" ';
+            html += 'data-module="' + record.moduleCode + '" data-mo="' + record.moId + '" ';
+            html += 'style="margin-right:12px; width:18px; height:18px; cursor:pointer;" checked>';
+            html += '<div style="flex:1; display:flex; justify-content:space-between;">';
+            html += '<div><strong>' + record.moduleCode + '</strong><br><span style="font-size:13px; color:#64748b;">' + record.jobTitle + '</span></div>';
+            html += '<div style="text-align:right; padding-left:12px;">' + record.weeklyHours + ' hrs/week</div>';
+            html += '</div>';
+            html += '</label>';
+        });
+        html += '</div>';
+        recordsContainer.innerHTML = html;
+    }
+
+    document.getElementById('forceCancelModal').style.display = 'block';
+}
+
+function closeForceCancelModal() {
+    document.getElementById('forceCancelModal').style.display = 'none';
+}
+
+function validateSelection() {
+    var checkboxes = document.querySelectorAll('#recordsContainer input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        alert('Please select at least one workload record to cancel.');
+        return false;
+    }
+
+    var form = document.getElementById('forceCancelForm');
+    checkboxes.forEach(function(checkbox) {
+        var moduleInput = document.createElement('input');
+        moduleInput.type = 'hidden';
+        moduleInput.name = 'moduleCode';
+        moduleInput.value = checkbox.getAttribute('data-module');
+        form.appendChild(moduleInput);
+
+        var moInput = document.createElement('input');
+        moInput.type = 'hidden';
+        moInput.name = 'moId';
+        moInput.value = checkbox.getAttribute('data-mo');
+        form.appendChild(moInput);
+    });
+
+    return true;
+}
+</script>
 </body>
 </html>
