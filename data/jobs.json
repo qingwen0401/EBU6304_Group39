@@ -350,7 +350,7 @@
     "hourlyRate": 1.0,
     "vacancies": 2,
     "filledCount": 1,
-    "status": "OPEN",
+    "status": "CANCELLED",
     "postedAt": "2026-05-18T15:01:13.655870",
     "deadline": "2026-05-18",
     "semester": "2026 Spring",

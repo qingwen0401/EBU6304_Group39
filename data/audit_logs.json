@@ -1,5 +1,71 @@
 [
   {
+    "logId": "AUD1779290310165",
+    "timestamp": "2026-05-20T23:18:30.165475300",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779290261019",
+    "timestamp": "2026-05-20T23:17:41.019031800",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779290195280",
+    "timestamp": "2026-05-20T23:16:35.280267800",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779290176719",
+    "timestamp": "2026-05-20T23:16:16.719070300",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779290130775",
+    "timestamp": "2026-05-20T23:15:30.778395300",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779289194308",
+    "timestamp": "2026-05-20T22:59:54.308725700",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
     "logId": "AUD1779289172184",
     "timestamp": "2026-05-20T22:59:32.188519400",
     "username": "admin",
@@ -1331,11 +1397,11 @@
     "details": "User logged in."
   },
   {
-    "logId": "AUD1779289194308",
-    "timestamp": "2026-05-20T22:59:54.308725700",
-    "username": "test_mo",
-    "userId": "MO20260402141809001",
-    "role": "MO",
+    "logId": "AUD1779290322290",
+    "timestamp": "2026-05-20T23:18:42.290324300",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
     "action": "LOGIN",
     "outcome": "SUCCESS",
     "ipAddress": "0:0:0:0:0:0:0:1",
