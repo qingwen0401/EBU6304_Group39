@@ -520,5 +520,23 @@
     "taSkillsSnapshot": null,
     "moduleCode": null,
     "moduleName": null
+  },
+  {
+    "applicationId": "APP20260520172529002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260520172322001",
+    "jobTitle": "333",
+    "moId": "MO20260402141809001",
+    "coverLetter": "3333",
+    "cvPath": null,
+    "status": "PENDING",
+    "appliedAt": "2026-05-20T17:25:29.493437200",
+    "reviewedAt": null,
+    "reviewNote": null,
+    "taGpa": 0.0,
+    "taSkillsSnapshot": null,
+    "moduleCode": null,
+    "moduleName": null
   }
 ]

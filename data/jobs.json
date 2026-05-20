@@ -357,5 +357,30 @@
     "applicationIds": [
       "APP20260518150447001"
     ]
+  },
+  {
+    "jobId": "JOB20260520172322001",
+    "moId": "MO20260402141809001",
+    "moName": "Test MO",
+    "moduleCode": "333",
+    "moduleName": "333",
+    "title": "333",
+    "description": "333",
+    "requiredSkills": [
+      "java"
+    ],
+    "hoursPerWeek": 3,
+    "hourlyRate": 3.0,
+    "vacancies": 3,
+    "filledCount": 0,
+    "status": "CANCELLED",
+    "postedAt": "2026-05-20T17:23:22.805672400",
+    "deadline": "2026-05-20",
+    "semester": "3",
+    "jobType": "3",
+    "minGpa": 3.0,
+    "applicationIds": [
+      "APP20260520172529002"
+    ]
   }
 ]
