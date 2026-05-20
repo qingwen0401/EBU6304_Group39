@@ -185,5 +185,38 @@
     "relatedEntityId": "JOB20260520172322001",
     "read": true,
     "createdAt": "2026-05-20T17:26:47.693579700"
+  },
+  {
+    "notificationId": "NOT1779291140060e782ce",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "WORKLOAD_WARNING",
+    "title": "Workload Overload Warning",
+    "message": "Your current workload in 2026 Spring is 68 hours per week, which exceeds the limit of 20 hours. Please consider reducing your workload.",
+    "relatedEntityId": "TA20260329164406002::2026 Spring",
+    "read": true,
+    "createdAt": "2026-05-20T23:32:20.073104600"
+  },
+  {
+    "notificationId": "NOT1779291851662434c21",
+    "recipientUserId": "TA20260329164406002",
+    "recipientRole": "TA",
+    "type": "WORKLOAD_CANCELLED",
+    "title": "Workload Assignment Cancelled",
+    "message": "Your workload assignment for Test for TA notification 2 in 2026 Spring has been cancelled by the administrator. Reason: Workload cancelled by administrator after 5 warnings",
+    "relatedEntityId": "Test for TA notification 2",
+    "read": true,
+    "createdAt": "2026-05-20T23:44:11.668328800"
+  },
+  {
+    "notificationId": "NOT177929185167632e057",
+    "recipientUserId": "MO20260402141809001",
+    "recipientRole": "MO",
+    "type": "WORKLOAD_CANCELLED",
+    "title": "TA Workload Cancelled",
+    "message": "The administrator has cancelled Alice Wang\u0027s workload assignment for Test for TA notification 2 in 2026 Spring. Reason: Workload cancelled by administrator after 5 warnings",
+    "relatedEntityId": "Test for TA notification 2",
+    "read": true,
+    "createdAt": "2026-05-20T23:44:11.676406"
   }
 ]

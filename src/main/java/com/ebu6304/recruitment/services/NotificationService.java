@@ -119,6 +119,40 @@ public class NotificationService {
         return getWorkloadWarningsForTa(taId, semester).size();
     }
 
+    public Notification createWorkloadCancelledNotificationForTA(String taId, String taName,
+                                                                  String moduleCode, String semester,
+                                                                  String reason) {
+        String title = "Workload Assignment Cancelled";
+        String message = "Your workload assignment for " + moduleCode + " in " + semester
+                + " has been cancelled by the administrator. Reason: " + reason;
+
+        return createNotification(
+                taId,
+                "TA",
+                Notification.TYPE_WORKLOAD_CANCELLED,
+                title,
+                message,
+                moduleCode
+        );
+    }
+
+    public Notification createWorkloadCancelledNotificationForMO(String moId, String taName,
+                                                                  String moduleCode, String semester,
+                                                                  String reason) {
+        String title = "TA Workload Cancelled";
+        String message = "The administrator has cancelled " + taName + "'s workload assignment for "
+                + moduleCode + " in " + semester + ". Reason: " + reason;
+
+        return createNotification(
+                moId,
+                "MO",
+                Notification.TYPE_WORKLOAD_CANCELLED,
+                title,
+                message,
+                moduleCode
+        );
+    }
+
     public List<Notification> getNotificationsForUser(String userId) {
         return notificationRepository.findByRecipientUserId(userId);
     }

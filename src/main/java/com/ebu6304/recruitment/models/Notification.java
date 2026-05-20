@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Notification {
     public static final String TYPE_WORKLOAD_WARNING = "WORKLOAD_WARNING";
+    public static final String TYPE_WORKLOAD_CANCELLED = "WORKLOAD_CANCELLED";
     public static final String TYPE_APPLICATION_WITHDRAWN = "APPLICATION_WITHDRAWN";
     public static final String TYPE_APPLICATION_ACCEPTED = "APPLICATION_ACCEPTED";
     public static final String TYPE_APPLICATION_REJECTED = "APPLICATION_REJECTED";
