@@ -6,10 +6,14 @@
     "postedJobIds": [
       "JOB20260503135503001",
       "JOB20260503135628002",
-      "JOB20260503151807001"
+      "JOB20260503151807001",
+      "JOB20260518145723001",
+      "JOB20260518150113003",
+      "JOB20260520172322001"
     ],
     "phone": null,
     "officeLocation": null,
+    "deepseekApiKey": "sk-3577442c0da1414cba5283b513c95b23",
     "userId": "MO20260402141809001",
     "username": "test_mo",
     "passwordHash": "50PgDoGF7eDJAlk5LGeTuA\u003d\u003d:oJ18lAj6O9uCx/HzQF1lUth2puYJqso8ZMC5apJd8J0\u003d",
@@ -26,6 +30,7 @@
     "postedJobIds": [],
     "phone": null,
     "officeLocation": null,
+    "deepseekApiKey": null,
     "userId": "MO20260402180227001",
     "username": "dr.smith",
     "passwordHash": "NU54ZvYkZDDeQ/7xP43kvQ\u003d\u003d:nPER38N0MzZiQ7QYGaaTZ9AZabpQzR5j1HzvBZlWDkI\u003d",

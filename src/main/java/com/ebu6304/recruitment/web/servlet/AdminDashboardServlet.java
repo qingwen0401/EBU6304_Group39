@@ -1,8 +1,15 @@
 package com.ebu6304.recruitment.web.servlet;
 
+import com.ebu6304.recruitment.models.Application;
+import com.ebu6304.recruitment.models.AuditLogEntry;
+import com.ebu6304.recruitment.models.JobPosting;
 import com.ebu6304.recruitment.models.User;
+import com.ebu6304.recruitment.models.WorkloadRecord;
+import com.ebu6304.recruitment.repositories.ApplicationRepository;
+import com.ebu6304.recruitment.repositories.AuditLogRepository;
+import com.ebu6304.recruitment.repositories.JobRepository;
 import com.ebu6304.recruitment.repositories.UserRepository;
-import com.ebu6304.recruitment.repositories.JobRepository; // 新增导入 JobRepository
+import com.ebu6304.recruitment.services.WorkloadService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -10,44 +17,86 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Admin 仪表盘 Servlet
- * GET /admin/dashboard → 显示管理员首页（展示系统内的用户总数和职位总数）
- *
- * @author Group39 / Fang Zixi, Guo Jiayi
- * @version 1.1
- */
 public class AdminDashboardServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User currentUser = (User) request.getSession().getAttribute("currentUser");
-
-        // 获取 UserRepository (用于统计用户)
         UserRepository userRepository =
                 (UserRepository) getServletContext().getAttribute("userRepository");
-
-        // 获取 JobRepository (用于统计职位)
         JobRepository jobRepository =
                 (JobRepository) getServletContext().getAttribute("jobRepository");
+        ApplicationRepository applicationRepository =
+                (ApplicationRepository) getServletContext().getAttribute("applicationRepository");
+        WorkloadService workloadService =
+                (WorkloadService) getServletContext().getAttribute("workloadService");
+        AuditLogRepository auditLogRepository =
+                (AuditLogRepository) getServletContext().getAttribute("auditLogRepository");
 
-        // 1. 统计用户总数
-        long taCount  = userRepository.findAllTAs().size();
-        long moCount  = userRepository.findAllMOs().size();
+        List<JobPosting> jobs = jobRepository.findAll();
+        List<Application> applications = applicationRepository.findAll();
+        List<WorkloadRecord> workloadRecords = workloadService.getAllWorkloadRecords();
+        String semester = request.getParameter("semester") == null
+                ? "2026 Spring" : request.getParameter("semester");
+        List<Map<String, Object>> workloadReport = workloadService.getWorkloadReport(semester);
+
+        long taCount = userRepository.findAllTAs().size();
+        long moCount = userRepository.findAllMOs().size();
         long adminCount = userRepository.findAllAdmins().size();
-        long totalUsers = taCount + moCount + adminCount; // 系统总人数
+        long totalUsers = taCount + moCount + adminCount;
+        long activeUsers = userRepository.findAllTAs().stream().filter(User::isActive).count()
+                + userRepository.findAllMOs().stream().filter(User::isActive).count()
+                + userRepository.findAllAdmins().stream().filter(User::isActive).count();
 
-        // 2. 统计职位总数
-        long totalJobs = jobRepository.findAll().size();
+        Map<String, Long> applicationStats = new HashMap<>();
+        applicationStats.put("total", (long) applications.size());
+        applicationStats.put("pending", applications.stream()
+                .filter(a -> Application.STATUS_PENDING.equals(a.getStatus())).count());
+        applicationStats.put("accepted", applications.stream()
+                .filter(a -> Application.STATUS_ACCEPTED.equals(a.getStatus())).count());
+        applicationStats.put("rejected", applications.stream()
+                .filter(a -> Application.STATUS_REJECTED.equals(a.getStatus())).count());
+        applicationStats.put("withdrawn", applications.stream()
+                .filter(a -> Application.STATUS_WITHDRAWN.equals(a.getStatus())).count());
 
-        // 3. 将数据打包发给前端 JSP
+        long totalWorkloadHours = workloadReport.stream()
+                .mapToLong(row -> (Integer) row.get("totalWeeklyHours")).sum();
+        long overloadedCount = workloadReport.stream()
+                .filter(row -> Boolean.TRUE.equals(row.get("isOverloaded"))).count();
+
+        jobs.sort(Comparator.comparing(JobPosting::getPostedAt,
+                Comparator.nullsLast(String::compareTo)).reversed());
+
         request.setAttribute("currentUser", currentUser);
         request.setAttribute("totalUsers", totalUsers);
-        request.setAttribute("totalJobs", totalJobs);
-        request.setAttribute("taCount",  taCount);
-        request.setAttribute("moCount",  moCount);
+        request.setAttribute("activeUsers", activeUsers);
+        request.setAttribute("inactiveUsers", totalUsers - activeUsers);
+        request.setAttribute("taCount", taCount);
+        request.setAttribute("moCount", moCount);
+        request.setAttribute("adminCount", adminCount);
+        request.setAttribute("totalJobs", jobs.size());
+        request.setAttribute("openJobs", jobs.stream().filter(JobPosting::isOpen).count());
+        request.setAttribute("closedJobs", jobs.stream()
+                .filter(j -> JobPosting.STATUS_CLOSED.equals(j.getStatus())).count());
+        request.setAttribute("cancelledJobs", jobs.stream()
+                .filter(j -> JobPosting.STATUS_CANCELLED.equals(j.getStatus())).count());
+        request.setAttribute("applicationStats", applicationStats);
+        request.setAttribute("totalWorkloadHours", totalWorkloadHours);
+        request.setAttribute("overloadedCount", overloadedCount);
+        request.setAttribute("maxWeeklyHours", workloadService.getMaxWeeklyHours());
+        request.setAttribute("recentJobs", jobs.stream().limit(5).toList());
+        request.setAttribute("recentWorkloadRecords", workloadRecords.stream().limit(5).toList());
+
+        List<AuditLogEntry> recentAudit = auditLogRepository == null
+                ? Collections.emptyList() : auditLogRepository.findAll().stream().limit(5).toList();
+        request.setAttribute("recentAudit", recentAudit);
 
         request.getRequestDispatcher("/WEB-INF/jsp/admin/dashboard.jsp").forward(request, response);
     }

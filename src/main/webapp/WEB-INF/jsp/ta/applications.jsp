@@ -312,7 +312,19 @@
     </div>
 
     <div class="content-panel">
-        <div class="tab-buttons">
+
+            <div class="search-container" style="margin-bottom: 24px;">
+                <div style="position: relative; max-width: 600px;">
+                    <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="appSearchInput" placeholder="Search by Job ID, Title, Status, or Feedback..."
+                           onkeyup="filterApps()"
+                           style="width: 100%; padding: 14px 16px 14px 48px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 15px; color: #1e293b; outline: none; transition: all 0.2s; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.02);">
+                </div>
+            </div>
+            <div class="tab-buttons">
             <button class="active" id="btnActive" onclick="switchTab('active')">Active Applications</button>
             <button id="btnHistory" onclick="switchTab('history')">Application History</button>
         </div>
@@ -331,7 +343,7 @@
                             <thead>
                             <tr>
                                 <th>Job ID</th>
-                                <th>Applied Date</th>
+                                <th>Job Title</th> <th>Applied Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -340,7 +352,7 @@
                             <c:forEach var="app" items="${activeApps}">
                                 <tr>
                                     <td>${app.jobId}</td>
-                                    <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
+                                    <td>${app.jobTitle}</td> <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
                                     <td><span class="status status-${app.status}">${app.status}</span></td>
                                     <td>
                                         <c:if test="${app.status == 'PENDING'}">
@@ -367,7 +379,7 @@
                             <thead>
                             <tr>
                                 <th>Job ID</th>
-                                <th>Applied Date</th>
+                                <th>Job Title</th> <th>Applied Date</th>
                                 <th>Outcome</th>
                                 <th>Feedback</th>
                             </tr>
@@ -376,7 +388,7 @@
                             <c:forEach var="app" items="${historyApps}">
                                 <tr>
                                     <td>${app.jobId}</td>
-                                    <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
+                                    <td>${app.jobTitle}</td> <td>${not empty app.appliedAt ? (app.appliedAt.length() >= 10 ? app.appliedAt.substring(0,10) : app.appliedAt) : '-'}</td>
                                     <td><span class="status status-${app.status}">${app.status}</span></td>
                                     <td style="color:#64748b;font-size:13px;">${not empty app.reviewNote ? app.reviewNote : '-'}</td>
                                 </tr>
@@ -393,6 +405,21 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ================= 新增：表格模糊搜索逻辑 =================
+    function filterApps() {
+        var input = document.getElementById('appSearchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('.applications-table tbody tr');
+
+        rows.forEach(function(row) {
+            var rowText = row.innerText.toLowerCase();
+            if (rowText.includes(input)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+    // ==========================================================
     function switchTab(tab) {
         var activeSection = document.getElementById('activeSection');
         var historySection = document.getElementById('historySection');

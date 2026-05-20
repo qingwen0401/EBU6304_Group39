@@ -357,6 +357,111 @@
             text-decoration: underline;
         }
 
+        /* 限制列表高度，增加内部滚动条 */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 320px; /* 【关键】超�?3 条左右就会出现滚动条 */
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* 美化滚动条（可选，让界面更精致�?*/
+        .notification-list::-webkit-scrollbar { width: 5px; }
+        .notification-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* 历史记录切换按钮样式 */
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            margin: 15px 0 10px 0;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+        .history-header:hover { color: #2563eb; }
+        .history-header i { font-size: 12px; transition: transform 0.3s; }
+        .history-header.collapsed i { transform: rotate(-90deg); } /* 折叠时旋转箭�?*/
+
+        .notification-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: #f8fafc;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .notification-time {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+     /*   .notification-count {
+            background: #dc2626;
+            color: white;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 12px;
+            margin-left: 8px;
+        }*/
+
+
+        /* 通知角标样式 */
+        .badge-unread { background: #dc2626; color: white; border-radius: 999px; padding: 3px 9px; font-size: 12px; margin-left: 8px; display: inline-block; }
+        .badge-read { background: #22c55e; color: white; border-radius: 999px; padding: 3px 9px; font-size: 12px; margin-left: 8px; display: inline-block; }
+
+        /* 通知历史标题 */
+        .history-title { font-size: 13px; font-weight: 700; color: #64748b; margin: 20px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; text-transform: uppercase;}
+
+        /* 未读状态（左侧蓝边，带红点�?*/
+        .notification-item.unread {
+            background-color: #ffffff;
+            border-left: 4px solid #2563eb;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .notification-item.unread .notification-title::before {
+            content: ""; display: inline-block; width: 8px; height: 8px; background-color: #dc2626; border-radius: 50%; margin-right: 8px; vertical-align: middle;
+        }
+
+        /* 已读状态（左侧绿边，底色变灰） */
+        .notification-item.read {
+            background-color: #f8fafc;
+            border-left: 4px solid #22c55e;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .notification-item.type-APPLICATION_ACCEPTED.unread {
+            border-left-color: #16a34a;
+        }
+
+        .notification-item.type-APPLICATION_REJECTED.unread {
+            border-left-color: #dc2626;
+        }
+
+        .notification-item.type-WORKLOAD_WARNING.unread {
+            border-left-color: #ea580c;
+        }
+
         @media (max-width: 1100px) {
             .content-row {
                 grid-template-columns: 1fr;
@@ -455,6 +560,48 @@
         </div>
     </div>
 
+    <div class="section" style="margin-bottom: 22px;"> <h3> Notifications
+        <span id="unreadBadge" class="badge-unread" style="${unreadCount == 0 ? 'display:none;' : ''}">${unreadCount} unread</span>
+        <span id="readBadge" class="badge-read" style="${readCount == 0 ? 'display:none;' : ''}">${readCount} read</span>
+    </h3>
+
+        <div class="notification-list" id="unreadList">
+            <c:if test="${empty unreadNotifs}">
+                <p class="empty-msg" id="emptyUnreadMsg">You are all caught up!</p>
+            </c:if>
+            <c:forEach var="notif" items="${unreadNotifs}">
+                <div class="notification-item unread type-${notif.type}" data-id="${notif.notificationId}" style="cursor:pointer;">
+                    <div class="notification-title">${notif.title}</div>
+                    <div class="notification-message">${notif.message}</div>
+                    <div class="notification-time">${notif.createdAt.substring(0, 16)}</div>
+                </div>
+            </c:forEach>
+        </div>
+
+        <div class="history-header" onclick="toggleHistory()">
+            <span class="history-title" style="margin:0; border:none; padding:0;">
+                Notification History
+                <small style="font-weight: normal; color: #94a3b8; font-size: 11px; margin-left: 4px;">(Click to view)</small>
+            </span>
+            <span id="historyToggleBtn">Show ▼</span>
+        </div>
+
+        <div id="historyWrapper" style="display: none;">
+            <div class="notification-list" id="readList">
+                <c:if test="${empty readNotifs}">
+                    <p class="empty-msg" id="emptyReadMsg">No notification history.</p>
+                </c:if>
+                <c:forEach var="notif" items="${readNotifs}">
+                    <div class="notification-item read type-${notif.type}" data-id="${notif.notificationId}">
+                        <div class="notification-title">${notif.title}</div>
+                        <div class="notification-message">${notif.message}</div>
+                        <div class="notification-time">${notif.createdAt.substring(0, 16)}</div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+
     <div class="content-row">
         <div class="section">
             <h3>Recent Applications</h3>
@@ -470,15 +617,16 @@
                         <table class="applications-table">
                             <thead>
                             <tr>
-                                <th>Job Title</th>
-                                <th>Date Applied</th>
+                                <th>Job Title</th> <th>Date Applied</th>
                                 <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
                             <c:forEach var="app" items="${recentApps}">
                                 <tr onclick="location.href='${pageContext.request.contextPath}/ta/applications'">
-                                    <td>${app.jobId}</td>
+
+                                    <td>${app.jobTitle}</td>
+
                                     <td>${app.appliedAt != null ? app.appliedAt.toString().substring(0,10) : '-'}</td>
                                     <td><span class="status status-${app.status}">${app.status}</span></td>
                                 </tr>
@@ -511,5 +659,86 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const unreadList = document.getElementById('unreadList');
+        const readList = document.getElementById('readList');
+
+        if (unreadList) {
+            unreadList.addEventListener('click', function(e) {
+                const item = e.target.closest('.notification-item.unread');
+                if (!item) return;
+
+                const notifId = item.getAttribute('data-id');
+                if (!notifId) return;
+
+                fetch('${pageContext.request.contextPath}/notifications/read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ 'notificationId': notifId })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            item.classList.remove('unread');
+                            item.classList.add('read');
+                            item.style.cursor = 'default';
+
+                            const emptyRead = document.getElementById('emptyReadMsg');
+                            if (emptyRead) emptyRead.style.display = 'none';
+                            readList.insertBefore(item, readList.firstChild);
+
+                            const wrapper = document.getElementById('historyWrapper');
+                            if (wrapper && wrapper.style.display === 'none') {
+                                toggleHistory();
+                            }
+
+                            if (unreadList.querySelectorAll('.notification-item').length === 0) {
+                                let emptyUnread = document.getElementById('emptyUnreadMsg');
+                                if (!emptyUnread) {
+                                    unreadList.innerHTML = '<p class="empty-msg" id="emptyUnreadMsg" style="margin:0;">You are all caught up!</p>';
+                                } else {
+                                    emptyUnread.style.display = 'block';
+                                }
+                            }
+
+                            const unreadBadge = document.getElementById('unreadBadge');
+                            const readBadge = document.getElementById('readBadge');
+
+                            if (unreadBadge) {
+                                let unreadCount = parseInt(unreadBadge.innerText, 10);
+                                if (!isNaN(unreadCount) && unreadCount > 0) {
+                                    unreadCount--;
+                                    unreadBadge.innerText = unreadCount + ' unread';
+                                    if (unreadCount === 0) unreadBadge.style.display = 'none';
+                                }
+                            }
+
+                            if (readBadge) {
+                                let readCount = parseInt(readBadge.innerText, 10) || 0;
+                                readCount++;
+                                readBadge.innerText = readCount + ' read';
+                                readBadge.style.display = 'inline-block';
+                            }
+                        }
+                    })
+                    .catch(err => console.error('Error:', err));
+            });
+        }
+    });
+
+    function toggleHistory() {
+        const wrapper = document.getElementById('historyWrapper');
+        const btn = document.getElementById('historyToggleBtn');
+        if (wrapper.style.display === 'none') {
+            wrapper.style.display = 'block';
+            btn.innerText = 'Hide ▲';
+        } else {
+            wrapper.style.display = 'none';
+            btn.innerText = 'Show ▼';
+        }
+    }
+</script>
+
 </body>
 </html>

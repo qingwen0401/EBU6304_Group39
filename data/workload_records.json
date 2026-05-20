@@ -68,5 +68,61 @@
     "createdAt": "2026-04-11T13:59:55.929477900",
     "applicationId": "APP20260411003",
     "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260517213346003",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260411002",
+    "jobTitle": "Lab TA for Database Systems",
+    "moduleCode": "EBU6305",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 10,
+    "semester": "2026 Spring",
+    "createdAt": "2026-05-17T21:33:46.155570700",
+    "applicationId": "APP20260517213137001",
+    "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260518013419002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260411001",
+    "jobTitle": "Tutorial TA for EBU6304",
+    "moduleCode": "EBU6304",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 6,
+    "semester": "2026 Spring",
+    "createdAt": "2026-05-18T01:34:19.092576100",
+    "applicationId": "APP20260518013400001",
+    "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260518144151002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260411003",
+    "jobTitle": "Project TA for Web Development",
+    "moduleCode": "EBU6306",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 8,
+    "semester": "2026 Spring",
+    "createdAt": "2026-05-18T14:41:51.162613900",
+    "applicationId": "APP20260518144120001",
+    "status": "ACTIVE"
+  },
+  {
+    "recordId": "WL20260518150506002",
+    "taId": "TA20260329164406002",
+    "taName": "Alice Wang",
+    "jobId": "JOB20260518150113003",
+    "jobTitle": "Test for TA notification 2",
+    "moduleCode": "Test for TA notification 2",
+    "moId": "MO20260402141809001",
+    "weeklyHours": 12,
+    "semester": "2026 Spring",
+    "createdAt": "2026-05-18T15:05:06.441979800",
+    "applicationId": "APP20260518150447001",
+    "status": "CANCELLED"
   }
 ]

@@ -18,7 +18,6 @@
             color: #1e293b;
         }
 
-        /* 左侧导航栏 */
         .sidebar {
             width: 250px;
             min-height: 100vh;
@@ -96,7 +95,6 @@
             color: white;
         }
 
-        /* 主内容区 */
         .main {
             margin-left: 250px;
             padding: 32px;
@@ -144,7 +142,6 @@
             color: #0f172a;
         }
 
-        /* 统计卡片网格 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -195,7 +192,6 @@
             color: #ea580c;
         }
 
-        /* 内容网格 */
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -235,7 +231,6 @@
             color: #1d4ed8;
         }
 
-        /* 职位卡片 */
         .job-card {
             padding: 16px;
             border: 1px solid #f1f5f9;
@@ -291,6 +286,7 @@
             font-size: 12px;
             color: #64748b;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .job-stat {
@@ -299,7 +295,50 @@
             gap: 4px;
         }
 
-        /* 申请列表 */
+        .empty-msg {
+            color: #64748b;
+            font-size: 14px;
+            padding: 24px;
+            border: 1px dashed #cbd5e1; /* 虚线框 */
+            border-radius: 14px;
+            background: #f8fafc; /* 浅灰色背景 */
+            text-align: center;
+            margin: 10px 0;
+            width: 100%;
+            display: block;
+            box-sizing: border-box; /* 防止宽度撑破页面 */
+        }
+
+        /* 限制列表高度，增加内部滚动条 */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 320px; /* 【关键】超过 3 条左右就会出现滚动条 */
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* 美化滚动条（让界面更精致） */
+        .notification-list::-webkit-scrollbar { width: 5px; }
+        .notification-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* 历史记录切换按钮样式 */
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            margin: 15px 0 10px 0;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+        .history-header:hover { color: #2563eb; }
+        .history-header i { font-size: 12px; transition: transform 0.3s; }
+        .history-header.collapsed i { transform: rotate(-90deg); } /* 折叠时旋转箭头 */
         .application-item {
             padding: 14px;
             border-bottom: 1px solid #f1f5f9;
@@ -357,7 +396,6 @@
             opacity: 0.5;
         }
 
-        /* 快速操作按钮 */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -397,6 +435,64 @@
             background: #1d4ed8;
         }
 
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-item {
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .notification-time {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* 通知角标样式 */
+        .badge-unread { background: #dc2626; color: white; border-radius: 999px; padding: 3px 9px; font-size: 12px; margin-left: 8px; display: inline-block; }
+        .badge-read { background: #22c55e; color: white; border-radius: 999px; padding: 3px 9px; font-size: 12px; margin-left: 8px; display: inline-block; }
+
+        /* 通知历史标题 */
+        .history-title { font-size: 13px; font-weight: 700; color: #64748b; margin: 20px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; text-transform: uppercase;}
+
+        /* 未读状态（左侧蓝边，带红点） */
+        .notification-item.unread {
+            background-color: #ffffff;
+            border-left: 4px solid #2563eb;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .notification-item.unread .notification-title::before {
+            content: ""; display: inline-block; width: 8px; height: 8px; background-color: #dc2626; border-radius: 50%; margin-right: 8px; vertical-align: middle;
+        }
+
+        /* 已读状态（左侧绿边，底色变灰） */
+        .notification-item.read {
+            background-color: #f8fafc;
+            border-left: 4px solid #22c55e;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
         @media (max-width: 1200px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -409,23 +505,29 @@
 
         @media (max-width: 768px) {
             .sidebar {
-                width: 200px;
+                position: static;
+                width: 100%;
+                min-height: auto;
             }
 
             .main {
-                margin-left: 200px;
+                margin-left: 0;
                 padding: 20px;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
         }
+
     </style>
 </head>
 <body>
 
-<!-- 左侧导航栏 -->
 <div class="sidebar">
     <div class="brand">TA Recruitment</div>
     <div class="role">Module Organiser Portal</div>
@@ -445,7 +547,9 @@
     <a href="${pageContext.request.contextPath}/mo/applications">
         <span class="icon">📋</span> Applications
         <c:if test="${stats.pendingApplications > 0}">
-            <span style="margin-left: auto; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700;">${stats.pendingApplications}</span>
+            <span style="margin-left: auto; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700;">
+                    ${stats.pendingApplications}
+            </span>
         </c:if>
     </a>
     <a href="${pageContext.request.contextPath}/mo/analytics">
@@ -462,7 +566,6 @@
     </a>
 </div>
 
-<!-- 主内容区 -->
 <div class="main">
     <div class="topbar">
         <div class="page-title">Dashboard</div>
@@ -472,7 +575,6 @@
         </div>
     </div>
 
-    <!-- 统计卡片 -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-label">Total Applications</div>
@@ -512,7 +614,6 @@
         </div>
     </div>
 
-    <!-- 快速操作 -->
     <div class="quick-actions">
         <a href="${pageContext.request.contextPath}/mo/create-job" class="quick-action-btn primary">
             <span>➕</span> Create New Job Posting
@@ -531,9 +632,53 @@
         </a>
     </div>
 
-    <!-- 内容网格 -->
+    <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+            <div class="panel-title">
+                Notifications
+                <span id="unreadBadge" class="badge-unread" style="${unreadCount == 0 ? 'display:none;' : ''}">${unreadCount} unread</span>
+                <span id="readBadge" class="badge-read" style="${readCount == 0 ? 'display:none;' : ''}">${readCount} read</span>
+            </div>
+        </div>
+
+        <div class="notification-list" id="unreadList">
+            <c:if test="${empty unreadNotifs}">
+                <p class="empty-msg" id="emptyUnreadMsg">You are all caught up!</p>
+            </c:if>
+            <c:forEach var="notif" items="${unreadNotifs}">
+                <div class="notification-item unread" data-id="${notif.notificationId}" style="cursor:pointer;">
+                    <div class="notification-title">${notif.title}</div>
+                    <div class="notification-message">${notif.message}</div>
+                    <div class="notification-time">${notif.createdAt.substring(0, 16)}</div>
+                </div>
+            </c:forEach>
+        </div>
+
+        <div class="history-header" onclick="toggleHistory()">
+    <span class="history-title" style="margin:0; border:none; padding:0;">
+        Notification History
+        <small style="font-weight: normal; color: #94a3b8; font-size: 11px; margin-left: 4px;">(Click to view)</small>
+    </span>
+            <span id="historyToggleBtn">Show ▼</span>
+        </div>
+
+        <div id="historyWrapper" style="display: none;">
+            <div class="notification-list" id="readList">
+                <c:if test="${empty readNotifs}">
+                    <p class="empty-msg" id="emptyReadMsg">No notification history.</p>
+                </c:if>
+                <c:forEach var="notif" items="${readNotifs}">
+                    <div class="notification-item read" data-id="${notif.notificationId}">
+                        <div class="notification-title">${notif.title}</div>
+                        <div class="notification-message">${notif.message}</div>
+                        <div class="notification-time">${notif.createdAt.substring(0, 16)}</div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+
     <div class="content-grid">
-        <!-- 需要关注的职位 -->
         <div class="panel">
             <div class="panel-header">
                 <div class="panel-title">Jobs Needing Attention</div>
@@ -560,11 +705,11 @@
                                             <c:set var="pendingCount" value="${pendingCount + 1}"/>
                                         </c:if>
                                     </c:forEach>
-                                    ${pendingCount} new applications
+                                        ${pendingCount} new applications
                                 </div>
                                 <div class="job-stat">
                                     <span>👥</span>
-                                    ${job.filledCount}/${job.vacancies} filled
+                                        ${job.filledCount}/${job.vacancies} filled
                                 </div>
                                 <div class="job-stat">
                                     <span>📅</span>
@@ -583,7 +728,6 @@
             </c:choose>
         </div>
 
-        <!-- 最近的申请 -->
         <div class="panel">
             <div class="panel-header">
                 <div class="panel-title">Recent Applications</div>
@@ -597,7 +741,7 @@
                             <div class="application-info">
                                 <div class="applicant-name">${app.taName}</div>
                                 <div class="application-meta">
-                                    ${app.jobTitle} • Applied ${app.appliedAt.substring(0, 10)}
+                                        ${app.jobTitle} • Applied ${app.appliedAt.substring(0, 10)}
                                 </div>
                             </div>
                             <c:choose>
@@ -621,6 +765,92 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 利用事件委托监听未读列表的点击事件
+        const unreadList = document.getElementById('unreadList');
+        const readList = document.getElementById('readList');
 
+        if (unreadList) {
+            unreadList.addEventListener('click', function(e) {
+                // 确保点中的是未读通知卡片
+                const item = e.target.closest('.notification-item.unread');
+                if (!item) return;
+
+                const notifId = item.getAttribute('data-id');
+                if (!notifId) return;
+
+                fetch('${pageContext.request.contextPath}/notifications/read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ 'notificationId': notifId })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // 1. 修改卡片样式，去掉鼠标指针
+                            item.classList.remove('unread');
+                            item.classList.add('read');
+                            item.style.cursor = 'default';
+
+                            // 2. 将卡片从当前位置移动到历史记录的【最顶端】
+                            const emptyRead = document.getElementById('emptyReadMsg');
+                            if (emptyRead) emptyRead.style.display = 'none'; // 隐藏"暂无历史"提示
+                            readList.insertBefore(item, readList.firstChild);
+
+                            // 如果历史记录当前是隐藏状态（display 为 none），自动调用 toggleHistory 展开它
+                            const wrapper = document.getElementById('historyWrapper');
+                            if (wrapper && wrapper.style.display === 'none') {
+                                toggleHistory();
+                            }
+
+                            // 3. 检查未读列表是否空了，空了就显示"全部已读"提示
+                            if (unreadList.querySelectorAll('.notification-item').length === 0) {
+                                let emptyUnread = document.getElementById('emptyUnreadMsg');
+                                if (!emptyUnread) {
+                                    unreadList.innerHTML = '<p class="empty-msg" id="emptyUnreadMsg" style="margin:0;">You are all caught up!</p>';
+                                } else {
+                                    emptyUnread.style.display = 'block';
+                                }
+                            }
+
+                            // 4. 动态更新顶部的红绿数字角标
+                            const unreadBadge = document.getElementById('unreadBadge');
+                            const readBadge = document.getElementById('readBadge');
+
+                            if (unreadBadge) {
+                                let unreadCount = parseInt(unreadBadge.innerText);
+                                if (!isNaN(unreadCount) && unreadCount > 0) {
+                                    unreadCount--;
+                                    unreadBadge.innerText = unreadCount + ' unread';
+                                    if (unreadCount === 0) unreadBadge.style.display = 'none';
+                                }
+                            }
+
+                            if (readBadge) {
+                                let readCount = parseInt(readBadge.innerText) || 0;
+                                readCount++;
+                                readBadge.innerText = readCount + ' read';
+                                readBadge.style.display = 'inline-block';
+                            }
+                        }
+                    })
+                    .catch(err => console.error('Error:', err));
+            });
+        }
+    });
+    // 切换历史记录的显示/隐藏
+    function toggleHistory() {
+        const wrapper = document.getElementById('historyWrapper');
+        const btn = document.getElementById('historyToggleBtn');
+        if (wrapper.style.display === 'none') {
+            wrapper.style.display = 'block';
+            btn.innerText = 'Hide ▲';
+        } else {
+            wrapper.style.display = 'none';
+            btn.innerText = 'Show ▼';
+        }
+    }
+</script>
 </body>
 </html>

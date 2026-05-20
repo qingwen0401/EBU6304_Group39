@@ -379,6 +379,143 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
+        .ai-match-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .ai-match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .ai-match-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .ai-match-subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .btn-ai {
+            background: white;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .btn-ai:hover {
+            background: #f8f9fa;
+        }
+
+        .ai-results {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .ai-results.active {
+            display: block;
+        }
+
+        .ai-result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            color: #1e293b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .ai-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .ai-score {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .ai-score.high {
+            color: #16a34a;
+        }
+
+        .ai-score.medium {
+            color: #ea580c;
+        }
+
+        .ai-score.low {
+            color: #dc2626;
+        }
+
+        .matched-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .skill-tag {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .ai-reason {
+            font-size: 14px;
+            color: #475569;
+            font-style: italic;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .api-key-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .api-key-modal.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -438,6 +575,26 @@
             <div class="stat-value">${applicationsByStatus['REJECTED'].size()}</div>
             <div class="stat-label">Rejected</div>
         </div>
+    </div>
+
+    <div class="ai-match-section">
+        <div class="ai-match-header">
+            <div>
+                <div class="ai-match-title">🤖 AI-Powered Skill Matching</div>
+                <div class="ai-match-subtitle">Analyze applicants using DeepSeek AI to find the best matches</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <select id="job-select" class="job-select" style="padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: white; color: #1e293b; font-size: 14px; min-width: 200px;">
+                    <option value="">Select a job...</option>
+                </select>
+                <button class="btn btn-ai" onclick="showApiKeyModal()">Configure API Key</button>
+                <button class="btn btn-ai" onclick="runAIMatching()">
+                    <span id="ai-btn-text">Run AI Matching</span>
+                    <span id="ai-loading" class="loading-spinner" style="display:none;"></span>
+                </button>
+            </div>
+        </div>
+        <div id="ai-results" class="ai-results"></div>
     </div>
 
     <div class="tabs">
@@ -524,6 +681,26 @@
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
             <button class="btn btn-primary" onclick="submitReview()">Submit</button>
+        </div>
+    </div>
+</div>
+
+<!-- API Key Configuration Modal -->
+<div id="api-key-modal" class="api-key-modal">
+    <div class="modal-content">
+        <div class="modal-header">Configure DeepSeek API Key</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>DeepSeek API Key</label>
+                <input type="password" id="api-key-input" placeholder="sk-..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                <p style="font-size: 12px; color: #64748b; margin-top: 8px;">
+                    Get your API key from <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeApiKeyModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveApiKey()">Save</button>
         </div>
     </div>
 </div>
@@ -663,6 +840,162 @@
             }
         });
     }
+
+    // API Key Modal Functions
+    function showApiKeyModal() {
+        document.getElementById('api-key-modal').classList.add('active');
+    }
+
+    function closeApiKeyModal() {
+        document.getElementById('api-key-modal').classList.remove('active');
+        document.getElementById('api-key-input').value = '';
+    }
+
+    function saveApiKey() {
+        const apiKey = document.getElementById('api-key-input').value.trim();
+        if (!apiKey) {
+            alert('Please enter an API key');
+            return;
+        }
+
+        fetch('${pageContext.request.contextPath}/mo/applications', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                action: 'save-api-key',
+                apiKey: apiKey
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('API key saved successfully!');
+                closeApiKeyModal();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            alert('Failed to save API key: ' + err.message);
+        });
+    }
+
+    // AI Matching Functions
+    function runAIMatching() {
+        const jobSelect = document.getElementById('job-select');
+        const jobId = jobSelect.value;
+
+        if (!jobId) {
+            alert('Please select a job from the dropdown first');
+            return;
+        }
+
+        const btnText = document.getElementById('ai-btn-text');
+        const loading = document.getElementById('ai-loading');
+        btnText.style.display = 'none';
+        loading.style.display = 'inline-block';
+
+        fetch('${pageContext.request.contextPath}/mo/applications', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                action: 'ai-match',
+                jobId: jobId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btnText.style.display = 'inline';
+            loading.style.display = 'none';
+
+            if (data.success) {
+                displayAIResults(data.results);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            btnText.style.display = 'inline';
+            loading.style.display = 'none';
+            alert('AI matching failed: ' + err.message);
+        });
+    }
+
+    function displayAIResults(results) {
+        const container = document.getElementById('ai-results');
+        container.innerHTML = '';
+
+        if (results.length === 0) {
+            container.innerHTML = '<p style="color: white;">No pending applications to analyze.</p>';
+            container.classList.add('active');
+            return;
+        }
+
+        results.forEach((result, index) => {
+            if (result.error) {
+                const errorCard = document.createElement('div');
+                errorCard.className = 'ai-result-card';
+                errorCard.innerHTML = '<div style="color: #dc2626;"><strong>' +
+                    result.taName + '</strong>: ' + result.error + '</div>';
+                container.appendChild(errorCard);
+                return;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'ai-result-card';
+
+            const scoreClass = result.matchingScore >= 75 ? 'high' :
+                              result.matchingScore >= 50 ? 'medium' : 'low';
+
+            let skillsHtml = '';
+            if (result.matchedSkills && result.matchedSkills.length > 0) {
+                skillsHtml = '<div class="matched-skills">' +
+                    result.matchedSkills.map(skill =>
+                        '<span class="skill-tag">' + skill + '</span>'
+                    ).join('') +
+                    '</div>';
+            }
+
+            card.innerHTML = `
+                <div class="ai-result-header">
+                    <div>
+                        <strong style="font-size: 16px;">#` + (index + 1) + ` ` + result.taName + `</strong>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 4px;">
+                            Application ID: ` + result.applicationId + `
+                        </div>
+                    </div>
+                    <div class="ai-score ` + scoreClass + `">` + result.matchingScore + `</div>
+                </div>
+                ` + skillsHtml + `
+                <div class="ai-reason">` + result.reason + `</div>
+            `;
+
+            container.appendChild(card);
+        });
+
+        container.classList.add('active');
+    }
+
+    // Load MO's jobs into dropdown on page load
+    function loadJobsDropdown() {
+        fetch('${pageContext.request.contextPath}/mo/applications?action=get-jobs')
+            .then(res => res.json())
+            .then(jobs => {
+                const jobSelect = document.getElementById('job-select');
+                jobs.forEach(job => {
+                    const option = document.createElement('option');
+                    option.value = job.jobId;
+                    option.textContent = job.title;
+                    jobSelect.appendChild(option);
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load jobs:', err);
+            });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', loadJobsDropdown);
 </script>
 </body>
 </html>

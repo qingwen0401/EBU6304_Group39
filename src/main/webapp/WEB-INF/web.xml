@@ -202,7 +202,50 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    <!-- admin workload -->
+    <servlet>
+        <servlet-name>AdminWorkloadServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.AdminWorkloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminWorkloadServlet</servlet-name>
+        <url-pattern>/admin/workload</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AdminJobsServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.AdminJobsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminJobsServlet</servlet-name>
+        <url-pattern>/admin/jobs</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AdminUsersServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.AdminUsersServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminUsersServlet</servlet-name>
+        <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminAuditServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.AdminAuditServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminAuditServlet</servlet-name>
+        <url-pattern>/admin/audit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>NotificationServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.NotificationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NotificationServlet</servlet-name>
+        <url-pattern>/notifications/read</url-pattern>
+    </servlet-mapping>
 
 </web-app>

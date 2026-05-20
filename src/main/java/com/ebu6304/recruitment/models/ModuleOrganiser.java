@@ -39,6 +39,9 @@ public class ModuleOrganiser extends User {
     /** 办公室地址 */
     private String officeLocation;
 
+    /** DeepSeek API密钥（用于AI技能匹配） */
+    private String deepseekApiKey;
+
     // ==================== 构造方法 ====================
 
     /** 无参构造（Gson反序列化需要） */
@@ -125,6 +128,9 @@ public class ModuleOrganiser extends User {
 
     public String getOfficeLocation() { return officeLocation; }
     public void setOfficeLocation(String officeLocation) { this.officeLocation = officeLocation; }
+
+    public String getDeepseekApiKey() { return deepseekApiKey; }
+    public void setDeepseekApiKey(String deepseekApiKey) { this.deepseekApiKey = deepseekApiKey; }
 
     @Override
     public String toString() {

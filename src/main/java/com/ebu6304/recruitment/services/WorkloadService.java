@@ -3,6 +3,7 @@ package com.ebu6304.recruitment.services;
 import com.ebu6304.recruitment.models.TA;
 import com.ebu6304.recruitment.models.WorkloadRecord;
 import com.ebu6304.recruitment.repositories.UserRepository;
+import com.ebu6304.recruitment.repositories.WorkloadConfigRepository;
 import com.ebu6304.recruitment.repositories.WorkloadRepository;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class WorkloadService {
     /** 用户数据访问层 */
     private final UserRepository userRepository;
 
+    private final WorkloadConfigRepository workloadConfigRepository;
+
     /**
      * 构造方法，注入依赖。
      *
@@ -47,8 +50,15 @@ public class WorkloadService {
      */
     public WorkloadService(WorkloadRepository workloadRepository,
                            UserRepository userRepository) {
+        this(workloadRepository, userRepository, new WorkloadConfigRepository());
+    }
+
+    public WorkloadService(WorkloadRepository workloadRepository,
+                           UserRepository userRepository,
+                           WorkloadConfigRepository workloadConfigRepository) {
         this.workloadRepository = workloadRepository;
         this.userRepository = userRepository;
+        this.workloadConfigRepository = workloadConfigRepository;
     }
 
     // ==================== 工作量查询 ====================
@@ -83,7 +93,7 @@ public class WorkloadService {
      * @return 超载返回true
      */
     public boolean isOverloaded(String taId, String semester) {
-        return getTotalWeeklyHours(taId, semester) > MAX_WEEKLY_HOURS;
+        return getTotalWeeklyHours(taId, semester) > getMaxWeeklyHours();
     }
 
     /**
@@ -95,7 +105,7 @@ public class WorkloadService {
      */
     public boolean isNearOverload(String taId, String semester) {
         int hours = getTotalWeeklyHours(taId, semester);
-        return hours > WARNING_WEEKLY_HOURS && hours <= MAX_WEEKLY_HOURS;
+        return hours > getWarningWeeklyHours() && hours <= getMaxWeeklyHours();
     }
 
     /**
@@ -108,7 +118,7 @@ public class WorkloadService {
      */
     public boolean wouldExceedLimit(String taId, String semester, int additionalHours) {
         int currentHours = getTotalWeeklyHours(taId, semester);
-        return (currentHours + additionalHours) > MAX_WEEKLY_HOURS;
+        return (currentHours + additionalHours) > getMaxWeeklyHours();
     }
 
     // ==================== 管理员统计 ====================
@@ -171,8 +181,8 @@ public class WorkloadService {
             entry.put("studentId", ta.getStudentId());
             entry.put("totalWeeklyHours", hours);
             entry.put("jobCount", records.size());
-            entry.put("isOverloaded", hours > MAX_WEEKLY_HOURS);
-            entry.put("isNearOverload", hours > WARNING_WEEKLY_HOURS && hours <= MAX_WEEKLY_HOURS);
+            entry.put("isOverloaded", hours > getMaxWeeklyHours());
+            entry.put("isNearOverload", hours > getWarningWeeklyHours() && hours <= getMaxWeeklyHours());
             entry.put("workloadStatus", getWorkloadStatus(hours));
             entry.put("records", records);
 
@@ -235,6 +245,21 @@ public class WorkloadService {
         return workloadRepository.findAll();
     }
 
+    public int getMaxWeeklyHours() {
+        return workloadConfigRepository.getConfig().getMaxWeeklyHours();
+    }
+
+    public int getWarningWeeklyHours() {
+        return Math.max(0, getMaxWeeklyHours() - 5);
+    }
+
+    public void setMaxWeeklyHours(int maxWeeklyHours) {
+        if (maxWeeklyHours < 1 || maxWeeklyHours > 80) {
+            throw new IllegalArgumentException("Threshold must be between 1 and 80 hours.");
+        }
+        workloadConfigRepository.save(new com.ebu6304.recruitment.models.WorkloadConfig(maxWeeklyHours));
+    }
+
     // ==================== 私有辅助方法 ====================
 
     /**
@@ -245,8 +270,8 @@ public class WorkloadService {
      */
     private String getWorkloadStatus(int hours) {
         if (hours == 0) return "IDLE";
-        if (hours <= WARNING_WEEKLY_HOURS) return "NORMAL";
-        if (hours <= MAX_WEEKLY_HOURS) return "WARNING";
+        if (hours <= getWarningWeeklyHours()) return "NORMAL";
+        if (hours <= getMaxWeeklyHours()) return "WARNING";
         return "OVERLOADED";
     }
 }
