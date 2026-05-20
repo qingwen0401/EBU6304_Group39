@@ -136,40 +136,4 @@ public class NotificationService {
     public void markAsRead(String notificationId) {
         notificationRepository.markAsRead(notificationId);
     }
-
-    public Notification createWorkloadForceCancelNotificationForTA(String taId, String taName,
-                                                                    String jobTitle, String moduleCode,
-                                                                    String semester, String adminName) {
-        String title = "Workload Assignment Cancelled by Admin";
-        String message = "Your assignment for " + jobTitle + " (" + moduleCode + ") in " + semester
-                + " has been cancelled by administrator " + adminName
-                + " due to workload overload. Please contact your module organiser if you have questions.";
-
-        return createNotification(
-                taId,
-                "TA",
-                "WORKLOAD_FORCE_CANCEL",
-                title,
-                message,
-                NotificationRepository.buildWorkloadRelatedId(taId, semester)
-        );
-    }
-
-    public Notification createWorkloadForceCancelNotificationForMO(String moId, String taName,
-                                                                    String jobTitle, String moduleCode,
-                                                                    String semester, String adminName) {
-        String title = "TA Assignment Cancelled by Admin";
-        String message = "The assignment of " + taName + " for " + jobTitle + " (" + moduleCode + ") in " + semester
-                + " has been cancelled by administrator " + adminName
-                + " due to TA workload overload. Please reassign this position.";
-
-        return createNotification(
-                moId,
-                "MO",
-                "WORKLOAD_FORCE_CANCEL",
-                title,
-                message,
-                jobTitle
-        );
-    }
 }

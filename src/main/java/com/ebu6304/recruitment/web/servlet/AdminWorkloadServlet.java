@@ -89,10 +89,6 @@ public class AdminWorkloadServlet extends HttpServlet {
             handleNotifyOverload(request, response, workloadService, auditLogRepository, currentUser);
             return;
         }
-        if ("forceCancel".equals(action)) {
-            handleForceCancel(request, response, workloadService, auditLogRepository, currentUser);
-            return;
-        }
 
         try {
             int threshold = Integer.parseInt(request.getParameter("maxWeeklyHours"));
@@ -339,78 +335,5 @@ public class AdminWorkloadServlet extends HttpServlet {
 
     private String emptyFallback(String value, String fallback) {
         return isBlank(value) ? fallback : value;
-    }
-
-    private void handleForceCancel(HttpServletRequest request, HttpServletResponse response,
-                                    WorkloadService workloadService,
-                                    AuditLogRepository auditLogRepository,
-                                    User currentUser) throws IOException {
-        NotificationService notificationService =
-                (NotificationService) getServletContext().getAttribute("notificationService");
-        UserRepository userRepository =
-                (UserRepository) getServletContext().getAttribute("userRepository");
-
-        String taId = trim(request.getParameter("taId"));
-        String taName = trim(request.getParameter("taName"));
-        String recordId = trim(request.getParameter("recordId"));
-        String semester = defaultIfBlank(request.getParameter("semester"), "2026 Spring");
-        String module = trim(request.getParameter("module"));
-        String status = trim(request.getParameter("status"));
-
-        try {
-            if (notificationService == null) {
-                throw new IllegalStateException("Notification service is not available");
-            }
-            if (isBlank(taId) || isBlank(recordId)) {
-                throw new IllegalArgumentException("TA ID and Record ID are required");
-            }
-
-            int notificationCount = notificationService.countWorkloadWarningsForTa(taId, semester);
-            if (notificationCount < 3) {
-                throw new IllegalStateException("Force cancel requires at least 3 prior notifications. Current count: " + notificationCount);
-            }
-
-            workloadService.cancelWorkloadRecord(recordId);
-
-            workloadService.getAllWorkloadRecords().stream()
-                    .filter(r -> recordId.equals(r.getRecordId()))
-                    .findFirst()
-                    .ifPresent(record -> {
-                        notificationService.createWorkloadForceCancelNotificationForTA(
-                                taId,
-                                taName,
-                                record.getJobTitle(),
-                                record.getModuleCode(),
-                                semester,
-                                currentUser.getUsername()
-                        );
-
-                        notificationService.createWorkloadForceCancelNotificationForMO(
-                                record.getMoId(),
-                                taName,
-                                record.getJobTitle(),
-                                record.getModuleCode(),
-                                semester,
-                                currentUser.getUsername()
-                        );
-                    });
-
-            if (auditLogRepository != null && currentUser != null) {
-                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
-                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
-                        "FORCE_CANCEL_WORKLOAD", "SUCCESS", request.getRemoteAddr(),
-                        "Force cancelled workload record " + recordId + " for TA " + taName + " after " + notificationCount + " notifications."));
-            }
-
-            response.sendRedirect(buildWorkloadRedirect(request, semester, module, status, "2", false));
-        } catch (Exception e) {
-            if (auditLogRepository != null && currentUser != null) {
-                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
-                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
-                        "FORCE_CANCEL_WORKLOAD", "FAILED", request.getRemoteAddr(), e.getMessage()));
-            }
-
-            response.sendRedirect(buildWorkloadRedirect(request, semester, module, status, "3", false));
-        }
     }
 }

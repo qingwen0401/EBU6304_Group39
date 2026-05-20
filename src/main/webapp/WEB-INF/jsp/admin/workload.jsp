@@ -171,27 +171,12 @@
             background: #fef2f2;
         }
 
-        .btn.danger {
-            background: #991b1b;
-            color: white;
-        }
-
-        .btn.danger:hover {
-            background: #7f1d1d;
-        }
-
         .notify-meta {
             display: block;
             margin-top: 6px;
             font-size: 11px;
             color: #64748b;
             font-weight: 600;
-        }
-
-        .action-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
 
         table {
@@ -289,12 +274,6 @@
     </c:if>
     <c:if test="${param.notified == '0'}">
         <div class="notice error">Failed to send notification. Please try again.</div>
-    </c:if>
-    <c:if test="${param.notified == '2'}">
-        <div class="notice">Workload assignment has been force-cancelled. Notifications sent to TA and MO.</div>
-    </c:if>
-    <c:if test="${param.notified == '3'}">
-        <div class="notice error">Failed to force-cancel workload. Please ensure at least 3 notifications were sent.</div>
     </c:if>
 
     <div class="topbar">
@@ -395,49 +374,29 @@
                     <td>
                         <c:choose>
                             <c:when test="${ta.workloadStatus == 'OVERLOADED'}">
-                                <div class="action-group">
-                                    <form class="inline-form" method="post" action="${pageContext.request.contextPath}/admin/workload">
-                                        <input type="hidden" name="action" value="notifyOverload">
-                                        <input type="hidden" name="taId" value="${ta.taId}">
-                                        <input type="hidden" name="taName" value="${ta.taName}">
-                                        <input type="hidden" name="totalWeeklyHours" value="${ta.totalWeeklyHours}">
-                                        <input type="hidden" name="semester" value="${semester}">
-                                        <input type="hidden" name="module" value="${selectedModule}">
-                                        <input type="hidden" name="status" value="${selectedStatus}">
-                                        <c:choose>
-                                            <c:when test="${ta.workloadNotified}">
-                                                <button class="btn warning outline" type="submit">Notify Again</button>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <button class="btn warning" type="submit">Notify TA</button>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </form>
-                                    <c:if test="${ta.workloadNotified && ta.notificationCount >= 3}">
-                                        <c:forEach var="record" items="${ta.records}">
-                                            <c:if test="${record.status == 'ACTIVE'}">
-                                                <form class="inline-form" method="post"
-                                                      action="${pageContext.request.contextPath}/admin/workload"
-                                                      onsubmit="return confirm('Force cancel ${record.jobTitle} for ${ta.taName}? This will notify both the TA and MO.');">
-                                                    <input type="hidden" name="action" value="forceCancel">
-                                                    <input type="hidden" name="taId" value="${ta.taId}">
-                                                    <input type="hidden" name="taName" value="${ta.taName}">
-                                                    <input type="hidden" name="recordId" value="${record.recordId}">
-                                                    <input type="hidden" name="semester" value="${semester}">
-                                                    <input type="hidden" name="module" value="${selectedModule}">
-                                                    <input type="hidden" name="status" value="${selectedStatus}">
-                                                    <button class="btn danger" type="submit">Cancel ${record.jobTitle}</button>
-                                                </form>
-                                            </c:if>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${ta.workloadNotified}">
-                                        <span class="notify-meta">
-                                            Sent ${ta.notificationCount} time(s),
-                                            last: ${ta.lastNotifiedAt}
-                                        </span>
-                                    </c:if>
-                                </div>
+                                <form class="inline-form" method="post" action="${pageContext.request.contextPath}/admin/workload">
+                                    <input type="hidden" name="action" value="notifyOverload">
+                                    <input type="hidden" name="taId" value="${ta.taId}">
+                                    <input type="hidden" name="taName" value="${ta.taName}">
+                                    <input type="hidden" name="totalWeeklyHours" value="${ta.totalWeeklyHours}">
+                                    <input type="hidden" name="semester" value="${semester}">
+                                    <input type="hidden" name="module" value="${selectedModule}">
+                                    <input type="hidden" name="status" value="${selectedStatus}">
+                                    <c:choose>
+                                        <c:when test="${ta.workloadNotified}">
+                                            <button class="btn warning outline" type="submit">Notify Again</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="btn warning" type="submit">Notify TA</button>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </form>
+                                <c:if test="${ta.workloadNotified}">
+                                    <span class="notify-meta">
+                                        Sent ${ta.notificationCount} time(s),
+                                        last: ${ta.lastNotifiedAt}
+                                    </span>
+                                </c:if>
                             </c:when>
                             <c:otherwise>-</c:otherwise>
                         </c:choose>

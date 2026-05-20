@@ -185,38 +185,5 @@
     "relatedEntityId": "JOB20260520172322001",
     "read": true,
     "createdAt": "2026-05-20T17:26:47.693579700"
-  },
-  {
-    "notificationId": "NOT17792856891456140bd",
-    "recipientUserId": "TA20260329164406002",
-    "recipientRole": "TA",
-    "type": "WORKLOAD_FORCE_CANCEL",
-    "title": "Workload Assignment Cancelled by Admin",
-    "message": "Your assignment for Test for TA notification 2 (Test for TA notification 2) in 2026 Spring has been cancelled by administrator admin due to workload overload. Please contact your module organiser if you have questions.",
-    "relatedEntityId": "TA20260329164406002::2026 Spring",
-    "read": true,
-    "createdAt": "2026-05-20T22:01:29.156170300"
-  },
-  {
-    "notificationId": "NOT17792856891613fbbb9",
-    "recipientUserId": "MO20260402141809001",
-    "recipientRole": "MO",
-    "type": "WORKLOAD_FORCE_CANCEL",
-    "title": "TA Assignment Cancelled by Admin",
-    "message": "The assignment of Alice Wang for Test for TA notification 2 (Test for TA notification 2) in 2026 Spring has been cancelled by administrator admin due to TA workload overload. Please reassign this position.",
-    "relatedEntityId": "Test for TA notification 2",
-    "read": true,
-    "createdAt": "2026-05-20T22:01:29.161810400"
-  },
-  {
-    "notificationId": "NOT1779290304497b4abb1",
-    "recipientUserId": "TA20260329164406002",
-    "recipientRole": "TA",
-    "type": "JOB_CANCELLED",
-    "title": "Job Cancelled Notice",
-    "message": "The position you applied for (Job ID: JOB20260518150113003) has been cancelled by the Module Organiser.",
-    "relatedEntityId": "JOB20260518150113003",
-    "read": true,
-    "createdAt": "2026-05-20T23:18:24.511360600"
   }
 ]
