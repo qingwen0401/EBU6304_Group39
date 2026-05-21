@@ -1,5 +1,27 @@
 [
   {
+    "logId": "AUD1779089181783",
+    "timestamp": "2026-05-18T15:26:21.784963400",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779087915693",
+    "timestamp": "2026-05-18T15:05:15.693039400",
+    "username": "alice.wang",
+    "userId": "TA20260329164406002",
+    "role": "TA",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
     "logId": "AUD1779087894432",
     "timestamp": "2026-05-18T15:04:54.432602700",
     "username": "test_mo",
@@ -968,11 +990,11 @@
     "details": "User logged in."
   },
   {
-    "logId": "AUD1779087915693",
-    "timestamp": "2026-05-18T15:05:15.693039400",
-    "username": "alice.wang",
-    "userId": "TA20260329164406002",
-    "role": "TA",
+    "logId": "AUD1779089396100",
+    "timestamp": "2026-05-18T15:29:56.100499400",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
     "action": "LOGIN",
     "outcome": "SUCCESS",
     "ipAddress": "0:0:0:0:0:0:0:1",
