@@ -138,6 +138,56 @@ class AdminWorkloadServletTest {
     }
 
     @Test
+    void postAssignTaskCreatesAdminWorkloadRecord() throws Exception {
+        AdminServletTestSupport.withCurrentUser(request, admin);
+        WorkloadRecord assigned = record("WL777", "TA001", 6, "ACTIVE");
+        when(request.getParameter("action")).thenReturn("assignTask");
+        when(request.getParameter("taId")).thenReturn("TA001");
+        when(request.getParameter("jobTitle")).thenReturn("Tutorial support");
+        when(request.getParameter("moduleCode")).thenReturn("EBU6304");
+        when(request.getParameter("moId")).thenReturn("MO001");
+        when(request.getParameter("weeklyHours")).thenReturn("6");
+        when(request.getParameter("semester")).thenReturn("2026 Spring");
+        when(request.getContextPath()).thenReturn("");
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+        when(workloadService.assignAdminTask("TA001", "Tutorial support", "EBU6304",
+                "MO001", 6, "2026 Spring")).thenReturn(assigned);
+
+        servlet.doPost(request, response);
+
+        verify(workloadService).assignAdminTask("TA001", "Tutorial support",
+                "EBU6304", "MO001", 6, "2026 Spring");
+        AuditLogEntry audit = captureAudit();
+        assertEquals("ASSIGN_WORKLOAD", audit.getAction());
+        assertEquals("SUCCESS", audit.getOutcome());
+    }
+
+    @Test
+    void postUpdateTaskAdjustsWorkloadRecord() throws Exception {
+        AdminServletTestSupport.withCurrentUser(request, admin);
+        WorkloadRecord updated = record("WL778", "TA002", 10, "ACTIVE");
+        when(request.getParameter("action")).thenReturn("updateTask");
+        when(request.getParameter("recordId")).thenReturn("WL778");
+        when(request.getParameter("taId")).thenReturn("TA002");
+        when(request.getParameter("jobTitle")).thenReturn("Adjusted lab");
+        when(request.getParameter("moduleCode")).thenReturn("EBU6405");
+        when(request.getParameter("moId")).thenReturn("MO002");
+        when(request.getParameter("weeklyHours")).thenReturn("10");
+        when(request.getParameter("semester")).thenReturn("2026 Autumn");
+        when(request.getParameter("recordStatus")).thenReturn("ACTIVE");
+        when(request.getContextPath()).thenReturn("");
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+        when(workloadService.updateWorkloadRecord("WL778", "TA002", "Adjusted lab",
+                "EBU6405", "MO002", 10, "2026 Autumn", "ACTIVE")).thenReturn(updated);
+
+        servlet.doPost(request, response);
+
+        verify(workloadService).updateWorkloadRecord("WL778", "TA002", "Adjusted lab",
+                "EBU6405", "MO002", 10, "2026 Autumn", "ACTIVE");
+        assertEquals("UPDATE_WORKLOAD", captureAudit().getAction());
+    }
+
+    @Test
     void postNotifyOverloadCreatesWarningAndAudit() throws Exception {
         AdminServletTestSupport.withCurrentUser(request, admin);
         when(request.getParameter("action")).thenReturn("notifyOverload");

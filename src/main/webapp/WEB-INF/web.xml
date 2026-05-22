@@ -43,6 +43,16 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
+    <!-- Admin password reset -->
+    <servlet>
+        <servlet-name>PasswordResetServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.PasswordResetServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PasswordResetServlet</servlet-name>
+        <url-pattern>/password-reset</url-pattern>
+    </servlet-mapping>
+
     <!-- Register -->
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>

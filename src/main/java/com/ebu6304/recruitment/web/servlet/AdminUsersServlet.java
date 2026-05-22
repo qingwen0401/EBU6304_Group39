@@ -2,6 +2,7 @@ package com.ebu6304.recruitment.web.servlet;
 
 import com.ebu6304.recruitment.models.AuditLogEntry;
 import com.ebu6304.recruitment.models.ModuleOrganiser;
+import com.ebu6304.recruitment.models.TA;
 import com.ebu6304.recruitment.models.User;
 import com.ebu6304.recruitment.repositories.AuditLogRepository;
 import com.ebu6304.recruitment.repositories.UserRepository;
@@ -43,6 +44,7 @@ public class AdminUsersServlet extends HttpServlet {
                 .collect(Collectors.toList());
 
         request.setAttribute("users", users);
+        request.setAttribute("tas", userRepository.findAllTAs());
         request.setAttribute("selectedRole", role);
         request.setAttribute("selectedStatus", status);
         request.setAttribute("message", request.getParameter("message"));
@@ -66,6 +68,18 @@ public class AdminUsersServlet extends HttpServlet {
 
         if ("create-mo".equals(action)) {
             handleCreateMO(request, response, authService, auditLogRepository, currentUser);
+            return;
+        }
+        if ("create-ta".equals(action)) {
+            handleCreateTA(request, response, authService, auditLogRepository, currentUser);
+            return;
+        }
+        if ("update-ta".equals(action)) {
+            handleUpdateTA(request, response, userRepository, auditLogRepository, currentUser, userId);
+            return;
+        }
+        if ("delete-ta".equals(action)) {
+            handleDeleteTA(request, response, userRepository, auditLogRepository, currentUser, userId);
             return;
         }
         if ("delete-mo".equals(action)) {
@@ -141,6 +155,96 @@ public class AdminUsersServlet extends HttpServlet {
                     request.getRemoteAddr(), detail);
             redirect(response, request, "error", detail);
         }
+    }
+
+    private void handleCreateTA(HttpServletRequest request, HttpServletResponse response,
+                                AuthService authService, AuditLogRepository auditLogRepository,
+                                User currentUser) throws IOException {
+        String username = trim(request.getParameter("taUsername"));
+        String password = trim(request.getParameter("taPassword"));
+        String email = trim(request.getParameter("taEmail"));
+        String fullName = trim(request.getParameter("taFullName"));
+        String studentId = trim(request.getParameter("studentId"));
+        String department = trim(request.getParameter("taDepartment"));
+        String major = trim(request.getParameter("major"));
+        String assignedModule = trim(request.getParameter("assignedModule"));
+
+        String outcome = "FAILED";
+        String detail;
+        try {
+            if (isBlank(username) || isBlank(password) || isBlank(email)
+                    || isBlank(fullName) || isBlank(studentId)
+                    || isBlank(department) || isBlank(major)) {
+                throw new IllegalArgumentException("All TA fields are required.");
+            }
+            if (!email.contains("@")) {
+                throw new IllegalArgumentException("A valid email address is required.");
+            }
+            TA ta = authService.registerTA(
+                    username, password, email, fullName, studentId, department, major);
+            ta.setAssignedModule(assignedModule);
+            ((UserRepository) getServletContext().getAttribute("userRepository")).saveTA(ta);
+            outcome = "SUCCESS";
+            detail = "Created TA account " + ta.getUsername();
+            writeAudit(auditLogRepository, currentUser, "TA_CREATED", outcome,
+                    request.getRemoteAddr(), detail);
+            redirect(response, request, "message", detail);
+        } catch (Exception e) {
+            detail = e.getMessage();
+            writeAudit(auditLogRepository, currentUser, "TA_CREATED", outcome,
+                    request.getRemoteAddr(), detail);
+            redirect(response, request, "error", detail);
+        }
+    }
+
+    private void handleUpdateTA(HttpServletRequest request, HttpServletResponse response,
+                                UserRepository userRepository, AuditLogRepository auditLogRepository,
+                                User currentUser, String userId) throws IOException {
+        String outcome = "FAILED";
+        String detail;
+        try {
+            TA ta = userRepository.findTAById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("TA account not found."));
+            String email = trim(request.getParameter("email"));
+            if (!isBlank(email) && !email.equals(ta.getEmail())
+                    && userRepository.emailExists(email)) {
+                throw new IllegalArgumentException("Email already registered: " + email);
+            }
+            ta.setFullName(trim(request.getParameter("fullName")));
+            ta.setEmail(email);
+            ta.setDepartment(trim(request.getParameter("department")));
+            ta.setMajor(trim(request.getParameter("major")));
+            ta.setAssignedModule(trim(request.getParameter("assignedModule")));
+            userRepository.saveTA(ta);
+            outcome = "SUCCESS";
+            detail = "Updated TA account " + ta.getUsername();
+            writeAudit(auditLogRepository, currentUser, "TA_UPDATED", outcome,
+                    request.getRemoteAddr(), detail);
+            redirect(response, request, "message", detail);
+        } catch (Exception e) {
+            detail = e.getMessage();
+            writeAudit(auditLogRepository, currentUser, "TA_UPDATED", outcome,
+                    request.getRemoteAddr(), detail);
+            redirect(response, request, "error", detail);
+        }
+    }
+
+    private void handleDeleteTA(HttpServletRequest request, HttpServletResponse response,
+                                UserRepository userRepository, AuditLogRepository auditLogRepository,
+                                User currentUser, String userId) throws IOException {
+        Optional<TA> target = userRepository.findTAById(userId);
+        String outcome = "FAILED";
+        String detail = "TA account not found.";
+        if (target.isPresent()) {
+            boolean deleted = userRepository.deleteTA(userId);
+            if (deleted) {
+                outcome = "SUCCESS";
+                detail = "Deleted TA account " + target.get().getUsername();
+            }
+        }
+        writeAudit(auditLogRepository, currentUser, "TA_DELETED", outcome,
+                request.getRemoteAddr(), detail);
+        redirect(response, request, "SUCCESS".equals(outcome) ? "message" : "error", detail);
     }
 
     private void handleDeleteMO(HttpServletRequest request, HttpServletResponse response,

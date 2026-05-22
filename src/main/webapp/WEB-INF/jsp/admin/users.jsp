@@ -98,6 +98,47 @@
         </form>
     </section>
 
+    <section class="panel">
+        <h2 class="panel-title">Add Teaching Assistant</h2>
+        <p class="panel-subtitle">Create TA accounts from the admin portal. The new TA can sign in immediately after creation.</p>
+        <form class="mo-form" method="post" action="${pageContext.request.contextPath}/admin/users">
+            <input type="hidden" name="action" value="create-ta">
+            <div>
+                <label>Username</label>
+                <input type="text" name="taUsername" required maxlength="50">
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" name="taPassword" required minlength="6">
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="email" name="taEmail" required maxlength="120">
+            </div>
+            <div>
+                <label>Full Name</label>
+                <input type="text" name="taFullName" required maxlength="100">
+            </div>
+            <div>
+                <label>Student ID</label>
+                <input type="text" name="studentId" required maxlength="50">
+            </div>
+            <div>
+                <label>Department</label>
+                <input type="text" name="taDepartment" required maxlength="100">
+            </div>
+            <div>
+                <label>Major</label>
+                <input type="text" name="major" required maxlength="100">
+            </div>
+            <div>
+                <label>Assigned Module</label>
+                <input type="text" name="assignedModule" maxlength="30" placeholder="e.g. EBU6304">
+            </div>
+            <button class="btn" type="submit">Add TA</button>
+        </form>
+    </section>
+
 <section class="panel">
 
         <div class="search-container" style="margin-bottom: 20px;">
@@ -149,11 +190,47 @@
                                 <button class="btn danger" name="action" value="delete-mo" type="submit">Delete MO</button>
                             </form>
                         </c:if>
+                        <c:if test="${user.role == 'TA'}">
+                            <form method="post" action="${pageContext.request.contextPath}/admin/users"
+                                  onsubmit="return confirm('Delete this TA account? Existing applications and workload records will remain for reporting.');">
+                                <input type="hidden" name="userId" value="${user.userId}">
+                                <button class="btn danger" name="action" value="delete-ta" type="submit">Delete TA</button>
+                            </form>
+                        </c:if>
                         </div>
                     </td>
                 </tr>
             </c:forEach>
             <c:if test="${empty users}"><tr><td colspan="6">No users match the filters.</td></tr></c:if>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="panel">
+        <h2 class="panel-title">Edit Teaching Assistant Accounts</h2>
+        <p class="panel-subtitle">Maintain TA profile fields controlled by administrators.</p>
+        <table>
+            <thead><tr><th>Username</th><th>Student ID</th><th>Name</th><th>Email</th><th>Department</th><th>Major</th><th>Module</th><th>Action</th></tr></thead>
+            <tbody>
+            <c:forEach var="ta" items="${tas}">
+                <tr>
+                    <td>
+                        <form id="editTa${ta.userId}" method="post" action="${pageContext.request.contextPath}/admin/users">
+                            <input type="hidden" name="action" value="update-ta">
+                            <input type="hidden" name="userId" value="${ta.userId}">
+                        </form>
+                        ${ta.username}
+                    </td>
+                    <td>${ta.studentId}</td>
+                    <td><input form="editTa${ta.userId}" type="text" name="fullName" value="${ta.fullName}" required></td>
+                    <td><input form="editTa${ta.userId}" type="email" name="email" value="${ta.email}" required></td>
+                    <td><input form="editTa${ta.userId}" type="text" name="department" value="${ta.department}" required></td>
+                    <td><input form="editTa${ta.userId}" type="text" name="major" value="${ta.major}" required></td>
+                    <td><input form="editTa${ta.userId}" type="text" name="assignedModule" value="${ta.assignedModule}"></td>
+                    <td><button form="editTa${ta.userId}" class="btn" type="submit">Save</button></td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty tas}"><tr><td colspan="8">No TA accounts found.</td></tr></c:if>
             </tbody>
         </table>
     </section>

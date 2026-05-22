@@ -159,6 +159,81 @@ class AdminUsersServletTest {
     }
 
     @Test
+    void createTARegistersAccountAndStoresAssignedModule() throws Exception {
+        AdminServletTestSupport.withCurrentUser(request, admin);
+        TA created = new TA("TA999", "new.ta", "hash", "new.ta@example.com",
+                "New TA", "S999", "EECS", "CS");
+        when(request.getParameter("action")).thenReturn("create-ta");
+        when(request.getParameter("taUsername")).thenReturn("new.ta");
+        when(request.getParameter("taPassword")).thenReturn("valid123");
+        when(request.getParameter("taEmail")).thenReturn("new.ta@example.com");
+        when(request.getParameter("taFullName")).thenReturn("New TA");
+        when(request.getParameter("studentId")).thenReturn("S999");
+        when(request.getParameter("taDepartment")).thenReturn("EECS");
+        when(request.getParameter("major")).thenReturn("CS");
+        when(request.getParameter("assignedModule")).thenReturn("EBU6304");
+        when(request.getContextPath()).thenReturn("");
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+        when(authService.registerTA("new.ta", "valid123", "new.ta@example.com",
+                "New TA", "S999", "EECS", "CS")).thenReturn(created);
+
+        servlet.doPost(request, response);
+
+        ArgumentCaptor<TA> taCaptor = ArgumentCaptor.forClass(TA.class);
+        verify(userRepository).saveTA(taCaptor.capture());
+        assertEquals("EBU6304", taCaptor.getValue().getAssignedModule());
+        verify(response).sendRedirect(contains("/admin/users?message=Created+TA+account+new.ta"));
+        AuditLogEntry audit = captureAudit();
+        assertEquals("TA_CREATED", audit.getAction());
+        assertEquals("SUCCESS", audit.getOutcome());
+    }
+
+    @Test
+    void updateTAChangesAdminManagedProfileFields() throws Exception {
+        AdminServletTestSupport.withCurrentUser(request, admin);
+        TA ta = new TA("TA100", "ta.update", "hash", "old@example.com",
+                "Old TA", "S100", "Old Dept", "Old Major");
+        when(request.getParameter("action")).thenReturn("update-ta");
+        when(request.getParameter("userId")).thenReturn("TA100");
+        when(request.getParameter("fullName")).thenReturn("Updated TA");
+        when(request.getParameter("email")).thenReturn("updated@example.com");
+        when(request.getParameter("department")).thenReturn("EECS");
+        when(request.getParameter("major")).thenReturn("Software");
+        when(request.getParameter("assignedModule")).thenReturn("EBU6405");
+        when(request.getContextPath()).thenReturn("");
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+        when(userRepository.findTAById("TA100")).thenReturn(Optional.of(ta));
+        when(userRepository.emailExists("updated@example.com")).thenReturn(false);
+
+        servlet.doPost(request, response);
+
+        verify(userRepository).saveTA(ta);
+        assertEquals("Updated TA", ta.getFullName());
+        assertEquals("updated@example.com", ta.getEmail());
+        assertEquals("EBU6405", ta.getAssignedModule());
+        assertEquals("TA_UPDATED", captureAudit().getAction());
+    }
+
+    @Test
+    void deleteTADeletesExistingAccount() throws Exception {
+        AdminServletTestSupport.withCurrentUser(request, admin);
+        TA ta = new TA("TA101", "ta.delete", "hash", "delete@example.com",
+                "Delete TA", "S101", "EECS", "CS");
+        when(request.getParameter("action")).thenReturn("delete-ta");
+        when(request.getParameter("userId")).thenReturn("TA101");
+        when(request.getContextPath()).thenReturn("");
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+        when(userRepository.findTAById("TA101")).thenReturn(Optional.of(ta));
+        when(userRepository.deleteTA("TA101")).thenReturn(true);
+
+        servlet.doPost(request, response);
+
+        verify(userRepository).deleteTA("TA101");
+        verify(response).sendRedirect(contains("/admin/users?message=Deleted+TA+account+ta.delete"));
+        assertEquals("TA_DELETED", captureAudit().getAction());
+    }
+
+    @Test
     void deleteMODeletesExistingMOAndWritesAudit() throws Exception {
         AdminServletTestSupport.withCurrentUser(request, admin);
         ModuleOrganiser existingMo = mo("MO003", "old.mo");

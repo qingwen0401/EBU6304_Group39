@@ -5,6 +5,7 @@ import com.ebu6304.recruitment.models.WorkloadRecord;
 import com.ebu6304.recruitment.repositories.UserRepository;
 import com.ebu6304.recruitment.repositories.WorkloadConfigRepository;
 import com.ebu6304.recruitment.repositories.WorkloadRepository;
+import com.ebu6304.recruitment.utils.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -245,6 +246,56 @@ public class WorkloadService {
         return workloadRepository.findAll();
     }
 
+    public WorkloadRecord assignAdminTask(String taId, String jobTitle, String moduleCode,
+                                          String moId, int weeklyHours, String semester) {
+        if (weeklyHours < 1 || weeklyHours > 80) {
+            throw new IllegalArgumentException("Weekly hours must be between 1 and 80.");
+        }
+        TA ta = userRepository.findTAById(taId)
+                .orElseThrow(() -> new IllegalArgumentException("TA account not found."));
+        String recordId = IdGenerator.generateWorkloadId();
+        String title = isBlank(jobTitle) ? "Admin assigned task" : jobTitle.trim();
+        String module = isBlank(moduleCode) ? "ADMIN" : moduleCode.trim();
+        String term = isBlank(semester) ? "2026 Spring" : semester.trim();
+        WorkloadRecord record = new WorkloadRecord(
+                recordId,
+                ta.getUserId(),
+                emptyFallback(ta.getFullName(), ta.getUsername()),
+                "ADMIN_TASK_" + recordId,
+                title,
+                module,
+                isBlank(moId) ? "ADMIN" : moId.trim(),
+                weeklyHours,
+                term,
+                "ADMIN_ASSIGNMENT"
+        );
+        workloadRepository.save(record);
+        return record;
+    }
+
+    public WorkloadRecord updateWorkloadRecord(String recordId, String taId,
+                                               String jobTitle, String moduleCode,
+                                               String moId, int weeklyHours,
+                                               String semester, String status) {
+        if (weeklyHours < 1 || weeklyHours > 80) {
+            throw new IllegalArgumentException("Weekly hours must be between 1 and 80.");
+        }
+        WorkloadRecord record = workloadRepository.findById(recordId)
+                .orElseThrow(() -> new IllegalArgumentException("Workload record not found."));
+        TA ta = userRepository.findTAById(taId)
+                .orElseThrow(() -> new IllegalArgumentException("TA account not found."));
+        record.setTaId(ta.getUserId());
+        record.setTaName(emptyFallback(ta.getFullName(), ta.getUsername()));
+        record.setJobTitle(isBlank(jobTitle) ? record.getJobTitle() : jobTitle.trim());
+        record.setModuleCode(isBlank(moduleCode) ? record.getModuleCode() : moduleCode.trim());
+        record.setMoId(isBlank(moId) ? record.getMoId() : moId.trim());
+        record.setWeeklyHours(weeklyHours);
+        record.setSemester(isBlank(semester) ? record.getSemester() : semester.trim());
+        record.setStatus(normalizeStatus(status));
+        workloadRepository.save(record);
+        return record;
+    }
+
     public int getMaxWeeklyHours() {
         return workloadConfigRepository.getConfig().getMaxWeeklyHours();
     }
@@ -273,5 +324,20 @@ public class WorkloadService {
         if (hours <= getWarningWeeklyHours()) return "NORMAL";
         if (hours <= getMaxWeeklyHours()) return "WARNING";
         return "OVERLOADED";
+    }
+
+    private String normalizeStatus(String status) {
+        if ("COMPLETED".equals(status) || "CANCELLED".equals(status)) {
+            return status;
+        }
+        return "ACTIVE";
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    private String emptyFallback(String value, String fallback) {
+        return isBlank(value) ? fallback : value;
     }
 }

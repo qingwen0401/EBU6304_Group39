@@ -62,6 +62,9 @@
     <div class="register-link">
         Don't have an account? <a href="${pageContext.request.contextPath}/register">Register as TA</a>
     </div>
+    <div class="register-link">
+        Admin forgot password? <a href="${pageContext.request.contextPath}/password-reset">Reset admin password</a>
+    </div>
     <p class="hint">MO and Admin accounts are created by the system administrator.</p>
 </div>
 </body>

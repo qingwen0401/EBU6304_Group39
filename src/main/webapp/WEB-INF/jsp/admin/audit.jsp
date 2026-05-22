@@ -57,6 +57,13 @@
                 <option value="USER_STATUS_UPDATE" ${selectedAction == 'USER_STATUS_UPDATE' ? 'selected' : ''}>USER_STATUS_UPDATE</option>
                 <option value="MO_CREATED" ${selectedAction == 'MO_CREATED' ? 'selected' : ''}>MO_CREATED</option>
                 <option value="MO_DELETED" ${selectedAction == 'MO_DELETED' ? 'selected' : ''}>MO_DELETED</option>
+                <option value="TA_CREATED" ${selectedAction == 'TA_CREATED' ? 'selected' : ''}>TA_CREATED</option>
+                <option value="TA_UPDATED" ${selectedAction == 'TA_UPDATED' ? 'selected' : ''}>TA_UPDATED</option>
+                <option value="TA_DELETED" ${selectedAction == 'TA_DELETED' ? 'selected' : ''}>TA_DELETED</option>
+                <option value="ASSIGN_WORKLOAD" ${selectedAction == 'ASSIGN_WORKLOAD' ? 'selected' : ''}>ASSIGN_WORKLOAD</option>
+                <option value="UPDATE_WORKLOAD" ${selectedAction == 'UPDATE_WORKLOAD' ? 'selected' : ''}>UPDATE_WORKLOAD</option>
+                <option value="PASSWORD_RESET_REQUEST" ${selectedAction == 'PASSWORD_RESET_REQUEST' ? 'selected' : ''}>PASSWORD_RESET_REQUEST</option>
+                <option value="PASSWORD_RESET_COMPLETE" ${selectedAction == 'PASSWORD_RESET_COMPLETE' ? 'selected' : ''}>PASSWORD_RESET_COMPLETE</option>
             </select></div>
             <div><label>Role</label><select name="role">
                 <option value="">All roles</option><option value="TA" ${selectedRole == 'TA' ? 'selected' : ''}>TA</option>

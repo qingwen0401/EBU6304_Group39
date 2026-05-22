@@ -131,6 +131,55 @@
 
     <section class="panel">
         <div class="panel-header">
+            <h2 class="panel-title">Recruitment Distribution</h2>
+            <a class="link" href="${pageContext.request.contextPath}/admin/jobs">Review jobs</a>
+        </div>
+        <table>
+            <thead><tr><th>Module</th><th>Jobs</th><th>Vacancies</th><th>Filled</th><th>Applications</th><th>Accepted</th></tr></thead>
+            <tbody>
+            <c:forEach var="row" items="${recruitmentDistribution}">
+                <tr>
+                    <td>${row.module}</td>
+                    <td>${row.jobCount}</td>
+                    <td>${row.vacancies}</td>
+                    <td>${row.filled}</td>
+                    <td>${row.applicationCount}</td>
+                    <td><span class="badge ok">${row.acceptedCount}</span></td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty recruitmentDistribution}">
+                <tr><td colspan="6">No recruitment records found.</td></tr>
+            </c:if>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Recent Login Activity</h2>
+            <a class="link" href="${pageContext.request.contextPath}/admin/audit?action=LOGIN">Open login log</a>
+        </div>
+        <table>
+            <thead><tr><th>Time</th><th>Account</th><th>Role</th><th>Outcome</th><th>Details</th></tr></thead>
+            <tbody>
+            <c:forEach var="entry" items="${recentLoginActivity}">
+                <tr>
+                    <td>${entry.timestamp}</td>
+                    <td>${entry.username}</td>
+                    <td>${entry.role}</td>
+                    <td><span class="badge ${entry.outcome == 'FAILED' ? 'danger' : 'ok'}">${entry.outcome}</span></td>
+                    <td>${entry.details}</td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty recentLoginActivity}">
+                <tr><td colspan="5">No login activity found.</td></tr>
+            </c:if>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
             <h2 class="panel-title">Recent Audit Activity</h2>
             <a class="link" href="${pageContext.request.contextPath}/admin/audit">Open audit log</a>
         </div>
