@@ -117,4 +117,55 @@ public class NotificationServiceTest {
 
         assertEquals(1, unreadCount);
     }
+
+    @Test
+    public void createApplicationAcceptedNotificationShouldIncludeReviewNote() {
+        Application application = new Application(
+                "APP002", "TA002", "Bob Lee",
+                "JOB002", "Lab TA", "MO002", "cover");
+        application.accept("Strong candidate");
+
+        Notification notification =
+                notificationService.createApplicationAcceptedNotification(application);
+
+        assertEquals(Notification.TYPE_APPLICATION_ACCEPTED, notification.getType());
+        assertEquals("TA002", notification.getRecipientUserId());
+        assertEquals("APP002", notification.getRelatedEntityId());
+        assertTrue(notification.getMessage().contains("Lab TA"));
+        assertTrue(notification.getMessage().contains("Strong candidate"));
+    }
+
+    @Test
+    public void createApplicationRejectedNotificationShouldIncludeReviewNote() {
+        Application application = new Application(
+                "APP003", "TA003", "Carol Wu",
+                "JOB003", "Tutorial TA", "MO003", "cover");
+        application.reject("GPA below requirement");
+
+        Notification notification =
+                notificationService.createApplicationRejectedNotification(application);
+
+        assertEquals(Notification.TYPE_APPLICATION_REJECTED, notification.getType());
+        assertTrue(notification.getMessage().contains("GPA below requirement"));
+    }
+
+    @Test
+    public void hasWorkloadWarningBeenSentShouldReturnTrueAfterWarningCreated() {
+        notificationService.createWorkloadWarning(
+                "TA010", "Test TA", 25, 20, "2026 Spring");
+
+        assertTrue(notificationService.hasWorkloadWarningBeenSent("TA010", "2026 Spring"));
+        assertEquals(1, notificationService.countWorkloadWarningsForTa("TA010", "2026 Spring"));
+        assertFalse(notificationService.getLastWorkloadWarningTime("TA010", "2026 Spring").isEmpty());
+    }
+
+    @Test
+    public void createWorkloadWarningShouldUseSemesterScopedRelatedId() {
+        Notification notification = notificationService.createWorkloadWarning(
+                "TA011", "Test TA", 22, 20, "2026 Spring");
+
+        assertEquals(
+                NotificationRepository.buildWorkloadRelatedId("TA011", "2026 Spring"),
+                notification.getRelatedEntityId());
+    }
 }

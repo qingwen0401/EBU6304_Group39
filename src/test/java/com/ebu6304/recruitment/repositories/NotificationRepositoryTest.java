@@ -126,6 +126,46 @@ public class NotificationRepositoryTest {
     }
 
     @Test
+    public void findWorkloadWarningsForTaShouldMatchNewRelatedIdFormat() {
+        Notification warning = new Notification(
+                "NOT006",
+                "TA002",
+                "TA",
+                Notification.TYPE_WORKLOAD_WARNING,
+                "Workload Overload Warning",
+                "Your current workload in 2026 Spring is 30 hours per week.",
+                NotificationRepository.buildWorkloadRelatedId("TA002", "2026 Spring")
+        );
+        notificationRepository.save(warning);
+
+        List<Notification> results =
+                notificationRepository.findWorkloadWarningsForTa("TA002", "2026 Spring");
+
+        assertEquals(1, results.size());
+        assertEquals("NOT006", results.get(0).getNotificationId());
+    }
+
+    @Test
+    public void findWorkloadWarningsForTaShouldMatchLegacyRelatedIdAndMessage() {
+        Notification legacy = new Notification(
+                "NOT007",
+                "TA002",
+                "TA",
+                Notification.TYPE_WORKLOAD_WARNING,
+                "Workload Overload Warning",
+                "Your current workload in 2026 Autumn is 28 hours per week.",
+                "TA002"
+        );
+        notificationRepository.save(legacy);
+
+        List<Notification> results =
+                notificationRepository.findWorkloadWarningsForTa("TA002", "2026 Autumn");
+
+        assertEquals(1, results.size());
+        assertEquals("NOT007", results.get(0).getNotificationId());
+    }
+
+    @Test
     public void markAsReadShouldUpdateReadStatus() {
         Notification notification = new Notification(
                 "NOT005",
