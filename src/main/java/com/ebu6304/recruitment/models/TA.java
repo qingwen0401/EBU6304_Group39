@@ -30,6 +30,9 @@ public class TA extends User {
     /** 专业 */
     private String major;
 
+    /** 管理员维护的主要所属模块 */
+    private String assignedModule;
+
     /** 年级（如 "Year 3", "Postgraduate"） */
     private String year;
 
@@ -175,6 +178,9 @@ public class TA extends User {
 
     public String getMajor() { return major; }
     public void setMajor(String major) { this.major = major; }
+
+    public String getAssignedModule() { return assignedModule; }
+    public void setAssignedModule(String assignedModule) { this.assignedModule = assignedModule; }
 
     public String getYear() { return year; }
     public void setYear(String year) { this.year = year; }

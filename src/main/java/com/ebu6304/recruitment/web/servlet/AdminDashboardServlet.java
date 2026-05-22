@@ -22,6 +22,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AdminDashboardServlet extends HttpServlet {
 
@@ -93,11 +96,59 @@ public class AdminDashboardServlet extends HttpServlet {
         request.setAttribute("maxWeeklyHours", workloadService.getMaxWeeklyHours());
         request.setAttribute("recentJobs", jobs.stream().limit(5).toList());
         request.setAttribute("recentWorkloadRecords", workloadRecords.stream().limit(5).toList());
+        request.setAttribute("recruitmentDistribution", buildRecruitmentDistribution(jobs, applications));
 
         List<AuditLogEntry> recentAudit = auditLogRepository == null
                 ? Collections.emptyList() : auditLogRepository.findAll().stream().limit(5).toList();
         request.setAttribute("recentAudit", recentAudit);
+        List<AuditLogEntry> recentLoginActivity = auditLogRepository == null
+                ? Collections.emptyList()
+                : auditLogRepository.findByFilters("LOGIN", "", "").stream().limit(8).toList();
+        request.setAttribute("recentLoginActivity", recentLoginActivity);
 
         request.getRequestDispatcher("/WEB-INF/jsp/admin/dashboard.jsp").forward(request, response);
+    }
+
+    private List<Map<String, Object>> buildRecruitmentDistribution(List<JobPosting> jobs,
+                                                                   List<Application> applications) {
+        Map<String, Map<String, Object>> distribution = new TreeMap<>();
+        Map<String, JobPosting> jobsById = jobs.stream()
+                .collect(Collectors.toMap(JobPosting::getJobId, Function.identity(), (a, b) -> a));
+
+        for (JobPosting job : jobs) {
+            String module = emptyFallback(job.getModuleCode(), "Unknown");
+            Map<String, Object> row = distribution.computeIfAbsent(module, this::newDistributionRow);
+            row.put("jobCount", (Integer) row.get("jobCount") + 1);
+            row.put("vacancies", (Integer) row.get("vacancies") + job.getVacancies());
+            row.put("filled", (Integer) row.get("filled") + job.getFilledCount());
+        }
+
+        for (Application application : applications) {
+            JobPosting job = jobsById.get(application.getJobId());
+            String module = emptyFallback(application.getModuleCode(),
+                    job == null ? "Unknown" : job.getModuleCode());
+            Map<String, Object> row = distribution.computeIfAbsent(module, this::newDistributionRow);
+            row.put("applicationCount", (Integer) row.get("applicationCount") + 1);
+            if (Application.STATUS_ACCEPTED.equals(application.getStatus())) {
+                row.put("acceptedCount", (Integer) row.get("acceptedCount") + 1);
+            }
+        }
+
+        return distribution.values().stream().toList();
+    }
+
+    private Map<String, Object> newDistributionRow(String module) {
+        Map<String, Object> row = new HashMap<>();
+        row.put("module", module);
+        row.put("jobCount", 0);
+        row.put("vacancies", 0);
+        row.put("filled", 0);
+        row.put("applicationCount", 0);
+        row.put("acceptedCount", 0);
+        return row;
+    }
+
+    private String emptyFallback(String value, String fallback) {
+        return value == null || value.trim().isEmpty() ? fallback : value;
     }
 }

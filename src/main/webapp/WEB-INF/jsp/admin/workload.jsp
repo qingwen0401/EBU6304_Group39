@@ -275,6 +275,12 @@
     <c:if test="${param.notified == '2'}">
         <div class="notice">Workload has been force cancelled and notifications sent to TA and MO.</div>
     </c:if>
+    <c:if test="${param.notified == '3'}">
+        <div class="notice">Workload task has been assigned.</div>
+    </c:if>
+    <c:if test="${param.notified == '4'}">
+        <div class="notice">Workload assignment has been updated.</div>
+    </c:if>
     <c:if test="${param.notified == '0'}">
         <div class="notice error">Failed to send notification. Please try again.</div>
     </c:if>
@@ -346,6 +352,60 @@
             </div>
             <button class="btn secondary" type="submit">Save Threshold</button>
         </form>
+
+        <form class="toolbar" method="post" action="${pageContext.request.contextPath}/admin/workload">
+            <input type="hidden" name="action" value="assignTask">
+            <div>
+                <label>Assign TA</label>
+                <select name="taId" required>
+                    <c:forEach var="taOption" items="${allTAs}">
+                        <option value="${taOption.userId}">${taOption.fullName} (${taOption.username})</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div>
+                <label>Task</label>
+                <input type="text" name="jobTitle" required placeholder="Lab support">
+            </div>
+            <div>
+                <label>Module</label>
+                <input type="text" name="moduleCode" required placeholder="EBU6304">
+            </div>
+            <div>
+                <label>Term</label>
+                <input type="text" name="semester" value="${semester}" required>
+            </div>
+            <div>
+                <label>Hours</label>
+                <input type="number" name="weeklyHours" min="1" max="80" required>
+            </div>
+            <div>
+                <label>MO Owner</label>
+                <select name="moId">
+                    <option value="">Admin managed</option>
+                    <c:forEach var="moOption" items="${allMOs}">
+                        <option value="${moOption.userId}">${moOption.fullName} (${moOption.moduleCode})</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <button class="btn secondary" type="submit">Assign Task</button>
+        </form>
+    </section>
+
+    <section class="panel">
+        <div class="stat-label">Fairness Visualization</div>
+        <c:forEach var="ta" items="${workloadReport}">
+            <div style="display:grid; grid-template-columns:180px 1fr 90px; gap:12px; align-items:center; margin:10px 0;">
+                <div style="font-size:13px; font-weight:700;">${ta.taName}</div>
+                <div style="height:14px; background:#e2e8f0; border-radius:999px; overflow:hidden;">
+                    <div style="height:14px; width:${ta.totalWeeklyHours * 100 / (maxWeeklyHours > 0 ? maxWeeklyHours : 1)}%; max-width:100%; background:${ta.workloadStatus == 'OVERLOADED' ? '#dc2626' : ta.workloadStatus == 'WARNING' ? '#ea580c' : '#2563eb'};"></div>
+                </div>
+                <div style="font-size:13px;">${ta.totalWeeklyHours} hrs</div>
+            </div>
+        </c:forEach>
+        <c:if test="${empty workloadReport}">
+            <p style="color:#64748b;">No workload data available for the selected filters.</p>
+        </c:if>
     </section>
 
     <section class="panel">
@@ -431,6 +491,7 @@
                 <th>Term</th>
                 <th>Hours</th>
                 <th>Status</th>
+                <th>Adjust</th>
             </tr>
             </thead>
             <tbody>
@@ -443,10 +504,37 @@
                     <td>${record.semester}</td>
                     <td>${record.weeklyHours}</td>
                     <td><span class="badge">${record.status}</span></td>
+                    <td>
+                        <form id="editWorkload${record.recordId}" method="post" action="${pageContext.request.contextPath}/admin/workload">
+                            <input type="hidden" name="action" value="updateTask">
+                            <input type="hidden" name="recordId" value="${record.recordId}">
+                        </form>
+                        <select form="editWorkload${record.recordId}" name="taId" style="margin-bottom:6px;">
+                            <c:forEach var="taOption" items="${allTAs}">
+                                <option value="${taOption.userId}" ${taOption.userId == record.taId ? 'selected' : ''}>${taOption.fullName}</option>
+                            </c:forEach>
+                        </select>
+                        <input form="editWorkload${record.recordId}" type="text" name="jobTitle" value="${record.jobTitle}" style="margin-bottom:6px;">
+                        <input form="editWorkload${record.recordId}" type="text" name="moduleCode" value="${record.moduleCode}" style="margin-bottom:6px;">
+                        <input form="editWorkload${record.recordId}" type="text" name="semester" value="${record.semester}" style="margin-bottom:6px;">
+                        <input form="editWorkload${record.recordId}" type="number" name="weeklyHours" min="1" max="80" value="${record.weeklyHours}" style="margin-bottom:6px;">
+                        <select form="editWorkload${record.recordId}" name="recordStatus" style="margin-bottom:6px;">
+                            <option value="ACTIVE" ${record.status == 'ACTIVE' ? 'selected' : ''}>ACTIVE</option>
+                            <option value="COMPLETED" ${record.status == 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
+                            <option value="CANCELLED" ${record.status == 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+                        </select>
+                        <select form="editWorkload${record.recordId}" name="moId" style="margin-bottom:6px;">
+                            <option value="ADMIN" ${record.moId == 'ADMIN' ? 'selected' : ''}>Admin managed</option>
+                            <c:forEach var="moOption" items="${allMOs}">
+                                <option value="${moOption.userId}" ${moOption.userId == record.moId ? 'selected' : ''}>${moOption.fullName}</option>
+                            </c:forEach>
+                        </select>
+                        <button form="editWorkload${record.recordId}" class="btn" type="submit">Save</button>
+                    </td>
                 </tr>
             </c:forEach>
             <c:if test="${empty records}">
-                <tr><td colspan="7">No historical workload records found.</td></tr>
+                <tr><td colspan="8">No historical workload records found.</td></tr>
             </c:if>
             </tbody>
         </table>

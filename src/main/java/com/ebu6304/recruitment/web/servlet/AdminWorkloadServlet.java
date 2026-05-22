@@ -66,6 +66,8 @@ public class AdminWorkloadServlet extends HttpServlet {
         request.setAttribute("selectedStatus", status);
         request.setAttribute("semesterOptions", collectSemesters(allRecords));
         request.setAttribute("moduleOptions", collectModules(allRecords));
+        request.setAttribute("allTAs", userRepository.findAllTAs());
+        request.setAttribute("allMOs", userRepository.findAllMOs());
         request.setAttribute("maxWeeklyHours", workloadService.getMaxWeeklyHours());
         request.setAttribute("warningWeeklyHours", workloadService.getWarningWeeklyHours());
         request.setAttribute("fairnessIndex", calculateFairnessIndex(workloadReport));
@@ -85,7 +87,13 @@ public class AdminWorkloadServlet extends HttpServlet {
         User currentUser = (User) request.getSession().getAttribute("currentUser");
 
         String action = request.getParameter("action");
-        if ("notifyOverload".equals(action)) {
+        if ("assignTask".equals(action)) {
+            handleAssignTask(request, response, workloadService, auditLogRepository, currentUser);
+            return;
+        } else if ("updateTask".equals(action)) {
+            handleUpdateTask(request, response, workloadService, auditLogRepository, currentUser);
+            return;
+        } else if ("notifyOverload".equals(action)) {
             handleNotifyOverload(request, response, workloadService, auditLogRepository, currentUser);
             return;
         } else if ("forceCancel".equals(action)) {
@@ -193,6 +201,7 @@ public class AdminWorkloadServlet extends HttpServlet {
             row.put("taId", ta.getUserId());
             row.put("taName", emptyFallback(ta.getFullName(), ta.getUsername()));
             row.put("studentId", ta.getStudentId());
+            row.put("semester", semester);
             row.put("totalWeeklyHours", activeHours);
             row.put("jobCount", records.stream().filter(r -> "ACTIVE".equals(r.getStatus())).count());
             row.put("records", records);
@@ -273,7 +282,7 @@ public class AdminWorkloadServlet extends HttpServlet {
         response.setHeader("Content-Disposition", "attachment; filename=admin-workload-report.csv");
 
         StringBuilder csv = new StringBuilder();
-        csv.append("TA Name,Student ID,Modules,Active Jobs,Weekly Hours,Threshold,Status\n");
+        csv.append("TA Name,Student ID,Modules,Active Jobs,Weekly Hours,Threshold,Status,Semester\n");
 
         for (Map<String, Object> row : report) {
             csv.append(csv(row.get("taName"))).append(',')
@@ -282,7 +291,8 @@ public class AdminWorkloadServlet extends HttpServlet {
                     .append(row.get("jobCount")).append(',')
                     .append(row.get("totalWeeklyHours")).append(',')
                     .append(threshold).append(',')
-                    .append(csv(row.get("workloadStatus"))).append('\n');
+                    .append(csv(row.get("workloadStatus"))).append(',')
+                    .append(csv(row.get("semester"))).append('\n');
         }
 
         response.getOutputStream().write(csv.toString().getBytes(StandardCharsets.UTF_8));
@@ -338,6 +348,69 @@ public class AdminWorkloadServlet extends HttpServlet {
 
     private String emptyFallback(String value, String fallback) {
         return isBlank(value) ? fallback : value;
+    }
+
+    private void handleAssignTask(HttpServletRequest request, HttpServletResponse response,
+                                  WorkloadService workloadService,
+                                  AuditLogRepository auditLogRepository,
+                                  User currentUser) throws IOException {
+        String semester = defaultIfBlank(request.getParameter("semester"), "2026 Spring");
+        try {
+            String taId = trim(request.getParameter("taId"));
+            String jobTitle = trim(request.getParameter("jobTitle"));
+            String moduleCode = trim(request.getParameter("moduleCode"));
+            String moId = trim(request.getParameter("moId"));
+            int weeklyHours = Integer.parseInt(request.getParameter("weeklyHours"));
+            WorkloadRecord record = workloadService.assignAdminTask(
+                    taId, jobTitle, moduleCode, moId, weeklyHours, semester);
+            if (auditLogRepository != null && currentUser != null) {
+                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
+                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
+                        "ASSIGN_WORKLOAD", "SUCCESS", request.getRemoteAddr(),
+                        "Assigned " + record.getWeeklyHours() + " hour(s) to " + record.getTaName()
+                                + " for " + record.getModuleCode() + "."));
+            }
+            response.sendRedirect(buildWorkloadRedirect(request, semester, "", "", "3", false));
+        } catch (Exception e) {
+            if (auditLogRepository != null && currentUser != null) {
+                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
+                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
+                        "ASSIGN_WORKLOAD", "FAILED", request.getRemoteAddr(), e.getMessage()));
+            }
+            response.sendRedirect(buildWorkloadRedirect(request, semester, "", "", "0", false));
+        }
+    }
+
+    private void handleUpdateTask(HttpServletRequest request, HttpServletResponse response,
+                                  WorkloadService workloadService,
+                                  AuditLogRepository auditLogRepository,
+                                  User currentUser) throws IOException {
+        String semester = defaultIfBlank(request.getParameter("semester"), "2026 Spring");
+        try {
+            WorkloadRecord record = workloadService.updateWorkloadRecord(
+                    trim(request.getParameter("recordId")),
+                    trim(request.getParameter("taId")),
+                    trim(request.getParameter("jobTitle")),
+                    trim(request.getParameter("moduleCode")),
+                    trim(request.getParameter("moId")),
+                    Integer.parseInt(request.getParameter("weeklyHours")),
+                    semester,
+                    trim(request.getParameter("recordStatus")));
+            if (auditLogRepository != null && currentUser != null) {
+                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
+                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
+                        "UPDATE_WORKLOAD", "SUCCESS", request.getRemoteAddr(),
+                        "Updated workload record " + record.getRecordId() + "."));
+            }
+            response.sendRedirect(buildWorkloadRedirect(request, semester, "", "", "4", false));
+        } catch (Exception e) {
+            if (auditLogRepository != null && currentUser != null) {
+                auditLogRepository.save(new AuditLogEntry("AUD" + System.currentTimeMillis(),
+                        currentUser.getUsername(), currentUser.getUserId(), currentUser.getRole(),
+                        "UPDATE_WORKLOAD", "FAILED", request.getRemoteAddr(), e.getMessage()));
+            }
+            response.sendRedirect(buildWorkloadRedirect(request, semester, "", "", "0", false));
+        }
     }
 
     private void handleForceCancel(HttpServletRequest request, HttpServletResponse response,
