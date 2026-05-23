@@ -1,5 +1,49 @@
 [
   {
+    "logId": "AUD1779543982582",
+    "timestamp": "2026-05-23T21:46:22.582832700",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779543935876",
+    "timestamp": "2026-05-23T21:45:35.876304500",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779543060370",
+    "timestamp": "2026-05-23T21:31:00.373308800",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779519345232",
+    "timestamp": "2026-05-23T14:55:45.233835200",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
     "logId": "AUD1779517895878",
     "timestamp": "2026-05-23T14:31:35.881692200",
     "username": "test_mo",
@@ -1287,8 +1331,8 @@
     "details": "User logged in."
   },
   {
-    "logId": "AUD1779519345232",
-    "timestamp": "2026-05-23T14:55:45.233835200",
+    "logId": "AUD1779544004009",
+    "timestamp": "2026-05-23T21:46:44.009557500",
     "username": "test_mo",
     "userId": "MO20260402141809001",
     "role": "MO",
