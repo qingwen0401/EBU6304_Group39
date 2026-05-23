@@ -258,4 +258,14 @@
         <url-pattern>/notifications/read</url-pattern>
     </servlet-mapping>
 
+    <!-- MO View TA Profile -->
+    <servlet>
+        <servlet-name>MOViewTAProfileServlet</servlet-name>
+        <servlet-class>com.ebu6304.recruitment.web.servlet.MOViewTAProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MOViewTAProfileServlet</servlet-name>
+        <url-pattern>/mo/view-ta</url-pattern>
+    </servlet-mapping>
+
 </web-app>
