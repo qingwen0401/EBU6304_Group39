@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AIMatchingServiceTest {
 
     @Test
-    @Disabled("需要有效的DeepSeek API密钥 - 手动运行时启用")
+    
     public void testMatchSkills_withValidApiKey() {
         AIMatchingService service = new AIMatchingService();
 
