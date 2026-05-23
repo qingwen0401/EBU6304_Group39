@@ -212,6 +212,30 @@ class AdminWorkloadServletTest {
     }
 
     @Test
+    void postNotifyOverloadResendRedirectsWithAgainFlag() throws Exception {
+        AdminServletTestSupport.withCurrentUser(request, admin);
+        when(request.getParameter("action")).thenReturn("notifyOverload");
+        when(request.getParameter("taId")).thenReturn("TA001");
+        when(request.getParameter("taName")).thenReturn("TA One");
+        when(request.getParameter("semester")).thenReturn("2026 Spring");
+        when(request.getParameter("totalWeeklyHours")).thenReturn("24");
+        when(request.getContextPath()).thenReturn("");
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+        when(workloadService.getMaxWeeklyHours()).thenReturn(20);
+        when(notificationService.hasWorkloadWarningBeenSent("TA001", "2026 Spring"))
+                .thenReturn(true);
+
+        servlet.doPost(request, response);
+
+        verify(notificationService).createWorkloadWarning("TA001", "TA One", 24, 20,
+                "2026 Spring");
+        verify(response).sendRedirect(contains("again=1"));
+        AuditLogEntry audit = captureAudit();
+        assertEquals("SEND_NOTIFICATION", audit.getAction());
+        assertTrue(audit.getDetails().contains("reminder"));
+    }
+
+    @Test
     void postForceCancelRequiresThreeWarningsBeforeCancellingRecords() throws Exception {
         AdminServletTestSupport.withCurrentUser(request, admin);
         when(request.getParameter("action")).thenReturn("forceCancel");
