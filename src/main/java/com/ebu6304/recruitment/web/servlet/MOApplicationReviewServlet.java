@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * MO申请审查Servlet
@@ -59,26 +60,49 @@ public class MOApplicationReviewServlet extends HttpServlet {
         String moId = currentUser.getUserId();
         String jobId = request.getParameter("jobId");
 
-        // 获取该MO的所有职位的申请，如果提供了jobId则过滤
+        // 获取该MO的所有职位的申请
+        // 获取该MO的所有职位的申请
         ApplicationService applicationService = getApplicationService();
-        List<Application> applications = applicationService.getApplicationsByMo(moId);
+        // 套上一层 new ArrayList<>()，确保列表是可变的，这样才能调用 sort()
+        List<Application> applications = new ArrayList<>(applicationService.getApplicationsByMo(moId));
+
+        // 1. 如果提供了jobId则过滤
         if (jobId != null && !jobId.isEmpty()) {
             applications = applications.stream()
                     .filter(app -> jobId.equals(app.getJobId()))
-                    .toList();
+                    .collect(Collectors.toList()); // 这里用 collect 而不是 toList() 为了兼容性和后续可变
         }
 
-        // 按状态分类
+        // 2. 解决 GPA 和排序问题
+        UserRepository userRepository = (UserRepository) getServletContext().getAttribute("userRepository");
+
+        for (Application app : applications) {
+            // 从最新的 TA 档案中获取最新的 GPA
+            Optional<TA> taOpt = userRepository.findTAById(app.getTaId());
+            if (taOpt.isPresent()) {
+                app.setTaGpa(taOpt.get().getGpa());
+            }
+        }
+
+        // 3. 按照申请时间 (appliedAt) 降序排序 (最新的在上面)
+        applications.sort((a1, a2) -> {
+            String time1 = a1.getAppliedAt() != null ? a1.getAppliedAt() : "";
+            String time2 = a2.getAppliedAt() != null ? a2.getAppliedAt() : "";
+            // compareTo 是升序，这里 time2.compareTo(time1) 就是降序
+            return time2.compareTo(time1);
+        });
+
+        // 按状态分类 (注意：Java 16+ 的 toList() 返回的是不可变列表，如果你用的是老版本Java，建议用 Collectors.toList())
         Map<String, List<Application>> applicationsByStatus = new HashMap<>();
         applicationsByStatus.put("PENDING", applications.stream()
                 .filter(app -> Application.STATUS_PENDING.equals(app.getStatus()))
-                .toList());
+                .collect(Collectors.toList()));
         applicationsByStatus.put("ACCEPTED", applications.stream()
                 .filter(app -> Application.STATUS_ACCEPTED.equals(app.getStatus()))
-                .toList());
+                .collect(Collectors.toList()));
         applicationsByStatus.put("REJECTED", applications.stream()
                 .filter(app -> Application.STATUS_REJECTED.equals(app.getStatus()))
-                .toList());
+                .collect(Collectors.toList()));
 
         request.setAttribute("applications", applications);
         request.setAttribute("applicationsByStatus", applicationsByStatus);
