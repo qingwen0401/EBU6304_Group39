@@ -642,7 +642,12 @@
                         <c:forEach var="app" items="${applications}">
                             <tr data-status="${app.status}">
                                 <td><input type="checkbox" class="app-checkbox" value="${app.applicationId}"></td>
-                                <td><strong>${app.taName}</strong></td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/mo/view-ta?taId=${app.taId}"
+                                       style="color: #2563eb; text-decoration: none; font-weight: 700;">
+                                        ${app.taName}
+                                    </a>
+                                </td>
                                 <td>${app.jobTitle}</td>
                                 <td>${app.appliedAt.substring(0, 10)}</td>
                                 <td>${app.taGpa}</td>

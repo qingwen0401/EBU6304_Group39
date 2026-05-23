@@ -18,6 +18,7 @@ public class AIMatchingServiceTest {
 
     @Test
     
+    @Disabled("手动测试 - 需要在代码中填入API密钥后启用")
     public void testMatchSkills_withValidApiKey() {
         AIMatchingService service = new AIMatchingService();
 

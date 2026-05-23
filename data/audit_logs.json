@@ -1,5 +1,27 @@
 [
   {
+    "logId": "AUD1779517895878",
+    "timestamp": "2026-05-23T14:31:35.881692200",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
+    "logId": "AUD1779291951959",
+    "timestamp": "2026-05-20T23:45:51.959606",
+    "username": "admin",
+    "userId": "ADMIN_001",
+    "role": "ADMIN",
+    "action": "LOGIN",
+    "outcome": "SUCCESS",
+    "ipAddress": "0:0:0:0:0:0:0:1",
+    "details": "User logged in."
+  },
+  {
     "logId": "AUD1779291920249",
     "timestamp": "2026-05-20T23:45:20.249131900",
     "username": "test_mo",
@@ -1265,11 +1287,11 @@
     "details": "User logged in."
   },
   {
-    "logId": "AUD1779291951959",
-    "timestamp": "2026-05-20T23:45:51.959606",
-    "username": "admin",
-    "userId": "ADMIN_001",
-    "role": "ADMIN",
+    "logId": "AUD1779519345232",
+    "timestamp": "2026-05-23T14:55:45.233835200",
+    "username": "test_mo",
+    "userId": "MO20260402141809001",
+    "role": "MO",
     "action": "LOGIN",
     "outcome": "SUCCESS",
     "ipAddress": "0:0:0:0:0:0:0:1",
